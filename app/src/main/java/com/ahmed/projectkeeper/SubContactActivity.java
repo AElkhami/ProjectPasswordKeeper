@@ -38,7 +38,7 @@ public class SubContactActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_contact);
+        setContentView(R.layout.activity_create_mail_or_contact);
 
         edtxtName = (EditText)findViewById(R.id.contactName);
         edtxtUsrName = (EditText)findViewById(R.id.userName);
@@ -254,6 +254,5 @@ public class SubContactActivity extends AppCompatActivity {
         }
         return super.onPrepareOptionsMenu(menu);
     }
-
 
 }

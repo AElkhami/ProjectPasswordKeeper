@@ -11,7 +11,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ahmed.projectkeeper.SubContactActivity">
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,5 +112,5 @@
                 android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
-
+</ScrollView>
 </RelativeLayout>

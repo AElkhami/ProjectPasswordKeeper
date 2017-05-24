@@ -1,158 +1,54 @@
 package com.ahmed.projectkeeper;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.ahmed.sqlite.helper.DatabaseHelper;
-import com.ahmed.sqlite.model.EmailModel;
+public class MainActivity extends AppCompatActivity
 
-import java.util.HashMap;
-import java.util.List;
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-public class MainActivity extends AppCompatActivity {
-
-    private Button FAB;
-    private RecyclerView recyclerView;
-    private DatabaseHelper db;
-    private SessionManager session;
-    private EmailAdapter mAdapter;
-    private long userId;
-    private boolean fromListView,doubleBackToExitPressedOnce = false;
-    private HashMap<String, Long> rid;
-    private List<EmailModel> Email ;
-
-
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        //Floating Action Button
-        FAB = (Button) findViewById(R.id.imageButton);
-        FAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //show PopUp Menu
-                showPopupMenu(v);
-            }
-        });
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        //Populate data from sqlite DB to Recycler View
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentManager manager = getSupportFragmentManager();
 
-        db = new DatabaseHelper(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
-
-
-        rid = session.getRowDetails();
-        userId = rid.get(session.KEY_ID);
-        Email = db.getContacts(userId);
-
-        mAdapter = new EmailAdapter(Email);
-
-        recyclerView.setAdapter(mAdapter);
-
-        mAdapter.notifyDataSetChanged();
-
-        //Declare List Item Lines
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
-        //on list item click
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                EmailModel emailModel = Email.get(position);
-                fromListView = true;
-                Intent mIntent = new Intent (MainActivity.this,EmailMainActivity.class);
-                mIntent.putExtra("boolean", fromListView);
-                mIntent.putExtra("long", emailModel.getE_row_id());
-
-                startActivity(mIntent);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-            }
-        }));
-    }
-
-    public void showPopupMenu(View view){
-
-        PopupMenu popup = new PopupMenu(this, view);
-
-        MenuInflater inflater = popup.getMenuInflater();
-
-        inflater.inflate(R.menu.add_fab_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.id_Email:
-                        Intent myIntent = new Intent (MainActivity.this,EmailCreateForm.class);
-                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(myIntent);
-                        return true;
-                    case R.id.id_BankAccount:
-                        Intent myIntent2 = new Intent (MainActivity.this,UserProfile.class);
-                        startActivity(myIntent2);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-        popup.show();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.context_delete_item, menu);
-
-        return true;
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Refresh Recycler View after resuming
-        Email.clear();
-        Email.addAll(db.getContacts(userId));
-        mAdapter.notifyDataSetChanged();
-
-        doubleBackToExitPressedOnce = false;
+        manager.beginTransaction().replace(R.id.layoutttt,homeFragment).commit();
     }
 
     @Override
     public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+
 
         //press back button twice to exit
         if (doubleBackToExitPressedOnce) {
@@ -169,8 +65,33 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
+
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+
+
+        if (id == R.id.nav_passwords) {
+
+            HomeFragment homeFragment = new HomeFragment();
+            FragmentManager manager = getSupportFragmentManager();
+
+            manager.beginTransaction().replace(R.id.layoutttt,homeFragment).commit();
+
+        } else if (id == R.id.nav_profile) {
+
+            ProfileFragment profileFragment = new ProfileFragment();
+
+            FragmentManager manager = getSupportFragmentManager();
+
+            manager.beginTransaction().replace(R.id.layoutttt,profileFragment).commit();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

@@ -423,6 +423,7 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
 
     }
 
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange())

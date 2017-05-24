@@ -1,6 +1,5 @@
 package com.ahmed.projectkeeper;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +19,11 @@ public class FortressGate extends AppCompatActivity {
     EditText edtxt_pin;
     SessionManager session;
     long id;
+
+    //for encryption and decryption
+    private String seedValue = "I don't know what is this";
+    private String normalTextEnc;
+    private String normalTextDec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +54,20 @@ public class FortressGate extends AppCompatActivity {
                     user = new UserModel();
 
                     db.getPinUser(sPin);
+                    try {
+                        normalTextEnc = AESHelper.encrypt(seedValue, sPin);
+                        normalTextDec = AESHelper.decrypt(seedValue, db.getPinUser(normalTextEnc).getPin());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (sPin.equals(normalTextDec)) {
+//                        Intent gotoMain = new Intent(FortressGate.this, MainAct.class);
 
-                    if (sPin.equals(db.getPinUser(sPin).getPin())) {
-                        Intent gotoMain = new Intent(FortressGate.this, MainActivity.class);
 
-                        id = db.getPinUser(sPin).getRow_id();
-                        session.createLoginSession(id, sPin);
+//                        id = db.getPinUser(sPin).getRow_id();
+//                        session.createLoginSession(id, sPin);
 
-                        startActivity(gotoMain);
+//                        startActivity(gotoMain);
                         finish();
                     } else {
                         Toast.makeText(getBaseContext(),
