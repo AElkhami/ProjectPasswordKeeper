@@ -47,6 +47,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent gotoMain = new Intent(WelcomeActivity.this, SignupActivity.class);
                 startActivity(gotoMain);
+                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             }
         });
 
@@ -55,6 +56,8 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent gotoMain = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(gotoMain);
+                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
             }
         });
 
@@ -153,7 +156,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //<<<<< IMPORTANT NOTE : Activity Stack is not cleared YET >>>>> SECURITY ISSUE
             moveTaskToBack(true);
     }
 }

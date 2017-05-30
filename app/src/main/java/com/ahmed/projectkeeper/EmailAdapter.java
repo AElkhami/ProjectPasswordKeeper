@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ahmed.sqlite.model.EmailModel;
@@ -21,6 +22,7 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name,user_name,created;
+        public ImageView itemImage;
         int rid;
 
         public MyViewHolder(View view) {
@@ -28,6 +30,7 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
             name = (TextView) view.findViewById(R.id.itemText);
             user_name = (TextView) view.findViewById(R.id.itemText2);
             created = (TextView) view.findViewById(R.id.itemDate);
+            itemImage = (ImageView)view.findViewById(R.id.itemImg);
 
         }
 
@@ -53,6 +56,7 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
         holder.name.setText(emailModel.getE_name());
         holder.user_name.setText(emailModel.getE_user_name());
         holder.created.setText(emailModel.getCreated_at());
+//        holder.itemImage.setImageResource(R.mipmap.credit_card);
 
     }
 

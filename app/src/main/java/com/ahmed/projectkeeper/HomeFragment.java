@@ -8,11 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,13 +55,21 @@ public class HomeFragment extends Fragment {
 
         final Activity activity = getActivity();
 
+        // Set title bar
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Passwords");
+
         //Floating Action Button
         FAB = (Button) activity.findViewById(R.id.imageButton);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //show PopUp Menu
-                showPopupMenu(v);
+//                showPopupMenu(v);
+
+                Intent myIntent = new Intent (getActivity(),EmailCreateForm.class);
+                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(myIntent);
             }
         });
 
@@ -111,36 +116,36 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void showPopupMenu(View view){
+//    public void showPopupMenu(View view){
+//
+//        PopupMenu popup = new PopupMenu(getActivity(), view);
+//
+//        MenuInflater inflater = popup.getMenuInflater();
+//
+//        inflater.inflate(R.menu.add_fab_menu, popup.getMenu());
 
-        PopupMenu popup = new PopupMenu(getActivity(), view);
-
-        MenuInflater inflater = popup.getMenuInflater();
-
-        inflater.inflate(R.menu.add_fab_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.id_Email:
-                        Intent myIntent = new Intent (getActivity(),EmailCreateForm.class);
-                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(myIntent);
-                        return true;
-                    case R.id.id_BankAccount:
-//                        Intent myIntent2 = new Intent (getActivity(),UserProfile.class);
-//                        startActivity(myIntent2);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-        popup.show();
-    }
+//        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+//
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//
+//                switch (item.getItemId()) {
+//                    case R.id.id_Email:
+//                        Intent myIntent = new Intent (getActivity(),EmailCreateForm.class);
+//                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                        startActivity(myIntent);
+//                        return true;
+//                    case R.id.id_BankAccount:
+////                        Intent myIntent2 = new Intent (getActivity(),UserProfile.class);
+////                        startActivity(myIntent2);
+//                        return true;
+//                    default:
+//                        return false;
+//                }
+//            }
+//        });
+//        popup.show();
+//    }
 
     @Override
     public void onResume() {

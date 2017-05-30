@@ -41,6 +41,9 @@ public class EmailCreateForm extends AppCompatActivity {
         edtxtUsrPass = (EditText)findViewById(R.id.contactPassword);
         txtCreated = (TextView)findViewById(R.id.created);
 
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_close_white_24dp);
+
     }
 
 
@@ -93,10 +96,13 @@ public class EmailCreateForm extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_done:
                 createEmail();
-                return true;
+                break;
+            case android.R.id.home:
+                finish();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
+        return true;
     }
 }

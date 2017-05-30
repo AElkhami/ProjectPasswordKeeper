@@ -46,6 +46,10 @@ public class ProfileFragment extends Fragment {
 
         final Activity activity = getActivity();
 
+        // Set title bar
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Profile");
+
 
         txt1 = (TextView)activity.findViewById(R.id.txtv1);
         txt2 = (TextView)activity.findViewById(R.id.txtv2);

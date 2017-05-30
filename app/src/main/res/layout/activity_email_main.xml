@@ -89,7 +89,8 @@
                         android:layout_marginTop="26dp"
                         android:ems="10"
                         android:hint="User Name"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:drawableLeft="@mipmap/ic_account_box_white_24dp"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -104,7 +105,8 @@
                         android:ems="10"
                         android:hint="Password"
                         android:imeOptions="actionUnspecified"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:drawableLeft="@mipmap/ic_lock_white_24dp"/>
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -122,7 +124,8 @@
                         android:layout_marginTop="26dp"
                         android:ems="10"
                         android:hint="Website"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:drawableLeft="@mipmap/ic_public_white_24dp"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -138,7 +141,8 @@
                     android:layout_marginTop="26dp"
                     android:ems="10"
                     android:hint="Notes"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:drawableLeft="@mipmap/ic_description_white_24dp"/>
                 </android.support.design.widget.TextInputLayout>
 
 
