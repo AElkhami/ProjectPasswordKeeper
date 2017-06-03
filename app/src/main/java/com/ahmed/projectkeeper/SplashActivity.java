@@ -15,7 +15,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         session = new SessionManager(getApplicationContext());
 
+
             splashRunner();
+
+
+
     }
 
 

@@ -10,6 +10,8 @@ public class SubContactModel {
     private String s_name;
     private String s_user_name;
     private String s_password;
+    private String s_website;
+    private String s_note;
     private long parentId;
     private String created_at;
 
@@ -46,6 +48,22 @@ public class SubContactModel {
 
     public void setS_password(String s_password) {
         this.s_password = s_password;
+    }
+
+    public String getS_website() {
+        return s_website;
+    }
+
+    public void setS_website(String s_website) {
+        this.s_website = s_website;
+    }
+
+    public String getS_note() {
+        return s_note;
+    }
+
+    public void setS_note(String s_note) {
+        this.s_note = s_note;
     }
 
     public long getParentId() {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.ahmed.sqlite.helper.DatabaseHelper;
 import com.ahmed.sqlite.model.EmailModel;
@@ -26,15 +26,16 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
 
-    private Button FAB;
+    //    private Button FAB;
+    private FloatingActionButton FAB;
     private RecyclerView recyclerView;
     private DatabaseHelper db;
     private SessionManager session;
     private EmailAdapter mAdapter;
     private long userId;
-    private boolean fromListView,doubleBackToExitPressedOnce = false;
+    private boolean fromListView, doubleBackToExitPressedOnce = false;
     private HashMap<String, Long> rid;
-    private List<EmailModel> Email ;
+    private List<EmailModel> Email;
 
 
     public HomeFragment() {
@@ -60,16 +61,16 @@ public class HomeFragment extends Fragment {
                 .setActionBarTitle("Passwords");
 
         //Floating Action Button
-        FAB = (Button) activity.findViewById(R.id.imageButton);
+        FAB = (FloatingActionButton) activity.findViewById(R.id.imageButton);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //show PopUp Menu
 //                showPopupMenu(v);
 
-                Intent myIntent = new Intent (getActivity(),EmailCreateForm.class);
-                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(myIntent);
+                Intent myIntent = new Intent(getActivity(), EmailCreateForm.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(myIntent);
             }
         });
 
@@ -102,7 +103,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view, int position) {
                 EmailModel emailModel = Email.get(position);
                 fromListView = true;
-                Intent mIntent = new Intent (activity.getApplicationContext(),EmailMainActivity.class);
+                Intent mIntent = new Intent(activity.getApplicationContext(), EmailMainActivity.class);
                 mIntent.putExtra("boolean", fromListView);
                 mIntent.putExtra("long", emailModel.getE_row_id());
 

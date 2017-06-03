@@ -2,6 +2,8 @@ package com.ahmed.projectkeeper;
 
 import android.app.AlertDialog;
 import android.app.Service;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,19 +12,21 @@ import android.text.method.KeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahmed.sqlite.helper.DatabaseHelper;
 import com.ahmed.sqlite.model.SubContactModel;
 
 public class SubContactActivity extends AppCompatActivity {
 
-    private EditText edtxtName, edtxtUsrName, edtxtUsrPass;
-    private KeyListener mKeyListener1,mKeyListener2,mKeyListener3;
+    private EditText edtxtName, edtxtUsrName, edtxtUsrPass,edtxtWebsite,edtxtNote;
+    private KeyListener mKeyListener1,mKeyListener2,mKeyListener3,mKeyListener4,mKeyListener5;
     private TextView txtCreated;
-    private String cName,cUsrName,cPass;
+    private String cName,cUsrName,cPass,cWebsite,cNote;
     private SubContactModel subContactModel;
     private DatabaseHelper db;
     private long parentId;
@@ -43,7 +47,9 @@ public class SubContactActivity extends AppCompatActivity {
         edtxtName = (EditText)findViewById(R.id.contactName);
         edtxtUsrName = (EditText)findViewById(R.id.userName);
         edtxtUsrPass = (EditText)findViewById(R.id.contactPassword);
-        txtCreated = (TextView)findViewById(R.id.created);//insert it in the xml
+        edtxtWebsite = (EditText)findViewById(R.id.contactwebsite);
+        edtxtNote = (EditText)findViewById(R.id.contactnotes);
+        txtCreated = (TextView)findViewById(R.id.supCreated);
 
 
         row_id = getIntent().getLongExtra("long",1L);
@@ -61,19 +67,59 @@ public class SubContactActivity extends AppCompatActivity {
             edtxtName.setText(db.getOneSubContact(row_id).getS_name());
             edtxtUsrName.setText(db.getOneSubContact(row_id).getS_user_name());
             try {
-                normalTextDec = AESHelper.decrypt(seedValue,db.getOneContact(row_id).getE_password());
+                normalTextDec = AESHelper.decrypt(seedValue,db.getOneSubContact(row_id).getS_password());
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             edtxtUsrPass.setText(normalTextDec);
+            edtxtWebsite.setText(db.getOneSubContact(row_id).getS_website());
+            edtxtNote.setText(db.getOneSubContact(row_id).getS_note());
 
+            txtCreated.setVisibility(View.VISIBLE);
+            txtCreated.setText("Last Updated "+db.getOneSubContact(row_id).getCreated_at());
 
-            //just insert the right filed in the xml
-            //txtCreated.setText("Last Updated "+db.getOneSubContact(row_id).getCreated_at());
+            onCopy();
 
         }
+    }
 
+    public void onCopy(){
+        edtxtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtName);
+                Toast.makeText(SubContactActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtUsrName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtUsrName);
+                Toast.makeText(SubContactActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtUsrPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtUsrPass);
+                Toast.makeText(SubContactActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtWebsite);
+                Toast.makeText(SubContactActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtNote);
+                Toast.makeText(SubContactActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void whenDone(){
@@ -82,31 +128,28 @@ public class SubContactActivity extends AppCompatActivity {
             cName = edtxtName.getText().toString();
             cUsrName = edtxtUsrName.getText().toString();
             cPass = edtxtUsrPass.getText().toString();
-
-
+            cWebsite = edtxtWebsite.getText().toString();
+            cNote = edtxtNote.getText().toString();
 
             db = new DatabaseHelper(getApplicationContext());
             subContactModel = new SubContactModel();
 
-
             subContactModel.setParentId(parentId);
             subContactModel.setS_name(cName);
             subContactModel.setS_user_name(cUsrName);
-
-
         try {
             normalTextEnc = AESHelper.encrypt(seedValue, cPass);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
             subContactModel.setS_password(normalTextEnc);
+            subContactModel.setS_website(cWebsite);
+            subContactModel.setS_note(cNote);
 
             db.createSubContact(subContactModel);
 
             finish();
-
     }
     public void onDelete(){
 
@@ -142,35 +185,44 @@ public class SubContactActivity extends AppCompatActivity {
 
         row_id = getIntent().getLongExtra("long",1L);
 
-        try {
             db = new DatabaseHelper(getApplicationContext());
             subContactModel = new SubContactModel();
 
             cName = edtxtName.getText().toString();
             cUsrName = edtxtUsrName.getText().toString();
             cPass = edtxtUsrPass.getText().toString();
-
-//            normalTextEnc = AESHelper.encrypt(seedValue, cPass);
+            cWebsite = edtxtWebsite.getText().toString();
+            cNote = edtxtNote.getText().toString();
 
             subContactModel.setS_row_id(row_id);
             subContactModel.setS_name(cName);
             subContactModel.setS_user_name(cUsrName);
-            subContactModel.setS_password(cPass);
+            try {
+                normalTextEnc = AESHelper.encrypt(seedValue, cPass);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            subContactModel.setS_password(normalTextEnc);
+            subContactModel.setS_website(cWebsite);
+            subContactModel.setS_note(cNote);
 
             db.updateSubContact(subContactModel);
-
-            finish();
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+            disableEditText();
+            onEditPressed = false;
     }
     public void onCancel(){
         disableEditText();
         onEditPressed = false;
+        Toast.makeText(this, "Thanks for your Feedback.", Toast.LENGTH_SHORT).show();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
+    public void copyText(EditText tdtxt) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        clipboard.setText(tdtxt.getText().toString());
+    }
 
     public void disableEditText(){
 //        edtxtName.setTextColor(Color.parseColor("#FFFFFF"));
@@ -184,6 +236,12 @@ public class SubContactActivity extends AppCompatActivity {
 //        edtxtUsrPass.setTextColor(Color.parseColor("#FFFFFF"));
         mKeyListener3 = edtxtUsrPass.getKeyListener();
         edtxtUsrPass.setKeyListener(null);
+
+        mKeyListener4 = edtxtWebsite.getKeyListener();
+        edtxtWebsite.setKeyListener(null);
+
+        mKeyListener5 = edtxtNote.getKeyListener();
+        edtxtNote.setKeyListener(null);
     }
     public void enableEditText(){
         InputMethodManager imm = (InputMethodManager)this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -194,10 +252,14 @@ public class SubContactActivity extends AppCompatActivity {
         edtxtName.setTextColor(Color.parseColor("#000000"));
         edtxtUsrName.setTextColor(Color.parseColor("#000000"));
         edtxtUsrPass.setTextColor(Color.parseColor("#000000"));
+        edtxtWebsite.setTextColor(Color.parseColor("#000000"));
+        edtxtNote.setTextColor(Color.parseColor("#000000"));
 
         edtxtName.setKeyListener(mKeyListener1);
         edtxtUsrName.setKeyListener(mKeyListener2);
         edtxtUsrPass.setKeyListener(mKeyListener3);
+        edtxtWebsite.setKeyListener(mKeyListener4);
+        edtxtNote.setKeyListener(mKeyListener5);
     }
 
     @Override
@@ -239,6 +301,10 @@ public class SubContactActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 onCancel();
                 return true;
+            // work around to handel on resume on EmailMainActivity.class
+            case android.R.id.home:
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -255,4 +321,16 @@ public class SubContactActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SecurityModerator.lockAppCheck(this);
+    }
 }

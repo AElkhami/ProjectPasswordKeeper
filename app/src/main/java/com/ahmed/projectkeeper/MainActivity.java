@@ -1,8 +1,11 @@
 package com.ahmed.projectkeeper;
 
+import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -19,13 +22,15 @@ public class MainActivity extends AppCompatActivity
 
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private boolean doubleBackToExitPressedOnce = false;
+    private boolean doubleBackToExitPressedOnce, newUser = false;
     private ImageButton lockButton, userButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //-----------------------------setting nav drawer-------------------------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -38,7 +43,13 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View header=navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
+        //-----------------------------------------------------------------------------------------
+        KeyguardManager myKM = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
+        boolean isPhoneLocked = myKM.inKeyguardRestrictedInputMode();
+
+        PowerManager powerManager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
+//        isSceenAwake = (Build.VERSION.SDK_INT < 20? powerManager.isScreenOn():powerManager.isInteractive());
 
         //Setting Home Fragment (Default)
         HomeFragment homeFragment = new HomeFragment();
@@ -46,10 +57,10 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(R.id.nav_passwords);
 
-        manager.beginTransaction().replace(R.id.layoutttt,homeFragment).commit();
+        manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
 
         //setting buttons
-        userButton = (ImageButton)header.findViewById(R.id.imgbtnUser);
+        userButton = (ImageButton) header.findViewById(R.id.imgbtnUser);
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
                 FragmentManager manager = getSupportFragmentManager();
 
-                manager.beginTransaction().replace(R.id.layoutttt,profileFragment).commit();
+                manager.beginTransaction().replace(R.id.layoutttt, profileFragment).commit();
 
                 navigationView.getMenu().getItem(0).setChecked(false);
 
@@ -67,11 +78,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        lockButton = (ImageButton)header.findViewById(R.id.imgbtnLock);
+        lockButton = (ImageButton) header.findViewById(R.id.imgbtnLock);
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,FortressGate.class);
+                Intent i = new Intent(MainActivity.this, FortressGate.class);
                 startActivity(i);
 
                 Toast.makeText(MainActivity.this, "Your app has been locked", Toast.LENGTH_SHORT).show();
@@ -93,12 +104,25 @@ public class MainActivity extends AppCompatActivity
             HomeFragment homeFragment = new HomeFragment();
             FragmentManager manager = getSupportFragmentManager();
 
-            manager.beginTransaction().replace(R.id.layoutttt,homeFragment).commit();
-        } else if (id == R.id.nav_settings){
+            manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
 
-        }else if (id == R.id.nav_send_Feedback){
+        } else if (id == R.id.nav_settings) {
 
-        }else if (id == R.id.nav_help){
+            SettingsFragment settingsFragment = new SettingsFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.layoutttt, settingsFragment).commit();
+
+        } else if (id == R.id.nav_send_Feedback) {
+
+            SendFeedbackFragment sendFeedbackFragment = new SendFeedbackFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.layoutttt, sendFeedbackFragment).commit();
+
+        } else if (id == R.id.nav_help) {
+
+            HelpFragment helpFragment = new HelpFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.layoutttt, helpFragment).commit();
 
         }
 
@@ -112,10 +136,25 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(title);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         this.doubleBackToExitPressedOnce = false;
+//        newUser = getIntent().getBooleanExtra("boolean",false);
+
+        //handle first login
+        if (newUser) {
+        } else {
+            SecurityModerator.lockAppCheck(this);
+        }
+
     }
 
     @Override

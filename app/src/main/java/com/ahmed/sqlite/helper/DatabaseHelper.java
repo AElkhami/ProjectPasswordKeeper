@@ -52,6 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String C_NAME = "c_name";
     private static final String C_USER_NAME = "c_user_name";
     private static final String C_PASSWORD = "c_password";
+    private static final String C_WEBSITE = "c_website";
+    private static final String C_NOTE = "c_note";
     private static final String C_CREATED = "c_created";
     private static final String C_USER_CONTACT = "c_user_contact";
 
@@ -64,6 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String S_NAME = "s_name";
     private static final String S_USER_NAME = "s_user_name";
     private static final String S_PASSWORD = "s_password";
+    private static final String S_WEBSITE = "s_website";
+    private static final String S_NOTE = "s_note";
     private static final String S_CREATED = "s_created";
     private static final String S_PARENT_CONTACT = "s_sub_contact";
 
@@ -84,6 +88,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         + C_NAME + " TEXT,"
         + C_USER_NAME + " TEXT,"
         + C_PASSWORD + " TEXT,"
+        + C_WEBSITE + " TEXT,"
+        + C_NOTE + " TEXT,"
         + C_CREATED + " DATETIME,"
         + C_USER_CONTACT + " INTEGER" +")";
     // USER table create statement
@@ -93,6 +99,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
             + S_NAME + " TEXT,"
             + S_USER_NAME + " TEXT,"
             + S_PASSWORD + " TEXT,"
+            + S_WEBSITE + " TEXT,"
+            + S_NOTE + " TEXT,"
             + S_CREATED + " DATETIME,"
             + S_PARENT_CONTACT + " INTEGER" +")";
 
@@ -155,6 +163,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         values.put(C_NAME, eModel.getE_name());
         values.put(C_USER_NAME, eModel.getE_user_name());
         values.put(C_PASSWORD, eModel.getE_password());
+        values.put(C_WEBSITE, eModel.getE_website());
+        values.put(C_NOTE, eModel.getE_note());
         values.put(C_CREATED, getDateTime());
 
         eModel.setE_row_id(db.insert(TABLE_CONTACT, null, values)); ;
@@ -171,6 +181,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         values.put(S_NAME, Scontact.getS_name());
         values.put(S_USER_NAME, Scontact.getS_user_name());
         values.put(S_PASSWORD, Scontact.getS_password());
+        values.put(S_WEBSITE, Scontact.getS_website());
+        values.put(S_NOTE, Scontact.getS_note());
         values.put(S_CREATED, getDateTime());
 
         db.insert(TABLE_SUB_CONTACT, null, values) ;
@@ -272,6 +284,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                     mail.setE_name(cursor.getString(cursor.getColumnIndex(C_NAME)));
                     mail.setE_user_name(cursor.getString(cursor.getColumnIndex(C_USER_NAME)));
                     mail.setE_password(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
+                    mail.setE_website(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
+                    mail.setE_note(cursor.getString(cursor.getColumnIndex(C_NOTE)));
                     mail.setCreated_at(cursor.getString(cursor.getColumnIndex(C_CREATED)));
                 } while (cursor.moveToNext());
             }
@@ -297,6 +311,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                     SubC.setS_name(cursor.getString(cursor.getColumnIndex(S_NAME)));
                     SubC.setS_user_name(cursor.getString(cursor.getColumnIndex(S_USER_NAME)));
                     SubC.setS_password(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
+                    SubC.setS_website(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
+                    SubC.setS_note(cursor.getString(cursor.getColumnIndex(S_NOTE)));
                     SubC.setCreated_at(cursor.getString(cursor.getColumnIndex(S_CREATED)));
                 } while (cursor.moveToNext());
             }
@@ -344,6 +360,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                 eMail.setE_name(cursor.getString((cursor.getColumnIndex(C_NAME))));
                 eMail.setE_user_name((cursor.getString(cursor.getColumnIndex(C_USER_NAME))));
                 eMail.setE_password(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
+                eMail.setE_website(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
+                eMail.setE_note(cursor.getString(cursor.getColumnIndex(C_NOTE)));
                 eMail.setCreated_at(cursor.getString(cursor.getColumnIndex(C_CREATED)));
                 // adding to the list
                 Mail.add(eMail);
@@ -369,6 +387,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                 sub.setS_name(cursor.getString((cursor.getColumnIndex(S_NAME))));
                 sub.setS_user_name((cursor.getString(cursor.getColumnIndex(S_USER_NAME))));
                 sub.setS_password(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
+                sub.setS_website(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
+                sub.setS_note(cursor.getString(cursor.getColumnIndex(S_NOTE)));
                 sub.setCreated_at(cursor.getString(cursor.getColumnIndex(S_CREATED)));
                 // adding to the list
                 SubContact.add(sub);
@@ -388,6 +408,8 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         values.put(C_NAME, eModel.getE_name());
         values.put(C_USER_NAME, eModel.getE_user_name());
         values.put(C_PASSWORD, eModel.getE_password());
+        values.put(C_WEBSITE, eModel.getE_website());
+        values.put(C_NOTE, eModel.getE_note());
         values.put(C_CREATED, getDateTime());
 
         // updating row
@@ -403,7 +425,9 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         values.put(S_NAME, sModel.getS_name());
         values.put(S_USER_NAME, sModel.getS_user_name());
         values.put(S_PASSWORD, sModel.getS_password());
-//        values.put(C_CREATED, getDateTime());
+        values.put(S_WEBSITE, sModel.getS_website());
+        values.put(S_NOTE, sModel.getS_note());
+        values.put(S_CREATED, getDateTime());
 
         // updating row
         return db.update(TABLE_SUB_CONTACT, values, S_ROW_ID + " = ?",

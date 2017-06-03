@@ -10,6 +10,8 @@ public class EmailModel {
     private String e_name;
     private String e_user_name;
     private String e_password;
+    private String e_website;
+    private String e_note;
     private long UserId;
     private String created_at;
 
@@ -51,6 +53,22 @@ public class EmailModel {
 
     public void setE_password(String e_password) {
         this.e_password = e_password;
+    }
+
+    public String getE_website() {
+        return e_website;
+    }
+
+    public void setE_website(String e_website) {
+        this.e_website = e_website;
+    }
+
+    public String getE_note() {
+        return e_note;
+    }
+
+    public void setE_note(String e_note) {
+        this.e_note = e_note;
     }
 
     public long getUserId() {

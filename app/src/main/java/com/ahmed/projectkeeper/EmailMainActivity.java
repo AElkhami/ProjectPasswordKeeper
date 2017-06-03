@@ -3,12 +3,14 @@ package com.ahmed.projectkeeper;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -33,9 +34,6 @@ import com.ahmed.sqlite.model.SubContactModel;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.ahmed.projectkeeper.R.id.SUB_FAP;
-
-
 public class EmailMainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
 
@@ -43,13 +41,13 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
     private EmailModel eMail;
     private EditText edtxtName, edtxtUsrName, edtxtUsrPass, edtxtWebsite, edtxtNotes;
     private TextView txtCreated;
-    private String cName, cUsrName, cPass;
+    private String cName, cUsrName, cPass, cWebsite, cNote;
     private long UserId, row_id;
     private HashMap<String, Long> rid;
-    private KeyListener mKeyListener1, mKeyListener2, mKeyListener3;
+    private KeyListener mKeyListener1, mKeyListener2, mKeyListener3, mKeyListener4, mKeyListener5;
     private boolean fromListView, onEditPressed= false;
     private RecyclerView recyclerView;
-    private Button SUB_FAB;
+    private FloatingActionButton SUB_FAB;
     private ImageButton expand, collapse;
     private List<SubContactModel> SubModel;
     private SubContactAdapter mAdapter;
@@ -71,7 +69,7 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
 
         edtxtName = (EditText) findViewById(R.id.contactName);
         edtxtUsrName = (EditText) findViewById(R.id.userName);
-        edtxtUsrPass = (EditText) findViewById(R.id.contactPassword);
+        edtxtUsrPass = (EditText) findViewById(R.id.Password);
         edtxtWebsite = (EditText) findViewById(R.id.website);
         edtxtNotes = (EditText) findViewById(R.id.notes);
         txtCreated = (TextView) findViewById(R.id.created);
@@ -92,7 +90,7 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
         //=========================================================================================
 
         //Adding SubAccount Floating Action Button --> go to add
-        SUB_FAB = (Button) findViewById(SUB_FAP);
+        SUB_FAB = (FloatingActionButton) findViewById(R.id.SUB_FAB);
         SUB_FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,29 +147,7 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
 
         //Show selected Contact
         disableEditText();
-
-
-    edtxtName.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            copyText(edtxtName);
-            Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
-        }
-    });
-    edtxtUsrName.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            copyText(edtxtUsrName);
-            Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
-        }
-    });
-    edtxtUsrPass.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            copyText(edtxtUsrPass);
-            Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
-        }
-    });
+        onCopy();
 
         recyclerView.setVisibility(View.VISIBLE);
         SUB_FAB.setVisibility(View.VISIBLE);
@@ -188,6 +164,8 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
         }
 
         edtxtUsrPass.setText(normalTextDec);
+        edtxtWebsite.setText(db.getOneContact(row_id).getE_website());
+        edtxtNotes.setText(db.getOneContact(row_id).getE_note());
         txtCreated.setText("Last Updated " + db.getOneContact(row_id).getCreated_at());
     }
 
@@ -276,16 +254,23 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
         cName = edtxtName.getText().toString();
         cUsrName = edtxtUsrName.getText().toString();
         cPass = edtxtUsrPass.getText().toString();
+        cWebsite = edtxtWebsite.getText().toString();
+        cNote = edtxtNotes.getText().toString();
+
+        eMail.setE_row_id(row_id);
+        eMail.setE_name(cName);
+        eMail.setE_user_name(cUsrName);
+
         try {
             normalTextEnc = AESHelper.encrypt(seedValue, cPass);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        eMail.setE_row_id(row_id);
-        eMail.setE_name(cName);
-        eMail.setE_user_name(cUsrName);
+
         eMail.setE_password(normalTextEnc);
+        eMail.setE_website(cWebsite);
+        eMail.setE_note(cNote);
 
         db.updateContact(eMail);
         disableEditText();
@@ -295,6 +280,10 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
     public void onCancel() {
         disableEditText();
         onEditPressed = false;
+
+        Toast.makeText(this, "Thanks for your Feedback.", Toast.LENGTH_SHORT).show();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
     public void disableEditText() {
@@ -313,6 +302,16 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
         edtxtUsrPass.setTextColor(Color.parseColor("#FFFFFF"));
         mKeyListener3 = edtxtUsrPass.getKeyListener();
         edtxtUsrPass.setKeyListener(null);
+
+        edtxtWebsite.clearFocus();
+        edtxtWebsite.setTextColor(Color.parseColor("#FFFFFF"));
+        mKeyListener4 = edtxtWebsite.getKeyListener();
+        edtxtWebsite.setKeyListener(null);
+
+        edtxtNotes.clearFocus();
+        edtxtNotes.setTextColor(Color.parseColor("#FFFFFF"));
+        mKeyListener5 = edtxtNotes.getKeyListener();
+        edtxtNotes.setKeyListener(null);
     }
 
     public void enableEditText() {
@@ -321,18 +320,60 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
 
         edtxtName.setSelection(edtxtName.getText().length());
 
-        edtxtName.setTextColor(Color.parseColor("#000000"));
-        edtxtUsrName.setTextColor(Color.parseColor("#000000"));
-        edtxtUsrPass.setTextColor(Color.parseColor("#000000"));
+        edtxtName.setTextColor(Color.parseColor("#E0E0E0"));
+        edtxtUsrName.setTextColor(Color.parseColor("#E0E0E0"));
+        edtxtUsrPass.setTextColor(Color.parseColor("#E0E0E0"));
+        edtxtWebsite.setTextColor(Color.parseColor("#E0E0E0"));
+        edtxtNotes.setTextColor(Color.parseColor("#E0E0E0"));
 
         edtxtName.setKeyListener(mKeyListener1);
         edtxtUsrName.setKeyListener(mKeyListener2);
         edtxtUsrPass.setKeyListener(mKeyListener3);
+        edtxtWebsite.setKeyListener(mKeyListener4);
+        edtxtNotes.setKeyListener(mKeyListener5);
     }
 
     public void copyText(EditText tdtxt) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         clipboard.setText(tdtxt.getText().toString());
+    }
+
+    public void onCopy(){
+        edtxtName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtName);
+                Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtUsrName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtUsrName);
+                Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtUsrPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtUsrPass);
+                Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtWebsite);
+                Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
+        edtxtNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyText(edtxtNotes);
+                Toast.makeText(EmailMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 //    public void showPopupCopy(View view){
@@ -412,15 +453,22 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
+        //work around provided on the up button
         //Refresh Recycler View after resuming
-
             SubModel.clear();
             SubModel.addAll(db.getSubContacts(row_id));
             mAdapter.notifyDataSetChanged();
 
+        SecurityModerator.lockAppCheck(this);
     }
 
 
@@ -429,21 +477,15 @@ public class EmailMainActivity extends AppCompatActivity implements AppBarLayout
         if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange())
         {
             // Collapsed
-//            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) SUB_FAB.getLayoutParams();
-//            lp.topMargin = 930;
-//            SUB_FAB.setLayoutParams(lp);
-
             SUB_FAB.setVisibility(View.GONE);
 
         } else if (verticalOffset == 0) {
             // Expanded
-//            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) SUB_FAB.getLayoutParams();
-//            lp.anchorGravity = Gravity.BOTTOM | GravityCompat.END;
-//            SUB_FAB.setLayoutParams(lp);
             SUB_FAB.setVisibility(View.VISIBLE);
 
         } else {
             // Somewhere in between
+            SUB_FAB.setVisibility(View.VISIBLE);
         }
     }
 }

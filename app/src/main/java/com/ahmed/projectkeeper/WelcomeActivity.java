@@ -23,6 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private EditText pin;
     private SessionManager session;
     private Long id;
+    private boolean newUser = true;
 
 
     //for encryption and decryption
@@ -100,6 +101,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     session.createLoginSession(id, normalTextEnc);
 
                     Intent gotoMain = new Intent(WelcomeActivity.this, MainActivity.class);
+                    gotoMain.putExtra("boolean", newUser);
                     startActivity(gotoMain);
                     finish();
 
@@ -152,6 +154,12 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
     }
 
     @Override

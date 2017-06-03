@@ -23,6 +23,7 @@ public class SignupActivity extends AppCompatActivity  {
     private EditText  edtxt_user, edtxt_pass, edtxt_email;
     private SessionManager session;
     private Long id;
+    private boolean newUser = true;
 
     //for encryption and decryption
     private String seedValue = "I don't know what is this";
@@ -83,6 +84,7 @@ public class SignupActivity extends AppCompatActivity  {
                     session.createLoginSession(id,eMail);
 
                     Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
+                    gotoMain.putExtra("boolean", newUser);
                     startActivity(gotoMain);
                     finish();
                 }

@@ -18,9 +18,9 @@ public class EmailCreateForm extends AppCompatActivity {
 
     private DatabaseHelper db;
     private EmailModel eMail;
-    private EditText edtxtName, edtxtUsrName, edtxtUsrPass;
+    private EditText edtxtName, edtxtUsrName, edtxtUsrPass,edtxtWebsite,edtxtNote;
     private TextView txtCreated;
-    private String cName,cUsrName,cPass;
+    private String cName,cUsrName,cPass,cWebsite,cNote;
     private SessionManager session;
     private long UserId, row_id;
     private HashMap<String, Long> rid;
@@ -39,6 +39,8 @@ public class EmailCreateForm extends AppCompatActivity {
         edtxtName = (EditText)findViewById(R.id.contactName);
         edtxtUsrName = (EditText)findViewById(R.id.userName);
         edtxtUsrPass = (EditText)findViewById(R.id.contactPassword);
+        edtxtWebsite = (EditText)findViewById(R.id.contactwebsite);
+        edtxtNote = (EditText)findViewById(R.id.contactnotes);
         txtCreated = (TextView)findViewById(R.id.created);
 
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,6 +53,8 @@ public class EmailCreateForm extends AppCompatActivity {
         cName = edtxtName.getText().toString();
         cUsrName = edtxtUsrName.getText().toString();
         cPass = edtxtUsrPass.getText().toString();
+        cWebsite = edtxtWebsite.getText().toString();
+        cNote = edtxtNote.getText().toString();
 
 
 
@@ -70,6 +74,8 @@ public class EmailCreateForm extends AppCompatActivity {
             e.printStackTrace();
         }
         eMail.setE_password(normalTextEnc);
+        eMail.setE_website(cWebsite);
+        eMail.setE_note(cNote);
         db.createContact(eMail);
         row_id = eMail.getE_row_id();
         fromListView = true;
@@ -104,5 +110,17 @@ public class EmailCreateForm extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SecurityModerator.lockAppCheck(this);
     }
 }

@@ -3,36 +3,100 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ahmed.projectkeeper.ProfileFragment"
-    >
+    tools:context="com.ahmed.projectkeeper.ProfileFragment">
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:text="TextView"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@mipmap/ic_bin2" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingTop="70sp"
+            android:src="@mipmap/ic_profile" />
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtv1"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/txtv11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Account No." />
+
+        <TextView
+            android:id="@+id/txtv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="TextView" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtv22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="Email: " />
+
+        <TextView
+            android:id="@+id/txtv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="TextView" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/enc1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Status: " />
     <TextView
-        android:text="TextView"
+        android:id="@+id/enc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtv2"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"/>
-
+        android:layout_gravity="center"
+        android:text="encrypted"
+        android:textColor="#228B22"
+        android:typeface="serif" />
+    </LinearLayout>
     <Button
-        android:text="Logout"
+        android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/logout"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_gravity="center"/>
+        android:text="Log out" />
 
 </LinearLayout>

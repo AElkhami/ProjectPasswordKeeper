@@ -53,20 +53,18 @@ public class FortressGate extends AppCompatActivity {
                     db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();
 
-                    db.getPinUser(sPin);
+
                     try {
                         normalTextEnc = AESHelper.encrypt(seedValue, sPin);
-                        normalTextDec = AESHelper.decrypt(seedValue, db.getPinUser(normalTextEnc).getPin());
+                        normalTextDec = AESHelper.decrypt(seedValue,db.getPinUser(normalTextEnc).getPin());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                     if (sPin.equals(normalTextDec)) {
-//                        Intent gotoMain = new Intent(FortressGate.this, MainAct.class);
-
-
-//                        id = db.getPinUser(sPin).getRow_id();
-//                        session.createLoginSession(id, sPin);
-
+//                        Intent gotoMain = new Intent(FortressGate.this, MainActivity.class);
+//                        id = db.getPinUser(normalTextEnc).getRow_id();
+//                        session.createLoginSession(id, normalTextDec);
 //                        startActivity(gotoMain);
                         finish();
                     } else {
@@ -81,7 +79,20 @@ public class FortressGate extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
         moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SecurityModerator.lockAppStoreTime();
     }
 }

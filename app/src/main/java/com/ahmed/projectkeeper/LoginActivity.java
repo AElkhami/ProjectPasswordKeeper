@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtxt_pass, edtxt_email, edtxt_pin;
     private SessionManager session;
     private long id;
+    private boolean newUser = true;
 
     //for encryption and decryption
     private String seedValue = "I don't know what is this";
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         id = db.getRegisteredUser(eMail,normalTextEnc).getRow_id();
                         session.createLoginSession(id,eMail);
-
+                        gotoMain.putExtra("boolean", newUser);
                         startActivity(gotoMain);
                         finish();
                     }else {
@@ -121,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         id = db.getPinUser(normalTextEnc).getRow_id();
                         session.createLoginSession(id, normalTextDec);
+                        gotoMain.putExtra("boolean", newUser);
 
                         startActivity(gotoMain);
                         finish();
@@ -136,8 +138,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        moveTaskToBack(true);
     }
+
 }
