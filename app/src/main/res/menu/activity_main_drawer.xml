@@ -9,10 +9,11 @@
             android:icon="@mipmap/ic_lock_white_24dp"
             android:title="My Passwords" />
 
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@mipmap/ic_settings_white_24dp"
-                android:title="Settings" />
+            <!--<item-->
+                <!--android:id="@+id/nav_settings"-->
+                <!--android:icon="@mipmap/ic_settings_white_24dp"-->
+                <!--android:title="Settings" />-->
+
             <item
                 android:id="@+id/nav_send_Feedback"
                 android:icon="@mipmap/ic_feedback_white_24dp"

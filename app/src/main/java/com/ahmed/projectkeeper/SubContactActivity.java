@@ -210,11 +210,13 @@ public class SubContactActivity extends AppCompatActivity {
             db.updateSubContact(subContactModel);
             disableEditText();
             onEditPressed = false;
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
     public void onCancel(){
         disableEditText();
         onEditPressed = false;
-        Toast.makeText(this, "Thanks for your Feedback.", Toast.LENGTH_SHORT).show();
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }

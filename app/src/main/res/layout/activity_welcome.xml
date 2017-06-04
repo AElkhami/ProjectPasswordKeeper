@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="70dp"
-                android:text="Enter your pin for fast login.\nNote: you will not be able to sync without sign up" />
+                android:text="Enter pin for fast sign up." />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

@@ -1,11 +1,8 @@
 package com.ahmed.projectkeeper;
 
-import android.app.KeyguardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +15,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 public class MainActivity extends AppCompatActivity
 
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Crashlytics crash monitor
+        Fabric.with(this, new Crashlytics());
 
         //-----------------------------setting nav drawer-------------------------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -45,11 +47,6 @@ public class MainActivity extends AppCompatActivity
 
         View header = navigationView.getHeaderView(0);
         //-----------------------------------------------------------------------------------------
-        KeyguardManager myKM = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
-        boolean isPhoneLocked = myKM.inKeyguardRestrictedInputMode();
-
-        PowerManager powerManager = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-//        isSceenAwake = (Build.VERSION.SDK_INT < 20? powerManager.isScreenOn():powerManager.isInteractive());
 
         //Setting Home Fragment (Default)
         HomeFragment homeFragment = new HomeFragment();
@@ -106,11 +103,11 @@ public class MainActivity extends AppCompatActivity
 
             manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
 
-        } else if (id == R.id.nav_settings) {
-
-            SettingsFragment settingsFragment = new SettingsFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.layoutttt, settingsFragment).commit();
+//        } else if (id == R.id.nav_settings) {
+//
+//            SettingsFragment settingsFragment = new SettingsFragment();
+//            FragmentManager manager = getSupportFragmentManager();
+//            manager.beginTransaction().replace(R.id.layoutttt, settingsFragment).commit();
 
         } else if (id == R.id.nav_send_Feedback) {
 
