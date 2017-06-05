@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectKeeper</string>
+    <string name="app_name">Password Keeper</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_lllllllogin">Sign in</string>
 

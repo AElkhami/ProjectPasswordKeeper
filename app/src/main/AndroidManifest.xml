@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ahmed.projectkeeper">
+    package="com.elkhamitech.projectkeeper">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -15,7 +15,7 @@
             android:value="987256bc635b349650c5e8671ce1c066fdf7ff98"
             />
 
-        <activity android:name=".SplashActivity">
+        <activity android:name="com.elkhamitech.projectkeeper.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,24 +23,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EmailMainActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name="com.elkhamitech.projectkeeper.EmailMainActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.MainActivity" />
         <activity
-            android:name=".SignupActivity"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity android:name=".WelcomeActivity"
+            android:name="com.elkhamitech.projectkeeper.SignupActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.WelcomeActivity" />
+        <activity android:name="com.elkhamitech.projectkeeper.WelcomeActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.elkhamitech.projectkeeper.LoginActivity"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".WelcomeActivity" />
+            android:parentActivityName="com.elkhamitech.projectkeeper.WelcomeActivity" />
         <activity
-            android:name=".SubContactActivity"
-            android:parentActivityName=".EmailMainActivity" />
-        <activity android:name=".FortressGate" />
-        <activity android:name=".EmailCreateForm" />
+            android:name="com.elkhamitech.projectkeeper.SubContactActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.EmailMainActivity" />
+        <activity android:name="com.elkhamitech.projectkeeper.FortressGate" />
+        <activity android:name="com.elkhamitech.projectkeeper.EmailCreateForm" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.elkhamitech.projectkeeper.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ahmed.projectkeeper.ProfileFragment">
+    tools:context="com.elkhamitech.projectkeeper.ProfileFragment">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
             android:background="@mipmap/ic_bin2" />
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="100sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="70sp"
@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/txtv11"
@@ -49,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -97,6 +98,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Log out" />
+        android:text="Log out"
+        android:visibility="gone"
+        />
 
 </LinearLayout>

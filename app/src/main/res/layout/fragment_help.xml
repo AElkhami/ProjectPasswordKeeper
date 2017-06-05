@@ -13,7 +13,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.ahmed.projectkeeper.HelpFragment">
+    tools:context="com.elkhamitech.projectkeeper.HelpFragment">
 
 
 
@@ -39,6 +39,17 @@
         android:layout_height="wrap_content"
         android:text="• Navigate to the parent contact,\n• Click the + button on the right center of the screen\n• Then fill the required fileds."/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="How to copy the Name/Password?"
+        android:layout_marginTop="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• Double tap on the desired filed."/>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="• The app makes sure that your passwords are secured but not letting anyone access the application without knowing the pin."/>
+
 
 </LinearLayout>
 </ScrollView>

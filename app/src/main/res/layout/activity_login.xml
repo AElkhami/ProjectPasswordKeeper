@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context="com.ahmed.projectkeeper.LoginActivity">
+    tools:context="com.elkhamitech.projectkeeper.LoginActivity">
 
     <ScrollView
         android:id="@+id/login_formLogin"

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ahmed.projectkeeper.HomeFragment">
+    tools:context="com.elkhamitech.projectkeeper.HomeFragment">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -15,7 +15,16 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txtaddmain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="Tap on + Button to create a new contact." />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/imageButton"
