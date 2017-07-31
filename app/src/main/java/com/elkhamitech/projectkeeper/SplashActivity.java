@@ -1,8 +1,10 @@
 package com.elkhamitech.projectkeeper;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -15,6 +17,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         session = new SessionManager(getApplicationContext());
 
+
+        TextView tv = (TextView) findViewById(R.id.splash_text);
+        Typeface face = Typeface.createFromAsset(getAssets(),
+                "Audiowide-Regular.ttf");
+        tv.setTypeface(face);
 
             splashRunner();
 

@@ -81,7 +81,7 @@ public class SignupActivity extends AppCompatActivity  {
 
                     id =user.getRow_id();
 
-                    session.createLoginSession(id,eMail);
+//                    session.createLoginSession(id,eMail);
 
                     Intent gotoMain = new Intent(SignupActivity.this, MainActivity.class);
                     gotoMain.putExtra("boolean", newUser);

@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
 
                         id = db.getRegisteredUser(eMail,normalTextEnc).getRow_id();
-                        session.createLoginSession(id,eMail);
+//                        session.createLoginSession(id,eMail);
                         gotoMain.putExtra("boolean", newUser);
                         startActivity(gotoMain);
                         finish();
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
 
                         id = db.getPinUser(normalTextEnc).getRow_id();
-                        session.createLoginSession(id, normalTextDec);
+//                        session.createLoginSession(id, normalTextDec);
                         gotoMain.putExtra("boolean", newUser);
 
                         startActivity(gotoMain);

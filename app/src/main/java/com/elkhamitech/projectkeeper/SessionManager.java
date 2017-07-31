@@ -3,6 +3,9 @@ package com.elkhamitech.projectkeeper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
+import android.widget.EditText;
 
 import java.util.HashMap;
 
@@ -22,8 +25,10 @@ public class SessionManager {
     private static final String PREF_NAME = "PrefrenceUser";
     //Shared Prefrence Keys
     private static final String IS_LOGIN = "IsLoggedIn";
+    private static final String IS_PIN = "IsPin";
     public static final String KEY_ID = "Id";
     public static final String KEY_EMAIL = "Email";
+    public static final String KEYBOARD_TYPE = "KeyboardType";
 
     //Constructor
     public SessionManager(Context context) {
@@ -45,6 +50,15 @@ public class SessionManager {
         //Commit changes
         editor.commit();
     }
+
+    public void createKeyboardType( boolean _keyboardType) {
+        // Storing login value as TRUE
+        editor.putBoolean(KEYBOARD_TYPE, _keyboardType);
+
+        //Commit changes
+        editor.commit();
+    }
+
 
     /**
      * Check login method wil check user login status
@@ -80,17 +94,24 @@ public class SessionManager {
             _context.startActivity(e);
         }
     }
+
+    public void checkKeyboard(EditText edt) {
+
+        if (!this.isPin()) {
+
+            edt.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            edt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        }else {
+            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            edt.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
+
+    }
+
     /**
      * Get stored session data
      * */
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
-
-//        user.put(KEY_ID, preferences.getString(KEY_ID,null));
-        user.put(KEY_EMAIL, preferences.getString(KEY_EMAIL, null));
-
-        return user;
-    }
 
     public HashMap<String, Long> getRowDetails(){
         HashMap<String, Long> user = new HashMap<String, Long>();
@@ -99,6 +120,22 @@ public class SessionManager {
 
         return user;
     }
+    public HashMap<String, String> getUserDetails(){
+        HashMap<String, String> user = new HashMap<String, String>();
+
+        user.put(KEY_EMAIL, preferences.getString(KEY_EMAIL, null));
+
+        return user;
+    }
+
+    public HashMap<String, Boolean> getKeyboardDetails(){
+        HashMap<String, Boolean> user = new HashMap<String, Boolean>();
+
+        user.put(KEYBOARD_TYPE, preferences.getBoolean(KEYBOARD_TYPE, true));
+
+        return user;
+    }
+
 
     /**
      * Clear session details
@@ -117,19 +154,7 @@ public class SessionManager {
         // Staring Login Activity
         _context.startActivity(w);
 
-
-//        Intent mStartActivity = new Intent(_context, WelcomeActivity.class);
-//        int mPendingIntentId = 123456;
-//        PendingIntent mPendingIntent = PendingIntent.getActivity(_context, mPendingIntentId, mStartActivity,
-//                PendingIntent.FLAG_CANCEL_CURRENT);
-//        AlarmManager mgr = (AlarmManager) _context.getSystemService(Context.ALARM_SERVICE);
-//        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-//        System.exit(0);
     }
-
-
-
-
 
     /**
      * Quick check for login
@@ -137,8 +162,10 @@ public class SessionManager {
     // Get Login State
     public boolean isLoggedIn() {
         return preferences.getBoolean(IS_LOGIN, false);
+    }
 
-
+    public boolean isPin() {
+        return preferences.getBoolean(IS_PIN, false);
     }
 }
 

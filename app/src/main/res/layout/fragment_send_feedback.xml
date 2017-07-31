@@ -29,7 +29,6 @@
         android:minLines="1"
         android:maxLines="10"
         android:gravity="top|left"
-
         android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbars="vertical"/>
 

@@ -29,7 +29,7 @@
             android:name="com.elkhamitech.projectkeeper.SignupActivity"
             android:parentActivityName="com.elkhamitech.projectkeeper.WelcomeActivity" />
         <activity android:name="com.elkhamitech.projectkeeper.WelcomeActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            />
         <activity
             android:name="com.elkhamitech.projectkeeper.LoginActivity"
             android:windowSoftInputMode="stateHidden"
@@ -37,7 +37,8 @@
         <activity
             android:name="com.elkhamitech.projectkeeper.SubContactActivity"
             android:parentActivityName="com.elkhamitech.projectkeeper.EmailMainActivity" />
-        <activity android:name="com.elkhamitech.projectkeeper.FortressGate" />
+        <activity android:name="com.elkhamitech.projectkeeper.FortressGate"
+            />
         <activity android:name="com.elkhamitech.projectkeeper.EmailCreateForm" />
         <activity
             android:name="com.elkhamitech.projectkeeper.MainActivity"

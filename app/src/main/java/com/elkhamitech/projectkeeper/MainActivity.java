@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     private boolean doubleBackToExitPressedOnce, newUser = false;
     private ImageButton lockButton, userButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,8 +162,7 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.setCheckedItem(R.id.nav_passwords);
 
-        manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
-
+        manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commitAllowingStateLoss();
     }
 
     @Override

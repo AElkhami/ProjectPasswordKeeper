@@ -68,10 +68,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
+                android:drawableLeft="@mipmap/ic_account_box_black_24dp"
                 android:ems="10"
                 android:hint="User Name"
-                android:inputType="textPersonName"
-                android:drawableLeft="@mipmap/ic_account_box_black_24dp"/>
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -101,7 +101,7 @@
                 android:layout_marginTop="26dp"
                 android:ems="10"
                 android:hint="Website"
-                android:inputType="textPersonName"
+                android:inputType="textWebEditText"
                 android:drawableLeft="@mipmap/ic_public_black_24dp"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
@@ -116,7 +116,11 @@
                 android:drawableLeft="@mipmap/ic_description_black_24dp"
                 android:ems="10"
                 android:hint="Notes"
-                android:inputType="textPersonName" />
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:minLines="1"
+                android:maxLines="3"
+                />
         </android.support.design.widget.TextInputLayout>
 
         <TextView

@@ -19,22 +19,25 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
 
     private List<EmailModel> emailList;
 
+//----------------------------ViewHolder------------------------------------------------------
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name,user_name,created;
+        public TextView name, user_name, created;
         public ImageView itemImage;
         int rid;
 
-        public MyViewHolder(View view) {
+
+        public MyViewHolder(final View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.itemText);
             user_name = (TextView) view.findViewById(R.id.itemText2);
             created = (TextView) view.findViewById(R.id.itemDate);
-            itemImage = (ImageView)view.findViewById(R.id.itemImg);
+            itemImage = (ImageView) view.findViewById(R.id.itemImg);
 
         }
-
     }
+
+    //----------------------------------------------------------------------------------
 
     public EmailAdapter(List<EmailModel> emailList) {
         this.emailList = emailList;
@@ -42,14 +45,14 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mail_list_item, parent, false);
+        View itemView = LayoutInflater.from
+                (parent.getContext()).inflate(R.layout.mail_list_item, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         EmailModel emailModel = emailList.get(position);
         holder.rid = (int) emailList.get(position).getE_row_id();
@@ -65,5 +68,7 @@ public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.MyViewHolder
         return emailList.size();
     }
 
-
 }
+
+
+

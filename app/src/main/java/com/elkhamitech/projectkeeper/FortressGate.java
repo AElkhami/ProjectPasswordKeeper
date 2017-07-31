@@ -1,14 +1,23 @@
 package com.elkhamitech.projectkeeper;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elkhamitech.sqlite.helper.DatabaseHelper;
 import com.elkhamitech.sqlite.model.UserModel;
+
+import java.util.HashMap;
 
 public class FortressGate extends AppCompatActivity {
 
@@ -18,7 +27,9 @@ public class FortressGate extends AppCompatActivity {
     String sPin;
     EditText edtxt_pin;
     SessionManager session;
+    private HashMap<String, Boolean> hashMap;
     long id;
+    private boolean NumericKeyboard;
 
     //for encryption and decryption
     private String seedValue = "I don't know what is this";
@@ -30,13 +41,24 @@ public class FortressGate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fortress_gate);
 
+        TextView tv = (TextView) findViewById(R.id.appTitle);
+        Typeface tf = FontCache.get("Audiowide-Regular.ttf", this);
+        tv.setTypeface(tf);
+
+        edtxt_pin = (EditText) findViewById(R.id.editPinGate);
+        session = new SessionManager(getApplicationContext());
+        hashMap = session.getKeyboardDetails();
+
+        NumericKeyboard = hashMap.get(session.KEYBOARD_TYPE);
+
+
         Button pinLogin = (Button)findViewById(R.id.pinEnterGate);
         pinLogin.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
             public void onClick(View v) {
-                edtxt_pin = (EditText) findViewById(R.id.editPinGate);
+
 
                 sPin = edtxt_pin.getText().toString();
 
@@ -47,12 +69,9 @@ public class FortressGate extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                 } else {
-                    session = new SessionManager(getApplicationContext());
-
 
                     db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();
-
 
                     try {
                         normalTextEnc = AESHelper.encrypt(seedValue, sPin);
@@ -75,6 +94,69 @@ public class FortressGate extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void pinKeyboard(){
+        edtxt_pin.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        edtxt_pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        NumericKeyboard = true;
+}
+
+    public void textKeyboard(){
+        edtxt_pin.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        edtxt_pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        NumericKeyboard = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater mInflater = getMenuInflater();
+
+        if (NumericKeyboard) {
+            mInflater.inflate(R.menu.pin_keyboard, menu);
+            pinKeyboard();
+        } else  {
+            mInflater.inflate(R.menu.normal_keyboard, menu);
+        }
+
+        return true;
+
+    }
+
+    // change between keyboards
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.pin: //opposite image
+                invalidateOptionsMenu();
+                textKeyboard();
+                return true;
+
+            case R.id.normal: //opposite image
+                invalidateOptionsMenu();
+                pinKeyboard();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        super.onPrepareOptionsMenu(menu);
+
+        if (NumericKeyboard) {
+
+            session.createKeyboardType(NumericKeyboard);
+        }else {
+            session.createKeyboardType(NumericKeyboard);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

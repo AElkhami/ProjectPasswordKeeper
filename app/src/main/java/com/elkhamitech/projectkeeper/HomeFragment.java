@@ -2,7 +2,10 @@ package com.elkhamitech.projectkeeper;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +32,7 @@ public class HomeFragment extends Fragment {
 
     //    private Button FAB;
     private FloatingActionButton FAB;
+    private EmailModel eMail;
     private RecyclerView recyclerView;
     private DatabaseHelper db;
     private SessionManager session;
@@ -39,6 +43,8 @@ public class HomeFragment extends Fragment {
     private List<EmailModel> Email;
     private TextView txtv;
 
+
+//    final Activity activity = getActivity();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -56,11 +62,15 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         final Activity activity = getActivity();
+
+        eMail = new EmailModel();
 
         // Set title bar
         ((MainActivity) getActivity())
                 .setActionBarTitle("Passwords");
+
 
         //Floating Action Button
         FAB = (FloatingActionButton) activity.findViewById(R.id.imageButton);
@@ -94,8 +104,7 @@ public class HomeFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
 
         //Declare List Item Lines
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
+        checkView();
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(activity.getApplicationContext(), LinearLayoutManager.VERTICAL));
 
@@ -117,15 +126,25 @@ public class HomeFragment extends Fragment {
             }
         }));
 
-        txtv = (TextView)activity.findViewById(R.id.txtaddmain);
 
+
+    }
+
+    public void checkView(){
+
+        txtv = (TextView)getActivity().findViewById(R.id.txtaddmain);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
         if( mLayoutManager.getItemCount() == 0 ){
             //Do something
+            recyclerView.setVisibility(View.GONE);
+            txtv.setVisibility(View.VISIBLE);
 
         }else {
 
             recyclerView.setVisibility(View.VISIBLE);
-            txtv.setVisibility(View.INVISIBLE);
+            txtv.setVisibility(View.GONE);
         }
         mAdapter.notifyDataSetChanged();
 
@@ -162,15 +181,110 @@ public class HomeFragment extends Fragment {
 //        popup.show();
 //    }
 
+//    private List<String> getData() {
+//        List<String> modelList = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            modelList.add("data item : " + i);
+//        }
+//        return modelList;
+//    }
+
+
+    private void setSwipeForRecyclerView() {
+        SwipeUtil swipeHelper = new SwipeUtil(getActivity(), recyclerView) {
+            @Override
+            public void instantiateUnderlayButton(final RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new SwipeUtil.UnderlayButton(
+                        "Delete",
+                        0,
+                        Color.parseColor("#FF3C30"),
+                        new SwipeUtil.UnderlayButtonClickListener() {
+                            @Override
+                            public void onClick(final int pos) {
+                                // TODO: onDelete
+
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle("Delete entry")
+                                        .setMessage("Are you sure you want to delete this entry?")
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // continue with delete
+                                                db = new DatabaseHelper(getActivity().getApplicationContext());
+                                                db.deleteContact(Email.get(pos).getE_row_id());
+                                                Email.remove(pos);
+                                                mAdapter.notifyItemRemoved(pos);
+
+                                                if (Email.isEmpty()){
+
+                                                    recyclerView.setVisibility(View.GONE);
+                                                    txtv.setVisibility(View.VISIBLE);
+
+                                                }else {
+
+                                                    recyclerView.setVisibility(View.VISIBLE);
+                                                    txtv.setVisibility(View.GONE);
+                                                }
+//
+                                            }
+                                        })
+                                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // do nothing
+                                                mAdapter.notifyDataSetChanged();
+                                            }
+                                        })
+//                .setIcon(android.R.drawable.ic_dialog_info)
+                                        .show();
+                            }
+                        }
+                ));
+
+//                underlayButtons.add(new SwipeUtil.UnderlayButton(
+//                        "Transfer",
+//                        0,
+//                        Color.parseColor("#FF9502"),
+//                        new SwipeUtil.UnderlayButtonClickListener() {
+//                            @Override
+//                            public void onClick(int pos) {
+//                                // TODO: OnTransfer
+//                            }
+//                        }
+//                ));
+//                underlayButtons.add(new SwipeUtil.UnderlayButton(
+//                        "Unshare",
+//                        0,
+//                        Color.parseColor("#C7C7CB"),
+//                        new SwipeUtil.UnderlayButtonClickListener() {
+//                            @Override
+//                            public void onClick(int pos) {
+//                                // TODO: OnUnshare
+//                            }
+//                        }
+//                ));
+            }
+        };
+
+    }
+
+
+
     @Override
     public void onResume() {
         super.onResume();
         //Refresh Recycler View after resuming
         Email.clear();
         Email.addAll(db.getContacts(userId));
-        mAdapter.notifyDataSetChanged();
 
         doubleBackToExitPressedOnce = false;
-    }
 
+        mAdapter = new EmailAdapter(Email);
+        recyclerView.setAdapter(mAdapter);
+
+        checkView();
+
+        mAdapter.notifyDataSetChanged();
+
+        setSwipeForRecyclerView();
+
+    }
 }

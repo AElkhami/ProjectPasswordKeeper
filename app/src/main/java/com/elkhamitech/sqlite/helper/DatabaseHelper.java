@@ -112,6 +112,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         //creating the tables
@@ -434,10 +435,11 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                 new String[] { String.valueOf(sModel.getS_row_id())});
     }
     //***Deleting***--------------------------------------------------------------------------------
-    public void deleteContact(long row_id) {
+    public long deleteContact(long row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACT, C_ROW_ID + " = ?",
                 new String[] { String.valueOf(row_id) });
+        return row_id;
     }
 
     public void deleteSubContact(long row_id) {

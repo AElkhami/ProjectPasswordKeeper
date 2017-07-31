@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PassForm">
     <item
-        android:id="@+id/action_keyboard"
+        android:id="@+id/pin"
         android:orderInCategory="100"
         android:icon="@mipmap/ic_keyboard_white"
         app:showAsAction="always"
-        android:title="keyboard" />
+        android:title="pin keyboard" />
 </menu>
