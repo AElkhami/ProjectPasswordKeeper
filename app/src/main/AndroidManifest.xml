@@ -3,6 +3,8 @@
     package="com.elkhamitech.projectkeeper">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="ANDROID.PERMISSION.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -15,7 +17,7 @@
             android:value="987256bc635b349650c5e8671ce1c066fdf7ff98"
             />
 
-        <activity android:name="com.elkhamitech.projectkeeper.SplashActivity">
+        <activity android:name="com.elkhamitech.projectkeeper.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,25 +25,25 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.elkhamitech.projectkeeper.EmailMainActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.MainActivity" />
+            android:name="com.elkhamitech.projectkeeper.Activities.EntryMainActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.MainActivity" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.SignupActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.WelcomeActivity" />
-        <activity android:name="com.elkhamitech.projectkeeper.WelcomeActivity"
+            android:name="com.elkhamitech.projectkeeper.Activities.SignupActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.WelcomeActivity" />
+        <activity android:name="com.elkhamitech.projectkeeper.Activities.WelcomeActivity"
             />
         <activity
-            android:name="com.elkhamitech.projectkeeper.LoginActivity"
+            android:name="com.elkhamitech.projectkeeper.Activities.LoginActivity"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="com.elkhamitech.projectkeeper.WelcomeActivity" />
+            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.WelcomeActivity" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.SubContactActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.EmailMainActivity" />
-        <activity android:name="com.elkhamitech.projectkeeper.FortressGate"
+            android:name="com.elkhamitech.projectkeeper.Activities.SubEntryActivity"
+            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.EntryMainActivity" />
+        <activity android:name="com.elkhamitech.projectkeeper.Activities.FortressGate"
             />
-        <activity android:name="com.elkhamitech.projectkeeper.EmailCreateForm" />
+        <activity android:name="com.elkhamitech.projectkeeper.Activities.CreateNewEntry" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.MainActivity"
+            android:name="com.elkhamitech.projectkeeper.Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

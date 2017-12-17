@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.elkhamitech.projectkeeper.SignupActivity">
+    tools:context="com.elkhamitech.projectkeeper.Activities.SignupActivity">
 
 
     <ScrollView
@@ -62,7 +62,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:imeActionId="@+id/login"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"

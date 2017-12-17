@@ -2,12 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elkhamitech.projectkeeper.SettingsFragment">
+    tools:context="com.elkhamitech.projectkeeper.Fragments.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+    <Button
+        android:id="@+id/backup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Backup"/>
+    <Button
+        android:id="@+id/restore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restore"/>
+    </LinearLayout>
 </FrameLayout>

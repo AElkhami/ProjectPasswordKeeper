@@ -141,10 +141,10 @@
                         android:drawableLeft="@mipmap/ic_description_white_24dp"
                         android:ems="10"
                         android:hint="Notes"
-                        android:inputType="textMultiLine"
-                        android:lines="2"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:lines="5"
                         android:minLines="1"
-                        android:maxLines="3"
+                        android:maxLines="5"
                          />
                 </android.support.design.widget.TextInputLayout>
 
@@ -181,13 +181,6 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!--
-                        <android.support.v7.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:layout_collapseMode="pin" />
-             -->
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -214,6 +207,12 @@
         app:layout_scrollFlags="scroll|enterAlways">
 
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/subAccountsRCV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/txtaddsub"
@@ -221,15 +220,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100sp"
-            android:textStyle="bold"
-            android:text="Tap on + Button to create new sub entry."/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/subAccountsRCV"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:visibility="gone"/>
+            android:text="Tap on + Button to create new sub entry."
+            android:textStyle="bold" />
     </FrameLayout>
 
 
