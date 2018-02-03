@@ -1,8 +1,14 @@
 package com.elkhamitech.projectkeeper.Activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -23,6 +29,11 @@ import com.elkhamitech.projectkeeper.AccessHandler.SessionManager;
 import com.elkhamitech.sqlite.helper.DatabaseHelper;
 import com.elkhamitech.sqlite.model.UserModel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private Button signUp,logIn,enter;
@@ -32,7 +43,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private EditText pin;
     private SessionManager session;
     private Long id;
-    private boolean newUser = true;
+    private boolean newUser,firstTime = true;
     private boolean NumericKeyboard;
 
 
@@ -40,6 +51,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private String seedValue = "I don't know what is this";
     private String normalTextEnc;
     private String normalTextDec;
+
+    private final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,33 +64,35 @@ public class WelcomeActivity extends AppCompatActivity {
         Typeface tf = FontCache.get("Audiowide-Regular.ttf", this);
         tv.setTypeface(tf);
 
-        signUp = (Button)findViewById(R.id.signUp);
-        logIn = (Button)findViewById(R.id.logIn);
+//        signUp = (Button)findViewById(R.id.signUp);
+//        logIn = (Button)findViewById(R.id.logIn);
         enter = (Button)findViewById(R.id.pinEnter);
 
         pin = (EditText)findViewById(R.id.editPin);
 
         session = new SessionManager(getApplicationContext());
+        db = new DatabaseHelper(getApplicationContext());
+        user = new UserModel();
+        db.createUser(user);
 
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gotoMain = new Intent(WelcomeActivity.this, SignupActivity.class);
-                startActivity(gotoMain);
-                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            }
-        });
-
-        logIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent gotoMain = new Intent(WelcomeActivity.this, LoginActivity.class);
-                startActivity(gotoMain);
-                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-            }
-        });
+//        signUp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent gotoMain = new Intent(WelcomeActivity.this, SignupActivity.class);
+//                startActivity(gotoMain);
+//                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            }
+//        });
+//
+//        logIn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent gotoMain = new Intent(WelcomeActivity.this, LoginActivity.class);
+//                startActivity(gotoMain);
+//                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//
+//            }
+//        });
 
 
         enter.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +122,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 } else {
 
-
-                    db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();
 
                     try {
@@ -137,7 +150,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public boolean pinExist() {
 
-        db = new DatabaseHelper(getApplicationContext());
+
         user = new UserModel();
 
         try {
@@ -225,6 +238,82 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
             moveTaskToBack(true);
+    }
+
+    public void restoreBackup(View view) {
+
+        if(checkPermissionForReadExternalStorage()){
+
+        }else {
+            try {
+                requestPermissionForReadExternalStorage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        importDB();
+    }
+
+
+    public boolean checkPermissionForReadExternalStorage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            int permissionRead = this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+            return permissionRead == PackageManager.PERMISSION_GRANTED;
+
+        }
+        return false;
+    }
+
+    public void requestPermissionForReadExternalStorage() throws Exception {
+        try {
+            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    //importing database
+    private void importDB() {
+        // TODO Auto-generated method stub
+
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data  = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String  currentDBPath= "//data//" + this.getPackageName()
+                        + "//databases//" + "PassKeeper";
+                String backupDBPath  = "/Password Wallet/PassKeeper";
+                File  backupDB= new File(data, currentDBPath);
+                File currentDB  = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(this, "Passwords have been restored, Thanks to re-enter the pin to confirm the passwords are yours.",
+                        Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(this, FortressGate.class);
+                i.putExtra("boolean", firstTime);
+                startActivity(i);
+
+                finish();
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
     }
 }
 

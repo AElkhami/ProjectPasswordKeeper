@@ -50,6 +50,9 @@ public class CreateNewEntry extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_close_white_24dp);
 
+        setTitle("Passwords");
+
+
     }
 
 

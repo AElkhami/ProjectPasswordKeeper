@@ -22,6 +22,7 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+
     Context context;
 
     // Logcat tag
@@ -32,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Name
     private static final String DATABASE_NAME = "PassKeeper";
-//-----------------------------------------------------------------
+    //-----------------------------------------------------------------
     // Table Name
     private static final String TABLE_USER= "user";
 
@@ -42,7 +43,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
     private static final String PIN = "pin";
-
 
     // Table Name
     private static final String TABLE_CONTACT = "contact_email";
@@ -245,14 +245,14 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
     public UserModel getPinUser (String pin) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLE_USER
-                + " WHERE " + PIN + " = '" + pin + "'";
+//        String selectQuery = "SELECT * FROM " + TABLE_USER
+//                + " WHERE " + PIN + " = '" + pin + "'";
+//
+//        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-//        String[] coloumns = { EMAIL, PASSWORD };
-//        Cursor c = db.query(TABLE_USER, coloumns, null, null,
-//                null, null, null);
+        String[] columns = { ROW_ID, EMAIL, PASSWORD, PIN };
+        Cursor cursor = db.query(TABLE_USER, columns, "pin=?", new String[]{pin},
+                null, null, null);
         UserModel user = new UserModel();
         if (cursor != null)
             if (cursor.moveToFirst()) {
