@@ -28,7 +28,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
 
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private boolean doubleBackToExitPressedOnce, newUser = false;
     private ImageButton lockButton, userButton;

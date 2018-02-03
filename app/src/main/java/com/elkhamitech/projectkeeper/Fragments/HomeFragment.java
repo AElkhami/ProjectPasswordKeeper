@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
 
         //Declare List Item Lines
         checkView();
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+               recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(activity.getApplicationContext(), LinearLayoutManager.VERTICAL));
 
         //on list item click

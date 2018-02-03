@@ -48,6 +48,8 @@ public class SubEntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_entry);
 
+        setTitle("Passwords");
+
         edtxtName = (EditText)findViewById(R.id.contactName);
         edtxtUsrName = (EditText)findViewById(R.id.userName);
         edtxtUsrPass = (EditText)findViewById(R.id.contactPassword);

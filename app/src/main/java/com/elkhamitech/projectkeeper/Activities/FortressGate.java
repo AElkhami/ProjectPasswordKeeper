@@ -1,5 +1,6 @@
 package com.elkhamitech.projectkeeper.Activities;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class FortressGate extends AppCompatActivity {
     private HashMap<String, Boolean> hashMap;
     long id;
     private boolean NumericKeyboard;
+    private boolean isFirstTime = false;
 
     //for encryption and decryption
     private String seedValue = "I don't know what is this";
@@ -52,9 +54,12 @@ public class FortressGate extends AppCompatActivity {
 
         edtxt_pin = (EditText) findViewById(R.id.editPinGate);
         session = new SessionManager(getApplicationContext());
+
         hashMap = session.getKeyboardDetails();
 
         NumericKeyboard = hashMap.get(session.KEYBOARD_TYPE);
+
+        isFirstTime = getIntent().getBooleanExtra("boolean",false);
 
 
         Button pinLogin = (Button)findViewById(R.id.pinEnterGate);
@@ -90,7 +95,14 @@ public class FortressGate extends AppCompatActivity {
 //                        id = db.getPinUser(normalTextEnc).getRow_id();
 //                        session.createLoginSession(id, normalTextDec);
 //                        startActivity(gotoMain);
-                        finish();
+                        if(isFirstTime){
+                            Intent i = new Intent(FortressGate.this, MainActivity.class);
+                            startActivity(i);
+                            session.createLoginSession(id, normalTextEnc);
+                        }else {
+                            finish();
+                        }
+
                     } else {
                         Toast.makeText(getBaseContext(),
                                 "Pin is incorrect.",

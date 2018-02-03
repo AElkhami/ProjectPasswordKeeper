@@ -82,6 +82,8 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
         txtCreated = (TextView) findViewById(R.id.created);
         txtv = (TextView) findViewById(R.id.txtaddsub);
 
+        setTitle("Passwords");
+
         recyclerView = (RecyclerView) findViewById(R.id.subAccountsRCV);
 
         row_id = getIntent().getLongExtra("long", 1L);

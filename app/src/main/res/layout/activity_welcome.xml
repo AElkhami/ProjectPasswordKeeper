@@ -21,8 +21,8 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="90sp"
+                android:layout_height="90sp"
                 android:layout_gravity="center"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:src="@mipmap/lg_lock"
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Password Keeper"
+                android:text="Password Wallet"
                 android:textSize="20dp" />
 
             <TextView
@@ -56,7 +56,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -91,6 +92,26 @@
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:visibility="gone"/>
+
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="If you are a registerd user, and you a backup within \nthe Password Wallet directoryyou can restore \nyour passwords."/>
+
+            <Button
+                android:layout_marginTop="16sp"
+                android:id="@+id/welcome_restore_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restore Backup"
+                android:onClick="restoreBackup"
+                android:drawableLeft="@mipmap/ic_restore_white_24dp"
+                android:paddingLeft="20sp"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"/>
         </LinearLayout>
 
     </ScrollView>

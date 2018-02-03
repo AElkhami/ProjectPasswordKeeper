@@ -5,19 +5,37 @@
     tools:context="com.elkhamitech.projectkeeper.Fragments.SettingsFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="20sp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="you can backup and restore your passwords but make\nsure that your backup file exists on '/Password Wallet' directory."/>
 
     <Button
+        android:layout_marginTop="20sp"
         android:id="@+id/backup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Backup"/>
+        android:text="Backup"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:drawableStart="@mipmap/ic_backup_white_24dp"
+        android:paddingLeft="20sp"
+        />
     <Button
+        android:layout_marginTop="10sp"
         android:id="@+id/restore"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Restore"/>
+        android:text="Restore"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:drawableLeft="@mipmap/ic_restore_white_24dp"
+        android:paddingLeft="20sp"
+        />
     </LinearLayout>
 </FrameLayout>
