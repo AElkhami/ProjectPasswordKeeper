@@ -106,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:drawableLeft="@mipmap/ic_lock_white_24dp"
+                        android:drawableStart="@mipmap/ic_lock_white_24dp"
                         android:ems="10"
                         android:hint="Password"
                         android:imeOptions="actionUnspecified"
