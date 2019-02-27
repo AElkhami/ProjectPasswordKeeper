@@ -5,8 +5,5 @@
     <color name="colorAccent">#FBC02D</color>
 
 
-    <color name="textBlack">#000000</color>
     <color name="textWhite">#FFFFFF</color>
-    <color name="textDimmed">#CFD8DC</color>
-    <color name="dimmedGrey">#6d6d6d</color>
 </resources>

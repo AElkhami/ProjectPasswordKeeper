@@ -17,7 +17,7 @@
             android:value="987256bc635b349650c5e8671ce1c066fdf7ff98"
             />
 
-        <activity android:name="com.elkhamitech.projectkeeper.Activities.SplashActivity">
+        <activity android:name=".ui.Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,26 +25,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.elkhamitech.projectkeeper.Activities.EntryMainActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.MainActivity" />
+            android:name=".ui.Activities.EntryMainActivity"
+            android:parentActivityName=".ui.Activities.MainActivity" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.Activities.SignupActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.WelcomeActivity" />
-        <activity android:name="com.elkhamitech.projectkeeper.Activities.WelcomeActivity"
+            android:name=".ui.Activities.SignupActivity"
+            android:parentActivityName=".ui.Activities.WelcomeActivity" />
+        <activity android:name=".ui.Activities.WelcomeActivity"
             android:windowSoftInputMode="stateHidden"
             />
         <activity
-            android:name="com.elkhamitech.projectkeeper.Activities.LoginActivity"
+            android:name=".ui.Activities.LoginActivity"
             android:windowSoftInputMode="stateHidden"
-            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.WelcomeActivity" />
+            android:parentActivityName=".ui.Activities.WelcomeActivity" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.Activities.SubEntryActivity"
-            android:parentActivityName="com.elkhamitech.projectkeeper.Activities.EntryMainActivity" />
-        <activity android:name="com.elkhamitech.projectkeeper.Activities.FortressGate"
+            android:name=".ui.Activities.SubEntryActivity"
+            android:parentActivityName=".ui.Activities.EntryMainActivity" />
+        <activity android:name=".ui.Activities.FortressGate"
             />
-        <activity android:name="com.elkhamitech.projectkeeper.Activities.CreateNewEntry" />
+        <activity android:name=".ui.Activities.CreateNewEntry" />
         <activity
-            android:name="com.elkhamitech.projectkeeper.Activities.MainActivity"
+            android:name=".ui.Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -2,11 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_welcome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.elkhamitech.projectkeeper.Activities.WelcomeActivity">
+    tools:context=".ui.Activities.WelcomeActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -38,7 +37,6 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -72,7 +70,6 @@
                 android:text="Enter" />
 
             <Button
-                android:id="@+id/logIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
@@ -81,7 +78,6 @@
 
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
@@ -89,7 +85,6 @@
                 android:visibility="gone"/>
 
             <Button
-                android:id="@+id/signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
@@ -97,7 +92,6 @@
 
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -105,7 +99,6 @@
 
             <Button
                 android:layout_marginTop="16sp"
-                android:id="@+id/welcome_restore_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Restore Backup"

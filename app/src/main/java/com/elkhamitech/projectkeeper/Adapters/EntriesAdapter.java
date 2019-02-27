@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.sqlite.model.EmailModel;
+import com.elkhamitech.data.model.EntryModel;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.MyViewHolder> {
 
-    private List<EmailModel> emailList;
+    private List<EntryModel> emailList;
 
 //----------------------------ViewHolder------------------------------------------------------
 
@@ -40,7 +40,7 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.MyViewHo
 
     //----------------------------------------------------------------------------------
 
-    public EntriesAdapter(List<EmailModel> emailList) {
+    public EntriesAdapter(List<EntryModel> emailList) {
         this.emailList = emailList;
     }
 
@@ -55,11 +55,11 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        EmailModel emailModel = emailList.get(position);
+        EntryModel entryModel = emailList.get(position);
         holder.rid = (int) emailList.get(position).getE_row_id();
-        holder.name.setText(emailModel.getE_name());
-        holder.user_name.setText(emailModel.getE_user_name());
-        holder.created.setText(emailModel.getCreated_at());
+        holder.name.setText(entryModel.getE_name());
+        holder.user_name.setText(entryModel.getE_user_name());
+        holder.created.setText(entryModel.getCreated_at());
 //        holder.itemImage.setImageResource(R.mipmap.credit_card);
 
     }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.sqlite.model.SubContactModel;
+import com.elkhamitech.data.model.SubEntryModel;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.MyViewHolder> {
 
-    private List<SubContactModel> subContactList;
+    private List<SubEntryModel> subContactList;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +34,7 @@ public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.My
 
     }
 
-    public SubEntriesAdapter(List<SubContactModel> subContactList) {
+    public SubEntriesAdapter(List<SubEntryModel> subContactList) {
         this.subContactList = subContactList;
     }
 
@@ -49,7 +49,7 @@ public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.My
     @Override
     public void onBindViewHolder(SubEntriesAdapter.MyViewHolder holder, int position) {
 
-        SubContactModel subModel = subContactList.get(position);
+        SubEntryModel subModel = subContactList.get(position);
         holder.rid = (int) subContactList.get(position).getS_row_id();
         holder.name.setText(subModel.getS_name());
         holder.user_name.setText(subModel.getS_user_name());
