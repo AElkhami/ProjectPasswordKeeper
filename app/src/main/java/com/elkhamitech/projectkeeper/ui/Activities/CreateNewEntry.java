@@ -25,7 +25,6 @@ public class CreateNewEntry extends AppCompatActivity {
     private EditText edtxtName, edtxtUsrName, edtxtUsrPass,edtxtWebsite,edtxtNote;
     private TextView txtCreated;
     private String cName,cUsrName,cPass,cWebsite,cNote;
-    private SessionManager session;
     private long UserId, row_id;
     private HashMap<String, Long> rid;
     private Boolean fromListView = false;
@@ -64,27 +63,25 @@ public class CreateNewEntry extends AppCompatActivity {
         cNote = edtxtNote.getText().toString();
 
 
-
-        session = new SessionManager(getApplicationContext());
         db = new DatabaseHelper(getApplicationContext());
         eMail = new EntryModel();
-        rid = session.getRowDetails();
-        UserId = rid.get(session.KEY_ID);
+        rid = SessionManager.getRowDetails();
+        UserId = rid.get(SessionManager.KEY_ID);
 
         eMail.setUserId(UserId);
-        eMail.setE_name(cName);
-        eMail.setE_user_name(cUsrName);
+        eMail.setName(cName);
+        eMail.setUserName(cUsrName);
         try {
             normalTextEnc = AESHelper.encrypt(seedValue, cPass);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        eMail.setE_password(normalTextEnc);
-        eMail.setE_website(cWebsite);
-        eMail.setE_note(cNote);
+        eMail.setPassword(normalTextEnc);
+        eMail.setWebsite(cWebsite);
+        eMail.setNote(cNote);
         db.createContact(eMail);
-        row_id = eMail.getE_row_id();
+        row_id = eMail.getRowId();
         fromListView = true;
 
         Intent mIntent = new Intent (CreateNewEntry.this,EntryMainActivity.class);

@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment {
     private EntryModel eMail;
     private RecyclerView recyclerView;
     private DatabaseHelper db;
-    private SessionManager session;
     private EntriesAdapter mAdapter;
     private long userId;
     private boolean fromListView, doubleBackToExitPressedOnce = false;
@@ -99,11 +98,9 @@ public class HomeFragment extends Fragment {
         recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
 
         db = new DatabaseHelper(activity.getApplicationContext());
-        session = new SessionManager(activity.getApplicationContext());
 
-
-        rid = session.getRowDetails();
-        userId = rid.get(session.KEY_ID);
+        rid = SessionManager.getRowDetails();
+        userId = rid.get(SessionManager.KEY_ID);
         Email = db.getContacts(userId);
 
         mAdapter = new EntriesAdapter(Email);
@@ -125,7 +122,7 @@ public class HomeFragment extends Fragment {
                 fromListView = true;
                 Intent mIntent = new Intent(activity.getApplicationContext(), EntryMainActivity.class);
                 mIntent.putExtra("boolean", fromListView);
-                mIntent.putExtra("long", entryModel.getE_row_id());
+                mIntent.putExtra("long", entryModel.getRowId());
 
                 startActivity(mIntent);
             }
@@ -219,7 +216,7 @@ public class HomeFragment extends Fragment {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 // continue with delete
                                                 db = new DatabaseHelper(getActivity().getApplicationContext());
-                                                db.deleteContact(Email.get(pos).getE_row_id());
+                                                db.deleteContact(Email.get(pos).getRowId());
                                                 Email.remove(pos);
                                                 mAdapter.notifyItemRemoved(pos);
 

@@ -1,69 +1,98 @@
 package com.elkhamitech.data.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by Ahmed on 1/24/2017.
  */
 
+@Entity(tableName = "sub_entry")
 public class SubEntryModel {
 
-    private long s_row_id;
-    private String s_name;
-    private String s_user_name;
-    private String s_password;
-    private String s_website;
-    private String s_note;
+    @PrimaryKey
+    @ColumnInfo(name = "sub_entry_id")
+    private long rowId;
+    @ColumnInfo(name = "sub_entry_name")
+    private String name;
+    @ColumnInfo(name = "user_name")
+    private String userName;
+    @ColumnInfo(name = "password")
+    private String password;
+    @ColumnInfo(name = "website")
+    private String website;
+    @ColumnInfo(name = "note")
+    private String note;
+    @ColumnInfo(name = "parent_entry_id")
     private long parentId;
-    private String created_at;
+    @ColumnInfo(name = "created_at")
+    private String createdAt;
 
+//    @Ignore
     public SubEntryModel() {
     }
 
-    public long getS_row_id() {
-        return s_row_id;
+    public SubEntryModel(long s_row_id, String name, String userName,
+                         String s_password, String s_website, String s_note,
+                         long parentId, String created_at) {
+        this.rowId = s_row_id;
+        this.name = name;
+        this.userName = userName;
+        this.password = s_password;
+        this.website = s_website;
+        this.note = s_note;
+        this.parentId = parentId;
+        this.createdAt = created_at;
     }
 
-    public void setS_row_id(long s_row_id) {
-        this.s_row_id = s_row_id;
+    public long getRowId() {
+        return rowId;
     }
 
-    public String getS_name() {
-        return s_name;
+    public void setRowId(long rowId) {
+        this.rowId = rowId;
     }
 
-    public void setS_name(String s_name) {
-        this.s_name = s_name;
+    public String getName() {
+        return name;
     }
 
-    public String getS_user_name() {
-        return s_user_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setS_user_name(String s_user_name) {
-        this.s_user_name = s_user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getS_password() {
-        return s_password;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setS_password(String s_password) {
-        this.s_password = s_password;
+    public String getPassword() {
+        return password;
     }
 
-    public String getS_website() {
-        return s_website;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setS_website(String s_website) {
-        this.s_website = s_website;
+    public String getWebsite() {
+        return website;
     }
 
-    public String getS_note() {
-        return s_note;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
-    public void setS_note(String s_note) {
-        this.s_note = s_note;
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public long getParentId() {
@@ -74,11 +103,11 @@ public class SubEntryModel {
         this.parentId = parentId;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

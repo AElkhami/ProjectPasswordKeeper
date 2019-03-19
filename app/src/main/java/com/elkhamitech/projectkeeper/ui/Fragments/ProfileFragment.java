@@ -3,6 +3,7 @@ package com.elkhamitech.projectkeeper.ui.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.elkhamitech.projectkeeper.ui.Activities.MainActivity;
 import com.elkhamitech.projectkeeper.R;
+import com.elkhamitech.projectkeeper.ui.Activities.WelcomeActivity;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
 import java.util.HashMap;
@@ -26,7 +28,6 @@ public class ProfileFragment extends Fragment {
 
     private TextView txt1,txt2,txt3;
     private Button logout;
-    private SessionManager session;
     private HashMap<String, Long> rid;
     private HashMap<String, String> user;
     private Context _context;
@@ -55,27 +56,44 @@ public class ProfileFragment extends Fragment {
                 .setActionBarTitle("Profile");
 
 
-        txt1 = (TextView)activity.findViewById(R.id.txtv1);
-        txt2 = (TextView)activity.findViewById(R.id.txtv2);
+        txt1 = activity.findViewById(R.id.txtv1);
+        txt2 = activity.findViewById(R.id.txtv2);
 
-        session = new SessionManager(activity.getApplicationContext());
-        rid = session.getRowDetails();
-        user = session.getUserDetails();
+        rid = SessionManager.getRowDetails();
+        user = SessionManager.getUserDetails();
 
-        long id = rid.get(session.KEY_ID);
-        String name = user.get(session.KEY_EMAIL);
+        long id = rid.get(SessionManager.KEY_ID);
+        String name = user.get(SessionManager.KEY_EMAIL);
 
         txt1.setText(String.valueOf(id));
         txt2.setText(name);
 
-        logout = (Button)activity.findViewById(R.id.logout);
+        logout = activity.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                session.logoutUser();
+                logoutUser();
                 activity.finish();
 
             }
         });
+    }
+
+
+    public void logoutUser(){
+
+        SessionManager.logoutUser();
+
+        // After logout redirect user to Loing Activity
+        Intent w = new Intent(getContext(), WelcomeActivity.class);
+        // Closing all the Activities
+        w.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // Add new Flag to start new Activity
+        w.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Staring Login Activity
+        startActivity(w);
+
     }
 }

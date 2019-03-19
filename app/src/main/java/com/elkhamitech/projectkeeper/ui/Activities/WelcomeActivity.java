@@ -1,15 +1,13 @@
 package com.elkhamitech.projectkeeper.ui.Activities;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
@@ -18,164 +16,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elkhamitech.projectkeeper.utils.AccessHandler.AESHelper;
-import com.elkhamitech.projectkeeper.utils.Fonts.FontCache;
+import com.elkhamitech.Constants;
 import com.elkhamitech.projectkeeper.R;
+import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
+import com.elkhamitech.projectkeeper.presenter.WelcomePresenterImpl;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
-import com.elkhamitech.data.helper.DatabaseHelper;
-import com.elkhamitech.data.model.UserModel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
+public class WelcomeActivity extends BaseActivity implements WelcomePresenterImpl {
 
-public class WelcomeActivity extends AppCompatActivity {
-
-    private Button signUp,logIn,enter;
-    private DatabaseHelper db;
-    private UserModel user;
-    private String sPin;
-    private EditText pin;
-    private SessionManager session;
-    private Long id;
-    private boolean newUser,firstTime = true;
+    private EditText pinCodeEditText;
     private boolean NumericKeyboard;
+    private WelcomePresenter presenter;
 
-
-    //for encryption and decryption
-    private String seedValue = "I don't know what is this";
-    private String normalTextEnc;
-    private String normalTextDec;
-
-    private final int REQUEST_CODE = 1;
+    private final int EXTERNAL_STORAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        TextView tv = (TextView) findViewById(R.id.appTitle);
+        presenter = new WelcomePresenter(this);
 
-        Typeface tf = FontCache.get("Audiowide-Regular.ttf", this);
-        tv.setTypeface(tf);
+        pinCodeEditText = findViewById(R.id.editPin);
 
-//        signUp = (Button)findViewById(R.id.signUp);
-//        logIn = (Button)findViewById(R.id.logIn);
-        enter = (Button)findViewById(R.id.pinEnter);
-
-        pin = (EditText)findViewById(R.id.editPin);
-
-        session = new SessionManager(getApplicationContext());
-        db = new DatabaseHelper(getApplicationContext());
-        user = new UserModel();
-        db.createUser(user);
-
-//        signUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent gotoMain = new Intent(WelcomeActivity.this, SignupActivity.class);
-//                startActivity(gotoMain);
-//                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//            }
-//        });
-//
-//        logIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent gotoMain = new Intent(WelcomeActivity.this, LoginActivity.class);
-//                startActivity(gotoMain);
-//                gotoMain.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//
-//            }
-//        });
-
-
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                sPin = pin.getText().toString();
-
-                int charCount = pin.getText().length();
-
-
-                if (sPin.equals("")) {
-
-                    Toast.makeText(getBaseContext(),
-                            "Please Fill all the Required Filed.",
-                            Toast.LENGTH_LONG).show();
-
-                }else if (pinExist()==false){
-
-                    Toast.makeText(getBaseContext(),
-                            "The pin already exist.",
-                            Toast.LENGTH_LONG).show();
-                }else if (charCount<6){
-                    Toast.makeText(getBaseContext(),
-                            "Your Pin must contain more than 6 characters.",
-                            Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    user = new UserModel();
-
-                    try {
-                        normalTextEnc = AESHelper.encrypt(seedValue, sPin);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    user.setPin(normalTextEnc);
-
-                    db.createUser(user);
-
-                    id = user.getRow_id();
-
-                    session.createLoginSession(id, normalTextEnc);
-
-                    Intent gotoMain = new Intent(WelcomeActivity.this, MainActivity.class);
-                    gotoMain.putExtra("boolean", newUser);
-                    startActivity(gotoMain);
-                    finish();
-
-                }
-            }
-     });
     }
 
-    public boolean pinExist() {
-
-
-        user = new UserModel();
-
-        try {
-            normalTextEnc = AESHelper.encrypt(seedValue, sPin);
-            normalTextDec = AESHelper.decrypt(seedValue, db.getPinUser(normalTextEnc).getPin());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (sPin.equals(normalTextDec)) {
-
-            return false;
-        }
-        return true;
-    }
-
-    public void pinKeyboard(){
-        pin.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
+    public void pinKeyboard() {
+        pinCodeEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        pinCodeEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         NumericKeyboard = true;
     }
 
-    public void textKeyboard(){
-        pin.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
+    public void textKeyboard() {
+        pinCodeEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        pinCodeEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         NumericKeyboard = false;
     }
 
@@ -186,14 +63,13 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (NumericKeyboard) {
             mInflater.inflate(R.menu.pin_keyboard, menu);
-        } else  {
+        } else {
             mInflater.inflate(R.menu.normal_keyboard, menu);
         }
 
         return true;
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -217,9 +93,9 @@ public class WelcomeActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         if (NumericKeyboard) {
-            session.createKeyboardType(NumericKeyboard);
-        }else {
-            session.createKeyboardType(NumericKeyboard);
+            SessionManager.createKeyboardType(NumericKeyboard);
+        } else {
+            SessionManager.createKeyboardType(NumericKeyboard);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -237,24 +113,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            moveTaskToBack(true);
+        moveTaskToBack(true);
     }
 
     public void restoreBackup(View view) {
 
-        if(checkPermissionForReadExternalStorage()){
-
+        if (!checkPermissionForReadExternalStorage()) {
+            requestPermissionForReadExternalStorage();
         }else {
-            try {
-                requestPermissionForReadExternalStorage();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            importDatabase();
         }
-
-        importDB();
     }
 
+    private void importDatabase(){
+        presenter.importDB(getPackageName());
+    }
 
     public boolean checkPermissionForReadExternalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -267,10 +140,10 @@ public class WelcomeActivity extends AppCompatActivity {
         return false;
     }
 
-    public void requestPermissionForReadExternalStorage() throws Exception {
+    public void requestPermissionForReadExternalStorage() {
         try {
-            ActivityCompat.requestPermissions((Activity) this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    EXTERNAL_STORAGE_REQUEST);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,42 +151,45 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    //importing database
-    private void importDB() {
-        // TODO Auto-generated method stub
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case EXTERNAL_STORAGE_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    importDatabase();
+                } else {
 
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data  = Environment.getDataDirectory();
-
-            if (sd.canWrite()) {
-                String  currentDBPath= "//data//" + this.getPackageName()
-                        + "//databases//" + "PassKeeper";
-                String backupDBPath  = "/Password Wallet/PassKeeper";
-                File  backupDB= new File(data, currentDBPath);
-                File currentDB  = new File(sd, backupDBPath);
-
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                Toast.makeText(this, "Passwords have been restored, Thanks to re-enter the pin to confirm the passwords are yours.",
-                        Toast.LENGTH_LONG).show();
-
-                Intent i = new Intent(this, FortressGate.class);
-                i.putExtra("boolean", firstTime);
-                startActivity(i);
-
-                finish();
-
+                    Toast.makeText(getApplicationContext(), Constants.PERMISSION_DENIED
+                            , Toast.LENGTH_SHORT).show();
+                }
             }
-        } catch (Exception e) {
-
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG)
-                    .show();
-
         }
+    }
+
+    @Override
+    public void userMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInputValidationSuccess(String validPinCode) {
+        presenter.createPassword(validPinCode);
+    }
+
+    @Override
+    public void onPasswordCreatedSuccessfully() {
+        Intent gotoMain = new Intent(WelcomeActivity.this, MainActivity.class);
+        boolean newUser = true;
+        gotoMain.putExtra("boolean", newUser);
+        startActivity(gotoMain);
+        finish();
+    }
+
+    public void OnEnterClick(View view) {
+        String pinCodeString = pinCodeEditText.getText().toString();
+        presenter.validateInputs(pinCodeString);
     }
 }
 

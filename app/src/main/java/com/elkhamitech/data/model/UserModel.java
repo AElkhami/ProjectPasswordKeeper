@@ -1,19 +1,45 @@
 package com.elkhamitech.data.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by Ahmed on 1/5/2017.
  */
 
+@Entity(tableName = "users")
 public class UserModel {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "user_id")
     private long row_id;
+    @ColumnInfo(name = "user_name")
     private String user_name;
+    @ColumnInfo(name = "password")
     private String password;
-    private String eMail;
+    @ColumnInfo(name = "email")
+    private String email;
+    @ColumnInfo(name = "pin")
     private String pin;
 
+    @Ignore
     public UserModel(){
+    }
 
+    public UserModel(String pin) {
+        this.pin = pin;
+    }
+
+    @Ignore
+    public UserModel(long row_id, String user_name, String password,
+                     String email, String pin) {
+        this.row_id = row_id;
+        this.user_name = user_name;
+        this.password = password;
+        this.email = email;
+        this.pin = pin;
     }
 
     public long getRow_id() {
@@ -40,12 +66,12 @@ public class UserModel {
         this.password = password;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getEmail() {
+        return email;
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPin() {

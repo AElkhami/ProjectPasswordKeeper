@@ -70,20 +70,20 @@ public class SubEntryActivity extends AppCompatActivity {
 
             db = new DatabaseHelper(getApplicationContext());
             db.getOneSubContact(row_id);
-            edtxtName.setText(db.getOneSubContact(row_id).getS_name());
-            edtxtUsrName.setText(db.getOneSubContact(row_id).getS_user_name());
+            edtxtName.setText(db.getOneSubContact(row_id).getName());
+            edtxtUsrName.setText(db.getOneSubContact(row_id).getUserName());
             try {
-                normalTextDec = AESHelper.decrypt(seedValue,db.getOneSubContact(row_id).getS_password());
+                normalTextDec = AESHelper.decrypt(seedValue,db.getOneSubContact(row_id).getPassword());
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             edtxtUsrPass.setText(normalTextDec);
-            edtxtWebsite.setText(db.getOneSubContact(row_id).getS_website());
-            edtxtNotes.setText(db.getOneSubContact(row_id).getS_note());
+            edtxtWebsite.setText(db.getOneSubContact(row_id).getWebsite());
+            edtxtNotes.setText(db.getOneSubContact(row_id).getNote());
 
             txtCreated.setVisibility(View.VISIBLE);
-            txtCreated.setText("Last Updated "+db.getOneSubContact(row_id).getCreated_at());
+            txtCreated.setText("Last Updated "+db.getOneSubContact(row_id).getCreatedAt());
 
             onCopy();
 
@@ -166,17 +166,17 @@ public class SubEntryActivity extends AppCompatActivity {
             subEntryModel = new SubEntryModel();
 
             subEntryModel.setParentId(parentId);
-            subEntryModel.setS_name(cName);
-            subEntryModel.setS_user_name(cUsrName);
+            subEntryModel.setName(cName);
+            subEntryModel.setUserName(cUsrName);
         try {
             normalTextEnc = AESHelper.encrypt(seedValue, cPass);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-            subEntryModel.setS_password(normalTextEnc);
-            subEntryModel.setS_website(cWebsite);
-            subEntryModel.setS_note(cNote);
+            subEntryModel.setPassword(normalTextEnc);
+            subEntryModel.setWebsite(cWebsite);
+            subEntryModel.setNote(cNote);
 
             db.createSubContact(subEntryModel);
 
@@ -228,18 +228,18 @@ public class SubEntryActivity extends AppCompatActivity {
             cWebsite = edtxtWebsite.getText().toString();
             cNote = edtxtNotes.getText().toString();
 
-            subEntryModel.setS_row_id(row_id);
-            subEntryModel.setS_name(cName);
-            subEntryModel.setS_user_name(cUsrName);
+            subEntryModel.setRowId(row_id);
+            subEntryModel.setName(cName);
+            subEntryModel.setUserName(cUsrName);
             try {
                 normalTextEnc = AESHelper.encrypt(seedValue, cPass);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            subEntryModel.setS_password(normalTextEnc);
-            subEntryModel.setS_website(cWebsite);
-            subEntryModel.setS_note(cNote);
+            subEntryModel.setPassword(normalTextEnc);
+            subEntryModel.setWebsite(cWebsite);
+            subEntryModel.setNote(cNote);
 
             db.updateSubContact(subEntryModel);
             disableEditText();

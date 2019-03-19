@@ -67,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="Enter" />
+                android:text="Enter"
+                android:onClick="OnEnterClick"/>
 
             <Button
                 android:layout_width="match_parent"

@@ -1,90 +1,111 @@
 package com.elkhamitech.data.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 /**
  * Created by Ahmed on 1/5/2017.
  */
 
+@Entity(tableName = "entry")
 public class EntryModel {
 
-    private long e_row_id;
-    private String e_name;
-    private String e_user_name;
-    private String e_password;
-    private String e_website;
-    private String e_note;
-    private long UserId;
-    private String created_at;
-
+    @PrimaryKey
+    @ColumnInfo(name = "entry_id")
+    private long rowId;
+    @ColumnInfo(name = "entry_name")
+    private String name;
+    @ColumnInfo(name = "user_name")
+    private String userName;
+    @ColumnInfo(name = "password")
+    private String password;
+    @ColumnInfo(name = "website")
+    private String website;
+    @ColumnInfo(name = "note")
+    private String note;
+    @ColumnInfo(name = "user_id")
+    private long userId;
+    @ColumnInfo(name = "created_at")
+    private String createdAt;
 
     public EntryModel(){
-
     }
 
-    //------Setters & Getters -----------
-
-
-    public long getE_row_id() {
-        return e_row_id;
+    public EntryModel(long row_id, String name, String user_name, String password,
+                      String website, String note, long userId, String created_at) {
+        this.rowId = row_id;
+        this.name = name;
+        this.userName = user_name;
+        this.password = password;
+        this.website = website;
+        this.note = note;
+        this.userId = userId;
+        this.createdAt = created_at;
     }
 
-    public void setE_row_id(long e_row_id) {
-        this.e_row_id = e_row_id;
+    public long getRowId() {
+        return rowId;
     }
 
-    public String getE_name() {
-        return e_name;
+    public void setRowId(long rowId) {
+        this.rowId = rowId;
     }
 
-    public void setE_name(String e_name) {
-        this.e_name = e_name;
+    public String getName() {
+        return name;
     }
 
-    public String getE_user_name() {
-        return e_user_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setE_user_name(String e_user_name) {
-        this.e_user_name = e_user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getE_password() {
-        return e_password;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setE_password(String e_password) {
-        this.e_password = e_password;
+    public String getPassword() {
+        return password;
     }
 
-    public String getE_website() {
-        return e_website;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setE_website(String e_website) {
-        this.e_website = e_website;
+    public String getWebsite() {
+        return website;
     }
 
-    public String getE_note() {
-        return e_note;
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
-    public void setE_note(String e_note) {
-        this.e_note = e_note;
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public long getUserId() {
-        return UserId;
+        return userId;
     }
 
     public void setUserId(long userId) {
-        this.UserId = userId;
+        this.userId = userId;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

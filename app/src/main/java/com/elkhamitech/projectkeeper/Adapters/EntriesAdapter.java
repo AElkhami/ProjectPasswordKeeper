@@ -56,10 +56,10 @@ public class EntriesAdapter extends RecyclerView.Adapter<EntriesAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         EntryModel entryModel = emailList.get(position);
-        holder.rid = (int) emailList.get(position).getE_row_id();
-        holder.name.setText(entryModel.getE_name());
-        holder.user_name.setText(entryModel.getE_user_name());
-        holder.created.setText(entryModel.getCreated_at());
+        holder.rid = (int) emailList.get(position).getRowId();
+        holder.name.setText(entryModel.getName());
+        holder.user_name.setText(entryModel.getUserName());
+        holder.created.setText(entryModel.getCreatedAt());
 //        holder.itemImage.setImageResource(R.mipmap.credit_card);
 
     }

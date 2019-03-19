@@ -135,7 +135,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
     }
 
 //==================================================================================================
-//-----------------------------------CRUD Functions-------------------------------------------------
+//-----------------------------------UserCrud Functions-------------------------------------------------
 
 
     //insert new row
@@ -147,7 +147,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
 
         values.put(USER_NAME, user.getUser_name());
         values.put(PASSWORD, user.getPassword());
-        values.put(EMAIL, user.geteMail());
+        values.put(EMAIL, user.getEmail());
         values.put(PIN, user.getPin());
 
         user.setRow_id(db.insert(TABLE_USER, null, values)) ;
@@ -161,16 +161,16 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         ContentValues values = new ContentValues();
 
         values.put(C_USER_CONTACT, eModel.getUserId());
-        values.put(C_NAME, eModel.getE_name());
-        values.put(C_USER_NAME, eModel.getE_user_name());
-        values.put(C_PASSWORD, eModel.getE_password());
-        values.put(C_WEBSITE, eModel.getE_website());
-        values.put(C_NOTE, eModel.getE_note());
+        values.put(C_NAME, eModel.getName());
+        values.put(C_USER_NAME, eModel.getUserName());
+        values.put(C_PASSWORD, eModel.getPassword());
+        values.put(C_WEBSITE, eModel.getWebsite());
+        values.put(C_NOTE, eModel.getNote());
         values.put(C_CREATED, getDateTime());
 
-        eModel.setE_row_id(db.insert(TABLE_CONTACT, null, values)); ;
+        eModel.setRowId(db.insert(TABLE_CONTACT, null, values)); ;
 
-        return eModel.getE_row_id();
+        return eModel.getRowId();
     }
 
     public void createSubContact (SubEntryModel Scontact){
@@ -179,11 +179,11 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         ContentValues values = new ContentValues();
 
         values.put(S_PARENT_CONTACT, Scontact.getParentId());
-        values.put(S_NAME, Scontact.getS_name());
-        values.put(S_USER_NAME, Scontact.getS_user_name());
-        values.put(S_PASSWORD, Scontact.getS_password());
-        values.put(S_WEBSITE, Scontact.getS_website());
-        values.put(S_NOTE, Scontact.getS_note());
+        values.put(S_NAME, Scontact.getName());
+        values.put(S_USER_NAME, Scontact.getUserName());
+        values.put(S_PASSWORD, Scontact.getPassword());
+        values.put(S_WEBSITE, Scontact.getWebsite());
+        values.put(S_NOTE, Scontact.getNote());
         values.put(S_CREATED, getDateTime());
 
         db.insert(TABLE_SUB_CONTACT, null, values) ;
@@ -210,7 +210,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
             if (cursor.moveToFirst()) {
                 do {
                     user.setRow_id(cursor.getLong(cursor.getColumnIndex(ROW_ID)));
-                    user.seteMail(cursor.getString(cursor.getColumnIndex(EMAIL)));
+                    user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                 } while (cursor.moveToNext());
             }
@@ -234,7 +234,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
             if (cursor.moveToFirst()) {
                 do {
                     user.setRow_id(cursor.getLong(cursor.getColumnIndex(ROW_ID)));
-                    user.seteMail(cursor.getString(cursor.getColumnIndex(EMAIL)));
+                    user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                 } while (cursor.moveToNext());
             }
@@ -258,7 +258,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
             if (cursor.moveToFirst()) {
                 do {
                     user.setRow_id(cursor.getLong(cursor.getColumnIndex(ROW_ID)));
-                    user.seteMail(cursor.getString(cursor.getColumnIndex(EMAIL)));
+                    user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                     user.setPin(cursor.getString(cursor.getColumnIndex(PIN)));
                 } while (cursor.moveToNext());
@@ -282,12 +282,12 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         if (cursor != null)
             if (cursor.moveToFirst()) {
                 do {
-                    mail.setE_name(cursor.getString(cursor.getColumnIndex(C_NAME)));
-                    mail.setE_user_name(cursor.getString(cursor.getColumnIndex(C_USER_NAME)));
-                    mail.setE_password(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
-                    mail.setE_website(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
-                    mail.setE_note(cursor.getString(cursor.getColumnIndex(C_NOTE)));
-                    mail.setCreated_at(cursor.getString(cursor.getColumnIndex(C_CREATED)));
+                    mail.setName(cursor.getString(cursor.getColumnIndex(C_NAME)));
+                    mail.setUserName(cursor.getString(cursor.getColumnIndex(C_USER_NAME)));
+                    mail.setPassword(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
+                    mail.setWebsite(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
+                    mail.setNote(cursor.getString(cursor.getColumnIndex(C_NOTE)));
+                    mail.setCreatedAt(cursor.getString(cursor.getColumnIndex(C_CREATED)));
                 } while (cursor.moveToNext());
             }
         cursor.close();
@@ -309,12 +309,12 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         if (cursor != null)
             if (cursor.moveToFirst()) {
                 do {
-                    SubC.setS_name(cursor.getString(cursor.getColumnIndex(S_NAME)));
-                    SubC.setS_user_name(cursor.getString(cursor.getColumnIndex(S_USER_NAME)));
-                    SubC.setS_password(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
-                    SubC.setS_website(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
-                    SubC.setS_note(cursor.getString(cursor.getColumnIndex(S_NOTE)));
-                    SubC.setCreated_at(cursor.getString(cursor.getColumnIndex(S_CREATED)));
+                    SubC.setName(cursor.getString(cursor.getColumnIndex(S_NAME)));
+                    SubC.setUserName(cursor.getString(cursor.getColumnIndex(S_USER_NAME)));
+                    SubC.setPassword(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
+                    SubC.setWebsite(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
+                    SubC.setNote(cursor.getString(cursor.getColumnIndex(S_NOTE)));
+                    SubC.setCreatedAt(cursor.getString(cursor.getColumnIndex(S_CREATED)));
                 } while (cursor.moveToNext());
             }
         cursor.close();
@@ -336,7 +336,7 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
                 UserModel user = new UserModel();
                 user.setRow_id(cursor.getInt((cursor.getColumnIndex(ROW_ID))));
                 user.setUser_name((cursor.getString(cursor.getColumnIndex(USER_NAME))));
-                user.seteMail(cursor.getString(cursor.getColumnIndex(EMAIL)));
+                user.setEmail(cursor.getString(cursor.getColumnIndex(EMAIL)));
 
                 // adding to the list
                 Users.add(user);
@@ -357,13 +357,13 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         if (cursor.moveToFirst()) {
             do {
                 EntryModel eMail = new EntryModel();
-                eMail.setE_row_id((cursor.getLong(cursor.getColumnIndex(C_ROW_ID))));
-                eMail.setE_name(cursor.getString((cursor.getColumnIndex(C_NAME))));
-                eMail.setE_user_name((cursor.getString(cursor.getColumnIndex(C_USER_NAME))));
-                eMail.setE_password(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
-                eMail.setE_website(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
-                eMail.setE_note(cursor.getString(cursor.getColumnIndex(C_NOTE)));
-                eMail.setCreated_at(cursor.getString(cursor.getColumnIndex(C_CREATED)));
+                eMail.setRowId((cursor.getLong(cursor.getColumnIndex(C_ROW_ID))));
+                eMail.setName(cursor.getString((cursor.getColumnIndex(C_NAME))));
+                eMail.setUserName((cursor.getString(cursor.getColumnIndex(C_USER_NAME))));
+                eMail.setPassword(cursor.getString(cursor.getColumnIndex(C_PASSWORD)));
+                eMail.setWebsite(cursor.getString(cursor.getColumnIndex(C_WEBSITE)));
+                eMail.setNote(cursor.getString(cursor.getColumnIndex(C_NOTE)));
+                eMail.setCreatedAt(cursor.getString(cursor.getColumnIndex(C_CREATED)));
                 // adding to the list
                 Mail.add(eMail);
             } while (cursor.moveToNext());
@@ -384,13 +384,13 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
         if (cursor.moveToFirst()) {
             do {
                 SubEntryModel sub = new SubEntryModel();
-                sub.setS_row_id((cursor.getLong(cursor.getColumnIndex(S_ROW_ID))));
-                sub.setS_name(cursor.getString((cursor.getColumnIndex(S_NAME))));
-                sub.setS_user_name((cursor.getString(cursor.getColumnIndex(S_USER_NAME))));
-                sub.setS_password(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
-                sub.setS_website(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
-                sub.setS_note(cursor.getString(cursor.getColumnIndex(S_NOTE)));
-                sub.setCreated_at(cursor.getString(cursor.getColumnIndex(S_CREATED)));
+                sub.setRowId((cursor.getLong(cursor.getColumnIndex(S_ROW_ID))));
+                sub.setName(cursor.getString((cursor.getColumnIndex(S_NAME))));
+                sub.setUserName((cursor.getString(cursor.getColumnIndex(S_USER_NAME))));
+                sub.setPassword(cursor.getString(cursor.getColumnIndex(S_PASSWORD)));
+                sub.setWebsite(cursor.getString(cursor.getColumnIndex(S_WEBSITE)));
+                sub.setNote(cursor.getString(cursor.getColumnIndex(S_NOTE)));
+                sub.setCreatedAt(cursor.getString(cursor.getColumnIndex(S_CREATED)));
                 // adding to the list
                 SubContact.add(sub);
             } while (cursor.moveToNext());
@@ -406,16 +406,16 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
 
         ContentValues values = new ContentValues();
 
-        values.put(C_NAME, eModel.getE_name());
-        values.put(C_USER_NAME, eModel.getE_user_name());
-        values.put(C_PASSWORD, eModel.getE_password());
-        values.put(C_WEBSITE, eModel.getE_website());
-        values.put(C_NOTE, eModel.getE_note());
+        values.put(C_NAME, eModel.getName());
+        values.put(C_USER_NAME, eModel.getUserName());
+        values.put(C_PASSWORD, eModel.getPassword());
+        values.put(C_WEBSITE, eModel.getWebsite());
+        values.put(C_NOTE, eModel.getNote());
         values.put(C_CREATED, getDateTime());
 
         // updating row
         return db.update(TABLE_CONTACT, values, C_ROW_ID + " = ?",
-                new String[] { String.valueOf(eModel.getE_row_id())});
+                new String[] { String.valueOf(eModel.getRowId())});
     }
 
     public int updateSubContact(SubEntryModel sModel) {
@@ -423,16 +423,16 @@ private static final String CREATE_TABLE_USER = "CREATE TABLE "
 
         ContentValues values = new ContentValues();
 
-        values.put(S_NAME, sModel.getS_name());
-        values.put(S_USER_NAME, sModel.getS_user_name());
-        values.put(S_PASSWORD, sModel.getS_password());
-        values.put(S_WEBSITE, sModel.getS_website());
-        values.put(S_NOTE, sModel.getS_note());
+        values.put(S_NAME, sModel.getName());
+        values.put(S_USER_NAME, sModel.getUserName());
+        values.put(S_PASSWORD, sModel.getPassword());
+        values.put(S_WEBSITE, sModel.getWebsite());
+        values.put(S_NOTE, sModel.getNote());
         values.put(S_CREATED, getDateTime());
 
         // updating row
         return db.update(TABLE_SUB_CONTACT, values, S_ROW_ID + " = ?",
-                new String[] { String.valueOf(sModel.getS_row_id())});
+                new String[] { String.valueOf(sModel.getRowId())});
     }
     //***Deleting***--------------------------------------------------------------------------------
     public long deleteContact(long row_id) {

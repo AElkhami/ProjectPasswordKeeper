@@ -18,85 +18,42 @@ import java.util.HashMap;
 
 public class SessionManager {
 
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    Context _context;
+    private static SharedPreferences prefInstance;
 
-    int PRIVATE_MODE = 0;
+    private static final String PREF_NAME = "Preference";
 
-    //Shared Prefrence File Name
-    private static final String PREF_NAME = "PrefrenceUser";
-    //Shared Prefrence Keys
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String IS_PIN = "IsPin";
     public static final String KEY_ID = "Id";
     public static final String KEY_EMAIL = "Email";
     public static final String KEYBOARD_TYPE = "KeyboardType";
 
-    //Constructor
-    public SessionManager(Context context) {
-        this._context = context;
-        preferences = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
-        editor = preferences.edit();
+
+    public static void initPref(Context context) {
+        prefInstance = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+
+    }
+
+    public static SharedPreferences getPrefs(){
+        return prefInstance;
     }
 
     /**
      * Create login session
      **/
-    public void createLoginSession(long _id, String _email) {
+    public static void createLoginSession(long _id, String _email) {
         // Storing login value as TRUE
-        editor.putBoolean(IS_LOGIN, true);
+        prefInstance.edit().putBoolean(IS_LOGIN, true).apply();
 
-        editor.putLong(KEY_ID, _id);
-        editor.putString(KEY_EMAIL, _email);
+        prefInstance.edit().putLong(KEY_ID, _id).apply();
+        prefInstance.edit().putString(KEY_EMAIL, _email).apply();
 
-        //Commit changes
-        editor.commit();
     }
 
-    public void createKeyboardType( boolean _keyboardType) {
-        // Storing login value as TRUE
-        editor.putBoolean(KEYBOARD_TYPE, _keyboardType);
-
-        //Commit changes
-        editor.commit();
+    public static void createKeyboardType( boolean _keyboardType) {
+        prefInstance.edit().putBoolean(KEYBOARD_TYPE, _keyboardType).apply();
     }
 
-
-    /**
-     * Check login method wil check user login status
-     * If false it will redirect user to login page
-     * Else won't do anything
-     */
-
-    public void checkLogin() {
-
-        // Check login status
-        if (!this.isLoggedIn()) {
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, WelcomeActivity.class);
-            // Closing all the Activities
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
-            _context.startActivity(i);
-
-        }else {
-
-            Intent e = new Intent(_context, MainActivity.class);
-            // Closing all the Activities
-            e.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            // Add new Flag to start new Activity
-            e.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            // Staring Login Activity
-            _context.startActivity(e);
-        }
-    }
 
     public void checkKeyboard(EditText edt) {
 
@@ -116,25 +73,25 @@ public class SessionManager {
      * Get stored session data
      * */
 
-    public HashMap<String, Long> getRowDetails(){
-        HashMap<String, Long> user = new HashMap<String, Long>();
+    public static HashMap<String, Long> getRowDetails(){
+        HashMap<String, Long> user = new HashMap<>();
 
-        user.put(KEY_ID, preferences.getLong(KEY_ID, 200L));
-
-        return user;
-    }
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
-
-        user.put(KEY_EMAIL, preferences.getString(KEY_EMAIL, null));
+        user.put(KEY_ID, prefInstance.getLong(KEY_ID, 200L));
 
         return user;
     }
+    public static HashMap<String, String> getUserDetails(){
+        HashMap<String, String> user = new HashMap<>();
 
-    public HashMap<String, Boolean> getKeyboardDetails(){
-        HashMap<String, Boolean> user = new HashMap<String, Boolean>();
+        user.put(KEY_EMAIL, prefInstance.getString(KEY_EMAIL, null));
 
-        user.put(KEYBOARD_TYPE, preferences.getBoolean(KEYBOARD_TYPE, true));
+        return user;
+    }
+
+    public static HashMap<String, Boolean> getKeyboardDetails(){
+        HashMap<String, Boolean> user = new HashMap<>();
+
+        user.put(KEYBOARD_TYPE, prefInstance.getBoolean(KEYBOARD_TYPE, true));
 
         return user;
     }
@@ -143,32 +100,19 @@ public class SessionManager {
     /**
      * Clear session details
      * */
-    public void logoutUser(){
+    public static void logoutUser(){
         // Clearing all data from Shared Preferences
-        editor.clear();
-        editor.commit();
-
-        // After logout redirect user to Loing Activity
-        Intent w = new Intent(_context, WelcomeActivity.class);
-        // Closing all the Activities
-        w.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        // Add new Flag to start new Activity
-        w.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // Staring Login Activity
-        _context.startActivity(w);
-
+        prefInstance.edit().clear().apply();
     }
 
-    /**
-     * Quick check for login
-     **/
+
     // Get Login State
-    public boolean isLoggedIn() {
-        return preferences.getBoolean(IS_LOGIN, false);
+    public static boolean isLoggedIn() {
+        return prefInstance.getBoolean(IS_LOGIN, false);
     }
 
     public boolean isPin() {
-        return preferences.getBoolean(IS_PIN, false);
+        return prefInstance.getBoolean(IS_PIN, false);
     }
 }
 

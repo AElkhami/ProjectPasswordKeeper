@@ -22,7 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     private UserModel user;
     private String eMail, password, sPin;
     private EditText edtxt_pass, edtxt_email, edtxt_pin;
-    private SessionManager session;
     private long id;
     private boolean newUser = true;
 
@@ -56,9 +55,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                 } else {
-                    session = new SessionManager(getApplicationContext());
-
-
                     db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();
 
@@ -72,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     db.getRegisteredUser(eMail,normalTextEnc);
 
 
-                    if (eMail.equals(db.getRegisteredUser(eMail,normalTextEnc).geteMail()) && password.equals(normalTextDec)){
+                    if (eMail.equals(db.getRegisteredUser(eMail,normalTextEnc).getEmail()) && password.equals(normalTextDec)){
                         Intent gotoMain = new Intent(LoginActivity.this, MainActivity.class);
 
                         id = db.getRegisteredUser(eMail,normalTextEnc).getRow_id();
@@ -107,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
 
                 } else {
-                    session = new SessionManager(getApplicationContext());
-
 
                     db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();

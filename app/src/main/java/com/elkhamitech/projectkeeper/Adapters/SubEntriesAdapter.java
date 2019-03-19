@@ -50,10 +50,10 @@ public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.My
     public void onBindViewHolder(SubEntriesAdapter.MyViewHolder holder, int position) {
 
         SubEntryModel subModel = subContactList.get(position);
-        holder.rid = (int) subContactList.get(position).getS_row_id();
-        holder.name.setText(subModel.getS_name());
-        holder.user_name.setText(subModel.getS_user_name());
-        holder.created.setText(subModel.getCreated_at());
+        holder.rid = (int) subContactList.get(position).getRowId();
+        holder.name.setText(subModel.getName());
+        holder.user_name.setText(subModel.getUserName());
+        holder.created.setText(subModel.getCreatedAt());
 
     }
 

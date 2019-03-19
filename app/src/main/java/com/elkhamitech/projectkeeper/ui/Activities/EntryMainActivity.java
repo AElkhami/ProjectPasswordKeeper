@@ -166,19 +166,19 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
 
         db = new DatabaseHelper(getApplicationContext());
         db.getOneContact(row_id);
-        edtxtName.setText(db.getOneContact(row_id).getE_name());
-        edtxtUsrName.setText(db.getOneContact(row_id).getE_user_name());
+        edtxtName.setText(db.getOneContact(row_id).getName());
+        edtxtUsrName.setText(db.getOneContact(row_id).getUserName());
 
         try {
-            normalTextDec = AESHelper.decrypt(seedValue, db.getOneContact(row_id).getE_password());
+            normalTextDec = AESHelper.decrypt(seedValue, db.getOneContact(row_id).getPassword());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         edtxtUsrPass.setText(normalTextDec);
-        edtxtWebsite.setText(db.getOneContact(row_id).getE_website());
-        edtxtNotes.setText(db.getOneContact(row_id).getE_note());
-        txtCreated.setText("Last Updated " + db.getOneContact(row_id).getCreated_at());
+        edtxtWebsite.setText(db.getOneContact(row_id).getWebsite());
+        edtxtNotes.setText(db.getOneContact(row_id).getNote());
+        txtCreated.setText("Last Updated " + db.getOneContact(row_id).getCreatedAt());
     }
 
     public void showSubContact() {
@@ -206,7 +206,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
                 fromListView = true;
                 Intent mIntent = new Intent(EntryMainActivity.this, SubEntryActivity.class);
                 mIntent.putExtra("boolean", fromListView);
-                mIntent.putExtra("long", subModel.getS_row_id());
+                mIntent.putExtra("long", subModel.getRowId());
 
                 startActivity(mIntent);
             }
@@ -271,9 +271,9 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
         cWebsite = edtxtWebsite.getText().toString();
         cNote = edtxtNotes.getText().toString();
 
-        eMail.setE_row_id(row_id);
-        eMail.setE_name(cName);
-        eMail.setE_user_name(cUsrName);
+        eMail.setRowId(row_id);
+        eMail.setName(cName);
+        eMail.setUserName(cUsrName);
 
         try {
             normalTextEnc = AESHelper.encrypt(seedValue, cPass);
@@ -282,9 +282,9 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
             e.printStackTrace();
         }
 
-        eMail.setE_password(normalTextEnc);
-        eMail.setE_website(cWebsite);
-        eMail.setE_note(cNote);
+        eMail.setPassword(normalTextEnc);
+        eMail.setWebsite(cWebsite);
+        eMail.setNote(cNote);
 
         db.updateContact(eMail);
         disableEditText();

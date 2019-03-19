@@ -24,7 +24,6 @@ public class SignupActivity extends AppCompatActivity  {
     private UserModel user;
     private String user_name,eMail,password;
     private EditText  edtxt_user, edtxt_pass, edtxt_email;
-    private SessionManager session;
     private Long id;
     private boolean newUser = true;
 
@@ -64,7 +63,6 @@ public class SignupActivity extends AppCompatActivity  {
                             "The email already exist.",
                             Toast.LENGTH_LONG).show();
                 }else {
-                    session = new SessionManager(getApplicationContext());
                     db = new DatabaseHelper(getApplicationContext());
                     user = new UserModel();
 
@@ -78,7 +76,7 @@ public class SignupActivity extends AppCompatActivity  {
                     }
 
                     user.setPassword(normalTextEnc);
-                    user.seteMail(eMail);
+                    user.setEmail(eMail);
 
                     db.createUser(user);
 

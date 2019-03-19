@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elkhamitech.projectkeeper.utils.AccessHandler.AESHelper;
+import com.elkhamitech.data.crud.UserCrud;
+import com.elkhamitech.data.PasswordsDatabase;
 import com.elkhamitech.projectkeeper.utils.Fonts.FontCache;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
@@ -53,11 +54,10 @@ public class FortressGate extends AppCompatActivity {
         tv.setTypeface(tf);
 
         edtxt_pin = (EditText) findViewById(R.id.editPinGate);
-        session = new SessionManager(getApplicationContext());
 
-        hashMap = session.getKeyboardDetails();
+        hashMap = SessionManager.getKeyboardDetails();
 
-        NumericKeyboard = hashMap.get(session.KEYBOARD_TYPE);
+        NumericKeyboard = hashMap.get(SessionManager.KEYBOARD_TYPE);
 
         isFirstTime = getIntent().getBooleanExtra("boolean",false);
 
@@ -80,19 +80,24 @@ public class FortressGate extends AppCompatActivity {
 
                 } else {
 
-                    db = new DatabaseHelper(getApplicationContext());
+                    normalTextDec = UserCrud.getUser(PasswordsDatabase.getDatabase()
+                            ,sPin)
+                            .getPin();
+
+                    Toast.makeText(FortressGate.this, normalTextDec, Toast.LENGTH_SHORT).show();
+
                     user = new UserModel();
 
-                    try {
-                        normalTextEnc = AESHelper.encrypt(seedValue, sPin);
-                        normalTextDec = AESHelper.decrypt(seedValue,db.getPinUser(normalTextEnc).getPin());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        normalTextEnc = AESHelper.encrypt(seedValue, sPin);
+//                        normalTextDec = AESHelper.decrypt(seedValue,db.getPinUser(normalTextEnc).getPin());
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
                     if (sPin.equals(normalTextDec)) {
 //                        Intent gotoMain = new Intent(FortressGate.this, MainActivity.class);
-//                        id = db.getPinUser(normalTextEnc).getRow_id();
+//                        id = db.getPinUser(normalTextEnc).getRowId();
 //                        session.createLoginSession(id, normalTextDec);
 //                        startActivity(gotoMain);
                         if(isFirstTime){
