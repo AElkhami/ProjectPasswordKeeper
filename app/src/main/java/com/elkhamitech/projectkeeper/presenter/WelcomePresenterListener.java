@@ -2,7 +2,7 @@ package com.elkhamitech.projectkeeper.presenter;
 
 import android.content.Context;
 
-public interface WelcomePresenterImpl {
+public interface WelcomePresenterListener {
 
     void userMessage(String msg);
     void onInputValidationSuccess(String validPinCode);

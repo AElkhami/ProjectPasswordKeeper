@@ -1,6 +1,5 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import android.content.Context;
 import android.os.Environment;
 
 import com.elkhamitech.Constants;
@@ -16,13 +15,13 @@ import java.nio.channels.FileChannel;
 
 public class WelcomePresenter {
 
-    private WelcomePresenterImpl listener;
+    private WelcomePresenterListener listener;
 
     //for encryption and decryption
     private String normalTextEnc;
     private String normalTextDec;
 
-    public WelcomePresenter(WelcomePresenterImpl listener) {
+    public WelcomePresenter(WelcomePresenterListener listener) {
         this.listener = listener;
     }
 
@@ -42,6 +41,13 @@ public class WelcomePresenter {
 
     public void createPassword(String pinCode) {
 
+        long id = saveUserPassword( pinCode);
+        saveUserSession(id);
+        listener.onPasswordCreatedSuccessfully();
+    }
+
+    public long saveUserPassword(String pinCode) {
+
         UserModel user = new UserModel();
 
 //            try {
@@ -49,16 +55,18 @@ public class WelcomePresenter {
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
-
         user.setPin(pinCode);
 
         UserCrud.createUser(PasswordsDatabase.getDatabase(), user);
 
-        long id = user.getRow_id();
+        return user.getRow_id();
+
+    }
+
+    public void saveUserSession(long id){
 
         SessionManager.createLoginSession(id, normalTextEnc);
 
-        listener.onPasswordCreatedSuccessfully();
     }
 
     //importing database

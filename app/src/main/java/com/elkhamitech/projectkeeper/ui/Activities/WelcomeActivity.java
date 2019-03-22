@@ -1,7 +1,6 @@
 package com.elkhamitech.projectkeeper.ui.Activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -14,18 +13,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.elkhamitech.Constants;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
-import com.elkhamitech.projectkeeper.presenter.WelcomePresenterImpl;
+import com.elkhamitech.projectkeeper.presenter.WelcomePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
-public class WelcomeActivity extends BaseActivity implements WelcomePresenterImpl {
+public class WelcomeActivity extends BaseActivity implements WelcomePresenterListener {
 
     private EditText pinCodeEditText;
     private boolean NumericKeyboard;
