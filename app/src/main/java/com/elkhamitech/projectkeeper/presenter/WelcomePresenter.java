@@ -6,6 +6,8 @@ import com.elkhamitech.Constants;
 import com.elkhamitech.data.PasswordsDatabase;
 import com.elkhamitech.data.crud.UserCrud;
 import com.elkhamitech.data.model.UserModel;
+import com.elkhamitech.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.ui.Activities.WelcomeActivity;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
 import java.io.File;
@@ -13,16 +15,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
+import javax.inject.Inject;
+
 public class WelcomePresenter {
 
+    private Repository repository;
     private WelcomePresenterListener listener;
 
     //for encryption and decryption
     private String normalTextEnc;
     private String normalTextDec;
 
-    public WelcomePresenter(WelcomePresenterListener listener) {
-        this.listener = listener;
+    @Inject
+    public WelcomePresenter(Repository repository) {
+        this.repository = repository;
     }
 
     public void validateInputs(String pinCode) {
@@ -65,7 +71,7 @@ public class WelcomePresenter {
 
     public void saveUserSession(long id){
 
-        SessionManager.createLoginSession(id, normalTextEnc);
+        repository.createLoginSession(id, normalTextEnc);
 
     }
 
@@ -98,4 +104,7 @@ public class WelcomePresenter {
         }
     }
 
+    public void setListener(WelcomePresenterListener listener) {
+        this.listener = listener;
+    }
 }

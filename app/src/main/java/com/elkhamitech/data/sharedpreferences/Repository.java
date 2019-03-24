@@ -1,0 +1,17 @@
+package com.elkhamitech.data.sharedpreferences;
+
+import java.util.HashMap;
+
+public interface Repository {
+
+    void createLoginSession(long id, String pin);
+    void createKeyboardType( boolean keyboardType);
+    HashMap<String, Long> getRowDetails();
+    HashMap<String, String> getUserDetails();
+    HashMap<String, Boolean> getKeyboardDetails();
+    void logoutUser();
+    boolean isLoggedIn();
+    boolean isPin();
+
+
+}

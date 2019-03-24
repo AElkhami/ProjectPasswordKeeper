@@ -17,17 +17,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.elkhamitech.Constants;
+import com.elkhamitech.data.dagger.AppComponent;
+import com.elkhamitech.data.dagger.ContextModule;
+import com.elkhamitech.data.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
+import javax.inject.Inject;
+
 public class WelcomeActivity extends BaseActivity implements WelcomePresenterListener {
 
     private EditText pinCodeEditText;
     private boolean NumericKeyboard;
-    private WelcomePresenter presenter;
+
+    @Inject
+     WelcomePresenter presenter;
 
     private final int EXTERNAL_STORAGE_REQUEST = 1;
 
@@ -36,7 +43,14 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        presenter = new WelcomePresenter(this);
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
+        component.inject(this);
+
+        presenter.setListener(this);
 
         pinCodeEditText = findViewById(R.id.editPin);
 
