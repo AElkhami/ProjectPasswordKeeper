@@ -25,4 +25,8 @@ public class BaseActivity extends AppCompatActivity {
         tv.setTypeface(tf);
 
     }
+
+    public void setListener(){
+        //todo abstraction
+    }
 }

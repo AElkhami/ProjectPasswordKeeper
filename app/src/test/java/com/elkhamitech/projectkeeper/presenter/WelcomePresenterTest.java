@@ -1,12 +1,16 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.Constants;
+import com.elkhamitech.data.crud.UserCrud;
+import com.elkhamitech.data.model.UserModel;
+import com.elkhamitech.data.sharedpreferences.Repository;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -16,12 +20,14 @@ public class WelcomePresenterTest {
 
     @Mock
     WelcomePresenterListener listener;
+    @Mock
+    Repository repository;
 
     @Before
-    public void setUp() throws Exception {
-
-        welcomePresenter = new WelcomePresenter(listener);
-
+    public void setUp(){
+        MockitoAnnotations.initMocks(this);
+        welcomePresenter = new WelcomePresenter(repository);
+        welcomePresenter.setListener(listener);
     }
 
     @Test
@@ -58,7 +64,7 @@ public class WelcomePresenterTest {
     public void saveUserPassword() {
         long id = welcomePresenter.saveUserPassword("123456");
 
-        Assert.assertEquals(0,id);
+        Assert.assertEquals(0, id);
     }
 
     @Test

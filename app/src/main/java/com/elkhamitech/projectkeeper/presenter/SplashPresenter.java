@@ -4,7 +4,7 @@ import com.elkhamitech.data.sharedpreferences.Repository;
 
 import javax.inject.Inject;
 
-public class SplashPresenter {
+public class SplashPresenter extends BasePresenter{
 
     private Repository repository;
     private SplashPresenterListener listener;
@@ -18,7 +18,7 @@ public class SplashPresenter {
         this.listener = listener;
     }
 
-    public void checkUserStatus(){
+    public void checkLoginStatus(){
         if(!repository.isLoggedIn()){
             listener.notLoggedIn();
         }else {

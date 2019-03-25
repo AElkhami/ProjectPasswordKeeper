@@ -17,7 +17,7 @@ import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
-public class WelcomePresenter {
+public class WelcomePresenter extends BasePresenter {
 
     private Repository repository;
     private WelcomePresenterListener listener;

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.elkhamitech.Constants;
@@ -17,7 +16,7 @@ import com.elkhamitech.projectkeeper.presenter.SplashPresenterListener;
 
 import javax.inject.Inject;
 
-public class SplashActivity extends AppCompatActivity implements SplashPresenterListener {
+public class SplashActivity extends BaseActivity implements SplashPresenterListener {
 
     private Intent intent;
 
@@ -38,6 +37,8 @@ public class SplashActivity extends AppCompatActivity implements SplashPresenter
 
         presenter.setListener(this);
 
+
+
         TextView tv = findViewById(R.id.splash_text);
         Typeface face = Typeface.createFromAsset(getAssets(),
                 "Audiowide-Regular.ttf");
@@ -54,7 +55,7 @@ public class SplashActivity extends AppCompatActivity implements SplashPresenter
             @Override
             public void run() {
 
-                presenter.checkUserStatus();
+                presenter.checkLoginStatus();
 
                 finish();
             }

@@ -34,7 +34,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
     private boolean NumericKeyboard;
 
     @Inject
-     WelcomePresenter presenter;
+    WelcomePresenter presenter;
 
     private final int EXTERNAL_STORAGE_REQUEST = 1;
 
