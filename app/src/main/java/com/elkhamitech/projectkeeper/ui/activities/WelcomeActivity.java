@@ -195,7 +195,7 @@ public class WelcomeActivity extends BaseActivity
 
     @Override
     public void onInputValidationSuccess(String validPinCode) {
-        presenter.createPassword(validPinCode);
+        presenter.createNewUser(validPinCode);
     }
 
     @Override

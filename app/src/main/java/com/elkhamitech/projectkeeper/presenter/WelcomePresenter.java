@@ -39,7 +39,7 @@ public class WelcomePresenter extends BasePresenter<WelcomePresenterListener> {
 
     }
 
-    public void createPassword(String pinCode) {
+    public void createNewUser(String pinCode) {
 //        try {
 //            normalTextEnc = AESHelper.encrypt(Constants.SEED, pinCode);
 //        } catch (Exception e) {

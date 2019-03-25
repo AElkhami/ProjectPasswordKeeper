@@ -2,6 +2,8 @@ package com.elkhamitech.projectkeeper.data.sharedpreferences;
 
 import android.content.SharedPreferences;
 
+import com.elkhamitech.projectkeeper.Constants;
+
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -14,7 +16,6 @@ public class SharedPrefsRepository implements Repository{
     private static final String IS_PIN = "IsPin";
     public static final String KEY_ID = "Id";
     public static final String KEY_PIN = "Pin";
-    public static final String KEYBOARD_TYPE = "KeyboardType";
 
 
     private final SharedPreferences prefs;
@@ -33,8 +34,8 @@ public class SharedPrefsRepository implements Repository{
 
     }
 
-    public  void createKeyboardType( boolean keyboardType) {
-        prefs.edit().putBoolean(KEYBOARD_TYPE, keyboardType).apply();
+    public void createKeyboardType( boolean keyboardType) {
+        prefs.edit().putBoolean(Constants.KEYBOARD_TYPE, keyboardType).apply();
     }
 
     public HashMap<String, Long> getRowDetails(){
@@ -56,7 +57,8 @@ public class SharedPrefsRepository implements Repository{
     public HashMap<String, Boolean> getKeyboardDetails(){
         HashMap<String, Boolean> user = new HashMap<>();
 
-        user.put(KEYBOARD_TYPE, prefs.getBoolean(KEYBOARD_TYPE, true));
+        user.put(Constants.KEYBOARD_TYPE, prefs
+                .getBoolean(Constants.KEYBOARD_TYPE, true));
 
         return user;
     }

@@ -10,4 +10,5 @@ public class Constants {
     public static final String PERMISSION_DENIED = "Permission denied, you can go to setting to enable it.";
     public static final int SPLASH_DISPLAY_LENGTH = 2000;
     public static final String Error_WRONG_PIN = "Pin code is incorrect.";
+    public static final String KEYBOARD_TYPE = "KEYBOARD_TYPE";
 }

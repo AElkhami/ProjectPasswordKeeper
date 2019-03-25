@@ -4,7 +4,6 @@ import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,8 +11,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.verify;
+
 @RunWith(MockitoJUnitRunner.class)
 public class WelcomePresenterTest {
+
+    private String pinCode_correct = "123456";
+    private String pinCode_wrongLength = "123";
+    private String pinCode_empty = "";
 
     private WelcomePresenter welcomePresenter;
 
@@ -32,45 +37,31 @@ public class WelcomePresenterTest {
     }
 
     @Test
-    public void validateEmptyInput() {
-        welcomePresenter.validateInputs("");
+    public void validateInputs_emptyInput() {
+        welcomePresenter.validateInputs(pinCode_empty);
         listener.userMessage(Constants.ERROR_EMPTY_TEXT);
     }
 
     @Test
-    public void validatePasswordLengthInput() {
-        welcomePresenter.validateInputs("123");
+    public void validateInputs_wrongPasswordLength() {
+        welcomePresenter.validateInputs(pinCode_wrongLength);
         listener.userMessage(Constants.ERROR_PASSWORD_LENGTH);
     }
 
     @Test
-    public void validateCorrectInputs() {
-        welcomePresenter.validateInputs("123456");
-        listener.onInputValidationSuccess("123456");
+    public void validateInputs_CorrectInputs() {
+        welcomePresenter.validateInputs(pinCode_correct);
+        listener.onInputValidationSuccess(pinCode_correct);
     }
 
 
     @Test
-    public void validateInputs() {
-        validateEmptyInput();
-        validatePasswordLengthInput();
-        validateCorrectInputs();
+    public void createNewUser() {
+        welcomePresenter.createNewUser(pinCode_correct);
+        verify(listener).onPasswordCreatedSuccessfully();
     }
 
-    @Test
-    public void createPassword() {
-    }
 
-    @Test
-    public void saveUserPassword() {
-        long id = welcomePresenter.saveUserPassword("123456");
-
-        Assert.assertEquals(0, id);
-    }
-
-    @Test
-    public void saveUserSession() {
-    }
 
     @Test
     public void importDB() {

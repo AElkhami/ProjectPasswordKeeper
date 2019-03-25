@@ -60,23 +60,9 @@ public class FortressGatePresenterTest {
 
     @Test
     public void checkPassword_correct() {
-        welcomePresenter.createPassword(pinCode_correct);
+        welcomePresenter.createNewUser(pinCode_correct);
         presenter.checkPassword(pinCode_correct);
         verify(listener).onCorrectPassword();
     }
 
-    @Test
-    public void saveKeyboardType_true() {
-        presenter.saveKeyboardType(isNumericKeyboard_true);
-    }
-
-    @Test
-    public void saveKeyboardType_false() {
-        presenter.saveKeyboardType(isNumericKeyboard_false);
-    }
-
-    @Test
-    public void setListener() {
-        assertThat(listener,instanceOf(FortressGatePresenterListener.class));
-    }
 }
