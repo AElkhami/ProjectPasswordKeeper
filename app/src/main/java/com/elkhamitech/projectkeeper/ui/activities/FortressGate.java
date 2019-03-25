@@ -1,9 +1,6 @@
-package com.elkhamitech.projectkeeper.ui.Activities;
+package com.elkhamitech.projectkeeper.ui.activities;
 
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
@@ -12,32 +9,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elkhamitech.data.crud.UserCrud;
-import com.elkhamitech.data.PasswordsDatabase;
-import com.elkhamitech.projectkeeper.utils.Fonts.FontCache;
 import com.elkhamitech.projectkeeper.R;
+import com.elkhamitech.projectkeeper.data.dagger.AppComponent;
+import com.elkhamitech.projectkeeper.data.dagger.ContextModule;
+import com.elkhamitech.projectkeeper.data.dagger.DaggerAppComponent;
+import com.elkhamitech.projectkeeper.presenter.FortressGatePresenter;
+import com.elkhamitech.projectkeeper.presenter.FortressGatePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
-import com.elkhamitech.data.helper.DatabaseHelper;
-import com.elkhamitech.data.model.UserModel;
 
-import java.util.HashMap;
+import javax.inject.Inject;
 
-public class FortressGate extends AppCompatActivity {
+public class FortressGate extends BaseActivity
+        implements FortressGatePresenterListener {
 
-    // Database Helper
-    DatabaseHelper db;
-    UserModel user;
-    String sPin;
-    EditText edtxt_pin;
-    SessionManager session;
-    private HashMap<String, Boolean> hashMap;
-    long id;
-    private boolean NumericKeyboard;
-    private boolean isFirstTime = false;
+    private String sPin;
+    private EditText edtxt_pin;
+    private Button loginBtn;
+    private boolean isNumericKeyboard;
+
+    @Inject
+    FortressGatePresenter presenter;
 
     //for encryption and decryption
     private String seedValue = "I don't know what is this";
@@ -49,85 +42,53 @@ public class FortressGate extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fortress_gate);
 
-        TextView tv = (TextView) findViewById(R.id.appTitle);
-        Typeface tf = FontCache.get("Audiowide-Regular.ttf", this);
-        tv.setTypeface(tf);
+        initView();
 
-        edtxt_pin = (EditText) findViewById(R.id.editPinGate);
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+        component.inject(this);
 
-        hashMap = SessionManager.getKeyboardDetails();
+        presenter.setListener(this);
 
-        NumericKeyboard = hashMap.get(SessionManager.KEYBOARD_TYPE);
+        isNumericKeyboard = presenter.getKeyboardStatus();
 
-        isFirstTime = getIntent().getBooleanExtra("boolean",false);
-
-
-        Button pinLogin = (Button)findViewById(R.id.pinEnterGate);
-        pinLogin.setOnClickListener(new View.OnClickListener() {
-
-
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
                 sPin = edtxt_pin.getText().toString();
-
-                if (sPin.equals("")) {
-
-                    Toast.makeText(getBaseContext(),
-                            "Please Fill all the Required Filed.",
-                            Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    normalTextDec = UserCrud.getUser(PasswordsDatabase.getDatabase()
-                            ,sPin)
-                            .getPin();
-
-                    Toast.makeText(FortressGate.this, normalTextDec, Toast.LENGTH_SHORT).show();
-
-                    user = new UserModel();
-
 //                    try {
 //                        normalTextEnc = AESHelper.encrypt(seedValue, sPin);
 //                        normalTextDec = AESHelper.decrypt(seedValue,db.getPinUser(normalTextEnc).getPin());
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
-
-                    if (sPin.equals(normalTextDec)) {
-//                        Intent gotoMain = new Intent(FortressGate.this, MainActivity.class);
-//                        id = db.getPinUser(normalTextEnc).getRowId();
-//                        session.createLoginSession(id, normalTextDec);
-//                        startActivity(gotoMain);
-                        if(isFirstTime){
-                            Intent i = new Intent(FortressGate.this, MainActivity.class);
-                            startActivity(i);
-                            session.createLoginSession(id, normalTextEnc);
-                        }else {
-                            finish();
-                        }
-
-                    } else {
-                        Toast.makeText(getBaseContext(),
-                                "Pin is incorrect.",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
+                    presenter.checkPassword(sPin);
             }
         });
     }
 
-    public void pinKeyboard(){
+    private void initView() {
+
+        setTitleFont(R.id.appTitle);
+
+        edtxt_pin = findViewById(R.id.editPinGate);
+        edtxt_pin.requestFocus();
+        loginBtn = findViewById(R.id.pinEnterGate);
+    }
+
+    public void pinKeyboard() {
         edtxt_pin.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         edtxt_pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        NumericKeyboard = true;
-}
+        isNumericKeyboard = true;
+    }
 
-    public void textKeyboard(){
+    public void textKeyboard() {
         edtxt_pin.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         edtxt_pin.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        NumericKeyboard = false;
+        isNumericKeyboard = false;
     }
 
     @Override
@@ -135,21 +96,19 @@ public class FortressGate extends AppCompatActivity {
 
         MenuInflater mInflater = getMenuInflater();
 
-        if (NumericKeyboard) {
+        if (isNumericKeyboard) {
             mInflater.inflate(R.menu.pin_keyboard, menu);
             pinKeyboard();
-        } else  {
+        } else {
             mInflater.inflate(R.menu.normal_keyboard, menu);
         }
 
         return true;
-
     }
 
-    // change between keyboards
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        // change between keyboards
         switch (item.getItemId()) {
             case R.id.pin: //opposite image
                 invalidateOptionsMenu();
@@ -168,14 +127,12 @@ public class FortressGate extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         super.onPrepareOptionsMenu(menu);
 
-        if (NumericKeyboard) {
-
-            session.createKeyboardType(NumericKeyboard);
-        }else {
-            session.createKeyboardType(NumericKeyboard);
+        if (isNumericKeyboard) {
+            presenter.saveKeyboardType(isNumericKeyboard);
+        } else {
+            presenter.saveKeyboardType(isNumericKeyboard);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -183,7 +140,6 @@ public class FortressGate extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         moveTaskToBack(true);
     }
 
@@ -196,7 +152,16 @@ public class FortressGate extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         SecurityModerator.lockAppStoreTime();
+    }
+
+    @Override
+    public void onCorrectPassword() {
+        finish();
+    }
+
+    @Override
+    public void userMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

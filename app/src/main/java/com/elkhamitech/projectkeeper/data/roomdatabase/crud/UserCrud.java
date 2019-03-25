@@ -19,8 +19,9 @@ public class UserCrud {
         this.db = db;
     }
 
-    public long createUser( UserModel user){
-
+    public long createUser(String pinCode){
+        UserModel user = new UserModel();
+        user.setPin(pinCode);
         return db.userDao().createUser(user);
     }
 

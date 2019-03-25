@@ -1,19 +1,36 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import javax.inject.Inject;
+import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
-public abstract class BasePresenter<L, R, C> {
+import java.util.HashMap;
 
-    protected L listener;
-    protected R repository;
-    protected C crud;
+public abstract class BasePresenter<E extends BasePresenterListener> {
 
-//    public BasePresenter(R repository, C crud){
-//        this.repository = repository;
-//        this.crud = crud;
-//    }
+    E listener;
+    protected Repository repository;
+    protected UserCrud crud;
 
-    public void setListener(L listener) {
+    BasePresenter(Repository repository) {
+        this.repository = repository;
+    }
+
+    BasePresenter(Repository repository, UserCrud crud) {
+        this.repository = repository;
+        this.crud = crud;
+    }
+
+    public void setListener(E listener) {
         this.listener = listener;
+    }
+
+    public void saveKeyboardType(boolean isNumericKeyboard) {
+        repository.createKeyboardType(isNumericKeyboard);
+    }
+
+    public boolean getKeyboardStatus() {
+        HashMap<String, Boolean> hashMap = repository.getKeyboardDetails();
+        return hashMap.get(SessionManager.KEYBOARD_TYPE);
     }
 }

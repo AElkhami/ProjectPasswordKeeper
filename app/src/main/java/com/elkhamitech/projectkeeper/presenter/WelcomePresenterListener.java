@@ -1,10 +1,6 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import android.content.Context;
-
-public interface WelcomePresenterListener {
-
-    void userMessage(String msg);
+public interface WelcomePresenterListener extends BasePresenterListener {
     void onInputValidationSuccess(String validPinCode);
     void onPasswordCreatedSuccessfully();
 }

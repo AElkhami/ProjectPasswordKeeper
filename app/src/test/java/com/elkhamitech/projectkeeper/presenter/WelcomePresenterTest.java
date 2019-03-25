@@ -1,6 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import org.junit.Assert;
@@ -20,11 +21,13 @@ public class WelcomePresenterTest {
     WelcomePresenterListener listener;
     @Mock
     Repository repository;
+    @Mock
+    UserCrud crud;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        welcomePresenter = new WelcomePresenter(repository);
+        welcomePresenter = new WelcomePresenter(repository, crud);
         welcomePresenter.setListener(listener);
     }
 

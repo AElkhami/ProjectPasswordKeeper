@@ -17,18 +17,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.data.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.data.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.data.dagger.DaggerAppComponent;
-import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
 
 import javax.inject.Inject;
 
-public class WelcomeActivity extends BaseActivity implements WelcomePresenterListener {
+public class WelcomeActivity extends BaseActivity
+        implements WelcomePresenterListener {
 
     private EditText pinCodeEditText;
     private boolean NumericKeyboard;
@@ -43,6 +43,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        setTitleFont(R.id.appTitle);
+
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
@@ -53,6 +55,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
         presenter.setListener(this);
 
         pinCodeEditText = findViewById(R.id.editPin);
+
+        NumericKeyboard = presenter.getKeyboardStatus();
 
     }
 
@@ -75,6 +79,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
 
         if (NumericKeyboard) {
             mInflater.inflate(R.menu.pin_keyboard, menu);
+            pinKeyboard();
         } else {
             mInflater.inflate(R.menu.normal_keyboard, menu);
         }
@@ -105,9 +110,9 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
     public boolean onPrepareOptionsMenu(Menu menu) {
 
         if (NumericKeyboard) {
-            SessionManager.createKeyboardType(NumericKeyboard);
+            presenter.saveKeyboardType(NumericKeyboard);
         } else {
-            SessionManager.createKeyboardType(NumericKeyboard);
+            presenter.saveKeyboardType(NumericKeyboard);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -164,7 +169,9 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case EXTERNAL_STORAGE_REQUEST: {
@@ -182,7 +189,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomePresenterLis
 
     @Override
     public void userMessage(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg,
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override

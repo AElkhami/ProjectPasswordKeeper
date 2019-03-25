@@ -7,49 +7,40 @@ import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import javax.inject.Inject;
 
-public class FortressGatePresenter extends BasePresenter {
+public class FortressGatePresenter extends BasePresenter<FortressGatePresenterListener> {
 
-    private FortressGatePresenterListener listener;
-    private Repository repository;
     private UserCrud crud;
 
     @Inject
     FortressGatePresenter(Repository repository, UserCrud crud) {
-        this.repository = repository;
+        super(repository, crud);
         this.crud = crud;
     }
 
-    public void checkPassword(String userPin){
+    public void checkPassword(String userPin) {
 
-        if(!userPin.equals("")){
+        if (!userPin.equals("")) {
             String dbPin = getUserPin(userPin);
-            if(!dbPin.equals(userPin)){
+            if (!dbPin.equals(userPin)) {
                 listener.userMessage(Constants.Error_WRONG_PIN);
-            }else {
+            } else {
                 listener.onCorrectPassword();
             }
-        }else {
+        } else {
             listener.userMessage(Constants.ERROR_EMPTY_TEXT);
         }
     }
 
-    private String getUserPin(String pinCode){
+    private String getUserPin(String pinCode) {
 
-         UserModel user = crud.getUser(pinCode);
+        UserModel user = crud.getUser(pinCode);
 
-         if(user == null){
-             //todo improve security.
-             return "";
-         }else {
-             return user.getPin();
-         }
+        if (user == null) {
+            //todo improve security.
+            return "";
+        } else {
+            return user.getPin();
+        }
     }
 
-    public void saveKeyboardType(boolean isNumericKeyboard){
-        repository.createKeyboardType(isNumericKeyboard);
-    }
-
-    public void setListener(FortressGatePresenterListener listener) {
-        this.listener = listener;
-    }
 }

@@ -26,6 +26,8 @@ public class SplashActivity extends BaseActivity implements SplashPresenterListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        setTitleFont(R.id.appTitle);
+
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
@@ -36,9 +38,7 @@ public class SplashActivity extends BaseActivity implements SplashPresenterListe
         presenter.setListener(this);
 
         splashRunner();
-
     }
-
 
     public void splashRunner() {
 

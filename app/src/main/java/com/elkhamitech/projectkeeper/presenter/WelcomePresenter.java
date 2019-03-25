@@ -4,7 +4,6 @@ import android.os.Environment;
 
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import java.io.File;
@@ -14,18 +13,14 @@ import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
-public class WelcomePresenter extends BasePresenter {
+public class WelcomePresenter extends BasePresenter<WelcomePresenterListener> {
 
     private Repository repository;
-    private WelcomePresenterListener listener;
     private UserCrud userCrud;
 
-    //for encryption and decryption
-    private String normalTextEnc;
-    private String normalTextDec;
-
     @Inject
-    public WelcomePresenter(Repository repository,UserCrud userCrud ) {
+    public WelcomePresenter(Repository repository, UserCrud userCrud) {
+        super(repository, userCrud);
         this.repository = repository;
         this.userCrud = userCrud;
     }
@@ -45,34 +40,16 @@ public class WelcomePresenter extends BasePresenter {
     }
 
     public void createPassword(String pinCode) {
-
-        long id = saveUserPassword( pinCode);
-        saveUserSession(id);
+//        try {
+//            normalTextEnc = AESHelper.encrypt(Constants.SEED, pinCode);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        long id = userCrud.createUser(pinCode);
+        repository.createLoginSession(id, pinCode);
         listener.onPasswordCreatedSuccessfully();
     }
 
-    public long saveUserPassword(String pinCode) {
-
-        UserModel user = new UserModel();
-
-//            try {
-//                normalTextEnc = AESHelper.encrypt(Constants.SEED, pinCode);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-        user.setPin(pinCode);
-
-        userCrud.createUser(user);
-
-        return user.getRow_id();
-
-    }
-
-    public void saveUserSession(long id){
-
-        repository.createLoginSession(id, normalTextEnc);
-
-    }
 
     //importing database
     public void importDB(String packageName) {
@@ -103,7 +80,4 @@ public class WelcomePresenter extends BasePresenter {
         }
     }
 
-    public void setListener(WelcomePresenterListener listener) {
-        this.listener = listener;
-    }
 }

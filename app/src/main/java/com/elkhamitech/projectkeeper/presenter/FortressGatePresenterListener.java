@@ -1,6 +1,5 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-public interface FortressGatePresenterListener {
+public interface FortressGatePresenterListener extends BasePresenterListener {
     void onCorrectPassword();
-    void userMessage(String msg);
 }
