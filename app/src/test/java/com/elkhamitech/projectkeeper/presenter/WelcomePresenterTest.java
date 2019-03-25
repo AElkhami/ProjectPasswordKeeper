@@ -1,9 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import com.elkhamitech.Constants;
-import com.elkhamitech.data.crud.UserCrud;
-import com.elkhamitech.data.model.UserModel;
-import com.elkhamitech.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,10 +1,19 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-public abstract class BasePresenter<E> {
+import javax.inject.Inject;
 
-    protected E listener;
+public abstract class BasePresenter<L, R, C> {
 
-    public void setListener(E listener) {
+    protected L listener;
+    protected R repository;
+    protected C crud;
+
+//    public BasePresenter(R repository, C crud){
+//        this.repository = repository;
+//        this.crud = crud;
+//    }
+
+    public void setListener(L listener) {
         this.listener = listener;
     }
 }

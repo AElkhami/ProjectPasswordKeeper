@@ -1,6 +1,6 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import com.elkhamitech.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import javax.inject.Inject;
 

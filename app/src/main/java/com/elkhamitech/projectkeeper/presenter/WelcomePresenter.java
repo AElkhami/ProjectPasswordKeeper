@@ -2,13 +2,10 @@ package com.elkhamitech.projectkeeper.presenter;
 
 import android.os.Environment;
 
-import com.elkhamitech.Constants;
-import com.elkhamitech.data.PasswordsDatabase;
-import com.elkhamitech.data.crud.UserCrud;
-import com.elkhamitech.data.model.UserModel;
-import com.elkhamitech.data.sharedpreferences.Repository;
-import com.elkhamitech.projectkeeper.ui.Activities.WelcomeActivity;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SessionManager;
+import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
+import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,14 +18,16 @@ public class WelcomePresenter extends BasePresenter {
 
     private Repository repository;
     private WelcomePresenterListener listener;
+    private UserCrud userCrud;
 
     //for encryption and decryption
     private String normalTextEnc;
     private String normalTextDec;
 
     @Inject
-    public WelcomePresenter(Repository repository) {
+    public WelcomePresenter(Repository repository,UserCrud userCrud ) {
         this.repository = repository;
+        this.userCrud = userCrud;
     }
 
     public void validateInputs(String pinCode) {
@@ -63,7 +62,7 @@ public class WelcomePresenter extends BasePresenter {
 //            }
         user.setPin(pinCode);
 
-        UserCrud.createUser(PasswordsDatabase.getDatabase(), user);
+        userCrud.createUser(user);
 
         return user.getRow_id();
 

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activities.FortressGate">
+    tools:context=".ui.activities.FortressGate">
 
 <LinearLayout
     android:layout_width="match_parent"

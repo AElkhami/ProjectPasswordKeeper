@@ -3,7 +3,7 @@ package com.elkhamitech.projectkeeper.utils.AccessHandler;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.elkhamitech.projectkeeper.ui.Activities.FortressGate;
+import com.elkhamitech.projectkeeper.ui.activities.FortressGate;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;

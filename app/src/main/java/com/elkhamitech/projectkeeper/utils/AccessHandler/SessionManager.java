@@ -1,14 +1,10 @@
 package com.elkhamitech.projectkeeper.utils.AccessHandler;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.EditText;
-
-import com.elkhamitech.projectkeeper.ui.Activities.MainActivity;
-import com.elkhamitech.projectkeeper.ui.Activities.WelcomeActivity;
 
 import java.util.HashMap;
 

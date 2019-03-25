@@ -1,8 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import com.elkhamitech.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
