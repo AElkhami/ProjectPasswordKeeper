@@ -1,4 +1,4 @@
-package com.elkhamitech.projectkeeper.data.dagger;
+package com.elkhamitech.projectkeeper.dagger;
 
 import com.elkhamitech.projectkeeper.ui.activities.FortressGate;
 import com.elkhamitech.projectkeeper.ui.activities.SplashActivity;

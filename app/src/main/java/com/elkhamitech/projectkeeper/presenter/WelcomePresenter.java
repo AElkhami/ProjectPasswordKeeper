@@ -13,16 +13,34 @@ import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
-public class WelcomePresenter extends BasePresenter<WelcomePresenterListener> {
+public class WelcomePresenter implements BasePresenterContract,SetPresenterListener<WelcomePresenterListener> {
 
     private Repository repository;
     private UserCrud userCrud;
+    private WelcomePresenterListener listener;
 
     @Inject
-    public WelcomePresenter(Repository repository, UserCrud userCrud) {
-        super(repository, userCrud);
+    BasePresenterImpl basePresenter;
+
+    @Inject
+    WelcomePresenter(Repository repository, UserCrud userCrud) {
         this.repository = repository;
         this.userCrud = userCrud;
+    }
+
+    @Override
+    public void setListener(WelcomePresenterListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void saveKeyboardType(boolean isNumericKeyboard) {
+        basePresenter.saveKeyboardType(isNumericKeyboard);
+    }
+
+    @Override
+    public boolean getKeyboardStatus() {
+        return basePresenter.getKeyboardStatus();
     }
 
     public void validateInputs(String pinCode) {
@@ -49,7 +67,6 @@ public class WelcomePresenter extends BasePresenter<WelcomePresenterListener> {
         repository.createLoginSession(id, pinCode);
         listener.onPasswordCreatedSuccessfully();
     }
-
 
     //importing database
     public void importDB(String packageName) {

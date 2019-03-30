@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.projectkeeper.data.dagger.AppComponent;
-import com.elkhamitech.projectkeeper.data.dagger.ContextModule;
-import com.elkhamitech.projectkeeper.data.dagger.DaggerAppComponent;
+import com.elkhamitech.projectkeeper.dagger.AppComponent;
+import com.elkhamitech.projectkeeper.dagger.ContextModule;
+import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.FortressGatePresenter;
 import com.elkhamitech.projectkeeper.presenter.FortressGatePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;

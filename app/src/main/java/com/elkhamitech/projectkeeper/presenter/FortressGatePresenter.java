@@ -3,17 +3,21 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import javax.inject.Inject;
 
-public class FortressGatePresenter extends BasePresenter<FortressGatePresenterListener> {
+public class FortressGatePresenter
+        implements BasePresenterContract
+        , SetPresenterListener<FortressGatePresenterListener> {
 
     private UserCrud crud;
+    private FortressGatePresenterListener listener;
 
     @Inject
-    FortressGatePresenter(Repository repository, UserCrud crud) {
-        super(repository, crud);
+    BasePresenterImpl basePresenter;
+
+    @Inject
+    FortressGatePresenter(UserCrud crud) {
         this.crud = crud;
     }
 
@@ -43,4 +47,18 @@ public class FortressGatePresenter extends BasePresenter<FortressGatePresenterLi
         }
     }
 
+    @Override
+    public void setListener(FortressGatePresenterListener listener) {
+        this.listener = listener;
+    }
+
+    @Override
+    public void saveKeyboardType(boolean isNumericKeyboard) {
+        basePresenter.saveKeyboardType(isNumericKeyboard);
+    }
+
+    @Override
+    public boolean getKeyboardStatus() {
+        return basePresenter.getKeyboardStatus();
+    }
 }

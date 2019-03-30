@@ -1,4 +1,4 @@
-package com.elkhamitech.projectkeeper.data.dagger;
+package com.elkhamitech.projectkeeper.dagger;
 
 import android.content.Context;
 

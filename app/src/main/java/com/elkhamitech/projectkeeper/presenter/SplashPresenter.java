@@ -4,12 +4,16 @@ import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
 
 import javax.inject.Inject;
 
-public class SplashPresenter extends BasePresenter<SplashPresenterListener>{
+public class SplashPresenter implements SetPresenterListener<SplashPresenterListener>{
+
+
+    private Repository repository;
+    private SplashPresenterListener listener;
 
 
     @Inject
     SplashPresenter(Repository repository){
-        super(repository);
+        this.repository = repository;
     }
 
 
@@ -19,5 +23,10 @@ public class SplashPresenter extends BasePresenter<SplashPresenterListener>{
         }else {
             listener.loggedIn();
         }
+    }
+
+    @Override
+    public void setListener(SplashPresenterListener listener) {
+        this.listener = listener;
     }
 }
