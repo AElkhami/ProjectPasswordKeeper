@@ -21,29 +21,21 @@ public class FortressGatePresenter
         this.crud = crud;
     }
 
-    public void checkPassword(String userPin) {
+    public void checkPassword(String userPin){
 
         if (!userPin.equals("")) {
-            String dbPin = getUserPin(userPin);
-            if (!dbPin.equals(userPin)) {
+            if(crud.getUser(userPin)!= null){
+                String dbPin = crud.getUser(userPin).getPin();
+                if (dbPin.equals(userPin)) {
+                    listener.onCorrectPassword();
+                } else {
+                    listener.userMessage(Constants.Error_WRONG_PIN);
+                }
+            }else {
                 listener.userMessage(Constants.Error_WRONG_PIN);
-            } else {
-                listener.onCorrectPassword();
             }
         } else {
             listener.userMessage(Constants.ERROR_EMPTY_TEXT);
-        }
-    }
-
-    private String getUserPin(String pinCode) {
-
-        UserModel user = crud.getUser(pinCode);
-
-        if (user == null) {
-            //todo improve security.
-            return "";
-        } else {
-            return user.getPin();
         }
     }
 

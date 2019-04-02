@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class SplashPresenterTest {
 
@@ -35,14 +36,14 @@ public class SplashPresenterTest {
 
     @Test
     public void checkLoginStatus_logged() {
-        repository.createLoginSession(0,"123456");
+        when(repository.isLoggedIn()).thenReturn(true);
         presenter.checkLoginStatus();
-        //todo fix this test
         verify(listener).loggedIn();
     }
 
     @Test
     public void checkLoginStatus_notLogged() {
+        when(repository.isLoggedIn()).thenReturn(false);
         presenter.checkLoginStatus();
         verify(listener).notLoggedIn();
     }

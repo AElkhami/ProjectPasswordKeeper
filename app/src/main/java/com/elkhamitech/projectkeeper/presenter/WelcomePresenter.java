@@ -13,7 +13,8 @@ import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
-public class WelcomePresenter implements BasePresenterContract,SetPresenterListener<WelcomePresenterListener> {
+public class WelcomePresenter implements BasePresenterContract,
+        SetPresenterListener<WelcomePresenterListener> {
 
     private Repository repository;
     private UserCrud userCrud;
@@ -66,35 +67,6 @@ public class WelcomePresenter implements BasePresenterContract,SetPresenterListe
         long id = userCrud.createUser(pinCode);
         repository.createLoginSession(id, pinCode);
         listener.onPasswordCreatedSuccessfully();
-    }
-
-    //importing database
-    public void importDB(String packageName) {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
-
-            if (sd.canWrite()) {
-                String currentDBPath = "//data//" + packageName
-                        + "//databases//" + "PassKeeper";
-                String backupDBPath = "/Password Wallet/PassKeeper";
-                File backupDB = new File(data, currentDBPath);
-                File currentDB = new File(sd, backupDBPath);
-
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-
-                listener.userMessage(Constants.BACKUP_RESTORED);
-
-            }
-        } catch (Exception e) {
-
-            listener.userMessage(e.toString());
-
-        }
     }
 
 }

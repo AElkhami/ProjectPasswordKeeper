@@ -13,5 +13,4 @@ public interface Repository {
     boolean isLoggedIn();
     boolean isPin();
 
-
 }

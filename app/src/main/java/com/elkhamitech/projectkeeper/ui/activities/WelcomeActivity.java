@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
@@ -24,6 +25,11 @@ import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
@@ -143,7 +149,30 @@ public class WelcomeActivity extends BaseActivity
     }
 
     private void importDatabase(){
-        presenter.importDB(getPackageName());
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "//data//" + getPackageName()
+                        + "//databases//" + "PassKeeper";
+                String backupDBPath = "/Password Wallet/PassKeeper";
+                File backupDB = new File(data, currentDBPath);
+                File currentDB = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+
+                userMessage(Constants.BACKUP_RESTORED);
+            }
+        } catch (Exception e) {
+
+            userMessage(e.toString());
+
+        }
     }
 
     public boolean checkPermissionForReadExternalStorage() {

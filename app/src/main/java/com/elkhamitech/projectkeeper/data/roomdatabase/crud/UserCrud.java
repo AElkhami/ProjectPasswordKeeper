@@ -12,6 +12,8 @@ public class UserCrud {
 //        task.execute();
 //    }
 
+    private UserModel user = new UserModel();
+
     private final PasswordsDatabase db;
 
     @Inject
@@ -20,14 +22,19 @@ public class UserCrud {
     }
 
     public long createUser(String pinCode){
-        UserModel user = new UserModel();
+
         user.setPin(pinCode);
         return db.userDao().createUser(user);
     }
 
     public UserModel getUser( String pinCode){
 
-        return db.userDao().getRegisteredUser(pinCode);
+        if (user != null) {
+            return db.userDao().getRegisteredUser(pinCode);
+        }else{
+            return null;
+        }
+
     }
 
 
