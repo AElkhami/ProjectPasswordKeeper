@@ -3,16 +3,14 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,11 +25,13 @@ public class FortressGatePresenterTest {
     @Mock
     private FortressGatePresenterListener listener;
     @Mock
+    private Repository repository;
+    @Mock
     private UserCrud crud;
     @Mock
-    private BasePresenterImpl basePresenter;
-    @Mock
     private UserModel userModel;
+    @Mock
+    private BasePresenterImpl basePresenter;
 
     @Before
     public void setUp() {
@@ -65,24 +65,15 @@ public class FortressGatePresenterTest {
     }
 
     @Test
-    public void setListener() {
-        assertThat(listener, instanceOf(FortressGatePresenterListener.class));
+    public void checkPassword_notExist() {
+        when(crud.getUser(pinCode_wrong))
+                .thenReturn(userModel);
+
+        userModel.setPin(null);
+
+        presenter.checkPassword(pinCode_wrong);
+
+        verify(listener).userMessage(Constants.Error_WRONG_PIN);
     }
 
-    @Test
-    public void saveKeyboardType() {
-        //todo
-    }
-
-    @Test
-    public void getKeyboardStatus_numeric() {
-        when(basePresenter.getKeyboardStatus()).thenReturn(true);
-        assertTrue(basePresenter.getKeyboardStatus());
-    }
-
-    @Test
-    public void getKeyboardStatus_nonNumeric() {
-        when(basePresenter.getKeyboardStatus()).thenReturn(false);
-        assertFalse(basePresenter.getKeyboardStatus());
-    }
 }

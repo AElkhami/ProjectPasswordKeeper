@@ -3,6 +3,7 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.viewnotifiyers.BasePresenterListener;
 
 import java.util.HashMap;
 
@@ -11,7 +12,8 @@ import javax.inject.Inject;
 /**
  * Created by A.Elkhami on 29,March,2019
  */
-public class BasePresenterImpl implements BasePresenterContract, SetPresenterListener<BasePresenterListener> {
+public class BasePresenterImpl implements BasePresenterContract,
+        SetPresenterListener<BasePresenterListener> {
 
     protected Repository repository;
     protected UserCrud crud;

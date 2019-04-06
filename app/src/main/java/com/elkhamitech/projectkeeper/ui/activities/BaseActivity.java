@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.presenter.BasePresenterListener;
 import com.elkhamitech.projectkeeper.utils.Fonts.FontCache;
 

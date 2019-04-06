@@ -1,6 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,11 +26,6 @@ public class SplashPresenterTest {
         MockitoAnnotations.initMocks(this);
         presenter = new SplashPresenter(repository);
         presenter.setListener(listener);
-    }
-
-    @Test
-    public void setListener() {
-        assertThat(listener, instanceOf(SplashPresenterListener.class));
     }
 
     @Test

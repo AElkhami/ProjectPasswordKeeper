@@ -149,13 +149,11 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         this.doubleBackToExitPressedOnce = false;
-//        newUser = getIntent().getBooleanExtra("boolean",false);
-
         //handle first login
-        if (newUser) {
-        } else {
+        if (!newUser) {
             SecurityModerator.lockAppCheck(this);
         }
+
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -190,8 +188,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-
         }
     }
 

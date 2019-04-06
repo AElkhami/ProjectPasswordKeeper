@@ -1,6 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
 
 import javax.inject.Inject;
 

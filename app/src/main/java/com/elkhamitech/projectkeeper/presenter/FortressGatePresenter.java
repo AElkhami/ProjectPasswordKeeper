@@ -2,7 +2,7 @@ package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
+import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
 
 import javax.inject.Inject;
 
@@ -24,12 +24,12 @@ public class FortressGatePresenter
     public void checkPassword(String userPin){
 
         if (!userPin.equals("")) {
-            if(crud.getUser(userPin)!= null){
+            if(crud.getUser(userPin)!= null
+                    && crud.getUser(userPin).getPin() != null){
+
                 String dbPin = crud.getUser(userPin).getPin();
                 if (dbPin.equals(userPin)) {
                     listener.onCorrectPassword();
-                } else {
-                    listener.userMessage(Constants.Error_WRONG_PIN);
                 }
             }else {
                 listener.userMessage(Constants.Error_WRONG_PIN);

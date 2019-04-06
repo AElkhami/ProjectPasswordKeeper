@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
-import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.presenter.SplashPresenter;
-import com.elkhamitech.projectkeeper.presenter.SplashPresenterListener;
+import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
 
 import javax.inject.Inject;
 

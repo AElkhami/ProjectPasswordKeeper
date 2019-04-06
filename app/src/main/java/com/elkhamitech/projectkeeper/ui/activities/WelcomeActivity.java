@@ -23,8 +23,8 @@ import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
-import com.elkhamitech.projectkeeper.presenter.WelcomePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
+import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
 
 import java.io.File;
 import java.io.FileInputStream;

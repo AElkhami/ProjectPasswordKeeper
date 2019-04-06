@@ -1,4 +1,4 @@
-package com.elkhamitech.projectkeeper.presenter;
+package com.elkhamitech.projectkeeper.viewnotifiyers;
 
 public interface BasePresenterListener {
     void userMessage(String msg);

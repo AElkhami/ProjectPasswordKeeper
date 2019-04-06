@@ -16,8 +16,8 @@ import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.FortressGatePresenter;
-import com.elkhamitech.projectkeeper.presenter.FortressGatePresenterListener;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
+import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
 
 import javax.inject.Inject;
 

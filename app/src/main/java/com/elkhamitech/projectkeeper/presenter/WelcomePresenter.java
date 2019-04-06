@@ -1,15 +1,9 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import android.os.Environment;
-
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
+import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
 
 import javax.inject.Inject;
 
