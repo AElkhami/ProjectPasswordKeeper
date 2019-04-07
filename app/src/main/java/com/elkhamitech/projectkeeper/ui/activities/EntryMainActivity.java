@@ -8,15 +8,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.method.KeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,7 +100,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
         //=========================================================================================
 
         //Adding SubAccount Floating Action Button --> go to add
-        SUB_FAB = (FloatingActionButton) findViewById(R.id.SUB_FAB);
+        SUB_FAB = findViewById(R.id.SUB_FAB);
         SUB_FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +162,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
         onCopy();
 
         recyclerView.setVisibility(View.VISIBLE);
-        SUB_FAB.setVisibility(View.VISIBLE);
+        SUB_FAB.show();
 
         db = new DatabaseHelper(getApplicationContext());
         db.getOneContact(row_id);
@@ -498,15 +498,15 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
             // Collapsed
-            SUB_FAB.setVisibility(View.GONE);
+            SUB_FAB.hide();
 
         } else if (verticalOffset == 0) {
             // Expanded
-            SUB_FAB.setVisibility(View.VISIBLE);
+            SUB_FAB.show();
 
         } else {
             // Somewhere in between
-            SUB_FAB.setVisibility(View.VISIBLE);
+            SUB_FAB.show();
         }
     }
 

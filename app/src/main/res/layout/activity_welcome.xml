@@ -42,7 +42,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Enter pin for sign up.\nMake sure that you don't forget your password as you will not be able to recover it." />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -59,7 +59,7 @@
                     android:singleLine="true"
                     />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/pinEnter"

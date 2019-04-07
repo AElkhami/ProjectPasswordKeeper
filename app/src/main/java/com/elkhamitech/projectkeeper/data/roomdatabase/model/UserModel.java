@@ -1,9 +1,9 @@
 package com.elkhamitech.projectkeeper.data.roomdatabase.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 /**
  * Created by Ahmed on 1/5/2017.
