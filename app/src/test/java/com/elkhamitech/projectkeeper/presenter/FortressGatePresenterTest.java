@@ -3,7 +3,7 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
 
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class FortressGatePresenterTest {
     @Mock
     private FortressGatePresenterListener listener;
     @Mock
-    private Repository repository;
+    private CacheRepository cacheRepository;
     @Mock
     private UserCrud crud;
     @Mock
@@ -55,7 +55,7 @@ public class FortressGatePresenterTest {
 
     @Test
     public void checkPassword_correct() {
-        when(crud.getUser(pinCode_correct))
+        when(crud.readFromDb(pinCode_correct))
                 .thenReturn(userModel);
 
         userModel.setPin(pinCode_correct);
@@ -66,7 +66,7 @@ public class FortressGatePresenterTest {
 
     @Test
     public void checkPassword_notExist() {
-        when(crud.getUser(pinCode_wrong))
+        when(crud.readFromDb(pinCode_wrong))
                 .thenReturn(userModel);
 
         userModel.setPin(null);

@@ -19,11 +19,11 @@ public class SecurityModerator {
 
 
     public static void lockAppStoreTime() {
-        appPauseTime=new Date();
+        appPauseTime = new Date();
     }
 
     public static void lockAppCheck(Activity act) {
-        boolean bLock=false;
+        boolean bLock = false;
 
         // Check to see if this is the first time through app
         if (appPauseTime==null) {

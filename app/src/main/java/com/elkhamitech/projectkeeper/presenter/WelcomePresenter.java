@@ -1,8 +1,10 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
 
 import javax.inject.Inject;
@@ -10,16 +12,16 @@ import javax.inject.Inject;
 public class WelcomePresenter implements BasePresenterContract,
         SetPresenterListener<WelcomePresenterListener> {
 
-    private Repository repository;
-    private UserCrud userCrud;
+    private CacheRepository cacheRepository;
+    private LocalDbRepository<UserModel, String> userCrud;
     private WelcomePresenterListener listener;
 
     @Inject
     BasePresenterImpl basePresenter;
 
     @Inject
-    WelcomePresenter(Repository repository, UserCrud userCrud) {
-        this.repository = repository;
+    WelcomePresenter(CacheRepository cacheRepository, UserCrud userCrud) {
+        this.cacheRepository = cacheRepository;
         this.userCrud = userCrud;
     }
 
@@ -58,8 +60,11 @@ public class WelcomePresenter implements BasePresenterContract,
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        long id = userCrud.createUser(pinCode);
-        repository.createLoginSession(id, pinCode);
+        UserModel userModel = new UserModel();
+        userModel.setPin(pinCode);
+
+        long id = userCrud.create(userModel);
+        cacheRepository.createLoginSession(id, pinCode);
         listener.onPasswordCreatedSuccessfully();
     }
 

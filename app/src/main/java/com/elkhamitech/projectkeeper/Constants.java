@@ -11,4 +11,6 @@ public class Constants {
     public static final int SPLASH_DISPLAY_LENGTH = 2000;
     public static final String Error_WRONG_PIN = "Pin code is incorrect.";
     public static final String KEYBOARD_TYPE = "KEYBOARD_TYPE";
+    public static final String ERROR_DATA_RETRIEVE = "Error: Couldn't retrieve your data, Please try again later";
+    public static final String SUCCESS_DELETE = "Entry has been deleted";
 }

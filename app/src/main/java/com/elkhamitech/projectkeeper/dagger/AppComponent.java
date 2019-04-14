@@ -3,6 +3,7 @@ package com.elkhamitech.projectkeeper.dagger;
 import com.elkhamitech.projectkeeper.ui.activities.FortressGate;
 import com.elkhamitech.projectkeeper.ui.activities.SplashActivity;
 import com.elkhamitech.projectkeeper.ui.activities.WelcomeActivity;
+import com.elkhamitech.projectkeeper.ui.fragments.HomeFragment;
 
 import dagger.Component;
 
@@ -11,4 +12,5 @@ public interface AppComponent {
     void inject(WelcomeActivity activity);
     void inject(SplashActivity activity);
     void inject(FortressGate activity);
+    void inject(HomeFragment fragment);
 }

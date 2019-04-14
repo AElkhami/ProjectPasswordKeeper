@@ -1,8 +1,7 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.BasePresenterListener;
 
 import java.util.HashMap;
@@ -15,13 +14,11 @@ import javax.inject.Inject;
 public class BasePresenterImpl implements BasePresenterContract,
         SetPresenterListener<BasePresenterListener> {
 
-    protected Repository repository;
-    protected UserCrud crud;
+    protected CacheRepository cacheRepository;
 
     @Inject
-    BasePresenterImpl(Repository repository, UserCrud crud) {
-        this.repository = repository;
-        this.crud = crud;
+    BasePresenterImpl(CacheRepository cacheRepository) {
+        this.cacheRepository = cacheRepository;
     }
 
     @Override
@@ -30,12 +27,12 @@ public class BasePresenterImpl implements BasePresenterContract,
 
     @Override
     public void saveKeyboardType(boolean isNumericKeyboard) {
-        repository.createKeyboardType(isNumericKeyboard);
+        cacheRepository.createKeyboardType(isNumericKeyboard);
     }
 
     @Override
     public boolean getKeyboardStatus() {
-        HashMap<String, Boolean> hashMap = repository.getKeyboardDetails();
+        HashMap<String, Boolean> hashMap = cacheRepository.getKeyboardDetails();
         return hashMap.get(Constants.KEYBOARD_TYPE);
     }
 

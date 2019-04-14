@@ -11,7 +11,7 @@ buildscript {
     }
 
     ext {
-        roomVersion = '2.1.0-alpha06'
+        roomVersion = '2.1.0-alpha04'
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'

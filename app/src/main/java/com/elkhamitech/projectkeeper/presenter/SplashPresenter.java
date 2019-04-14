@@ -1,6 +1,6 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
 
 import javax.inject.Inject;
@@ -8,18 +8,18 @@ import javax.inject.Inject;
 public class SplashPresenter implements SetPresenterListener<SplashPresenterListener>{
 
 
-    private Repository repository;
+    private CacheRepository cacheRepository;
     private SplashPresenterListener listener;
 
 
     @Inject
-    SplashPresenter(Repository repository){
-        this.repository = repository;
+    SplashPresenter(CacheRepository cacheRepository){
+        this.cacheRepository = cacheRepository;
     }
 
 
     public void checkLoginStatus(){
-        if(!repository.isLoggedIn()){
+        if(!cacheRepository.isLoggedIn()){
             listener.notLoggedIn();
         }else {
             listener.loggedIn();

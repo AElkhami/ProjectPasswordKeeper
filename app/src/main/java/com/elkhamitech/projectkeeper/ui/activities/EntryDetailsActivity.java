@@ -25,7 +25,7 @@ import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
 import com.elkhamitech.projectkeeper.data.helper.DatabaseHelper;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 
-public class SubEntryActivity extends AppCompatActivity {
+public class EntryDetailsActivity extends AppCompatActivity {
 
     private EditText edtxtName, edtxtUsrName, edtxtUsrPass,edtxtWebsite,edtxtNotes;
     private KeyListener mKeyListener1,mKeyListener2,mKeyListener3,mKeyListener4,mKeyListener5;
@@ -107,7 +107,7 @@ public class SubEntryActivity extends AppCompatActivity {
 
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         clipboard.setText(tdtxt.getText().toString());
-                        Toast.makeText(SubEntryActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EntryDetailsActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
 
                         return true;
                     default:
@@ -186,7 +186,7 @@ public class SubEntryActivity extends AppCompatActivity {
     public void onDelete(){
 
 
-        new AlertDialog.Builder(SubEntryActivity.this)
+        new AlertDialog.Builder(EntryDetailsActivity.this)
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this entry?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -334,7 +334,7 @@ public class SubEntryActivity extends AppCompatActivity {
                 invalidateOptionsMenu();
                 onCancel();
                 return true;
-            // work around to handel on resume on EntryMainActivity.class
+            // work around to handel on resume on EntryActivity.class
             case android.R.id.home:
                 finish();
                 return true;

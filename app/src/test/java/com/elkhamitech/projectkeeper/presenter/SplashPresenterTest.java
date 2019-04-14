@@ -1,6 +1,6 @@
 package com.elkhamitech.projectkeeper.presenter;
 
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
 
 import org.junit.Before;
@@ -17,27 +17,27 @@ public class SplashPresenterTest {
     private SplashPresenter presenter;
 
     @Mock
-    private Repository repository;
+    private CacheRepository cacheRepository;
     @Mock
     private SplashPresenterListener listener;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        presenter = new SplashPresenter(repository);
+        presenter = new SplashPresenter(cacheRepository);
         presenter.setListener(listener);
     }
 
     @Test
     public void checkLoginStatus_logged() {
-        when(repository.isLoggedIn()).thenReturn(true);
+        when(cacheRepository.isLoggedIn()).thenReturn(true);
         presenter.checkLoginStatus();
         verify(listener).loggedIn();
     }
 
     @Test
     public void checkLoginStatus_notLogged() {
-        when(repository.isLoggedIn()).thenReturn(false);
+        when(cacheRepository.isLoggedIn()).thenReturn(false);
         presenter.checkLoginStatus();
         verify(listener).notLoggedIn();
     }

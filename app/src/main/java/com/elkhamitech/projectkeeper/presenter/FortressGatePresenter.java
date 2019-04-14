@@ -1,7 +1,9 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
+import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
+import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
 
 import javax.inject.Inject;
@@ -10,8 +12,8 @@ public class FortressGatePresenter
         implements BasePresenterContract
         , SetPresenterListener<FortressGatePresenterListener> {
 
-    private UserCrud crud;
     private FortressGatePresenterListener listener;
+    private LocalDbRepository<UserModel, String> crud;
 
     @Inject
     BasePresenterImpl basePresenter;
@@ -24,11 +26,14 @@ public class FortressGatePresenter
     public void checkPassword(String userPin){
 
         if (!userPin.equals("")) {
-            if(crud.getUser(userPin)!= null
-                    && crud.getUser(userPin).getPin() != null){
+            if(crud.readFromDb(userPin)!= null
+                    && crud.readFromDb(userPin).getPin() != null){
 
-                String dbPin = crud.getUser(userPin).getPin();
-                if (dbPin.equals(userPin)) {
+                UserModel dbPin = crud.readFromDb(userPin);
+
+                String retrievedPin = dbPin.getPin();
+
+                if (retrievedPin.equals(userPin)) {
                     listener.onCorrectPassword();
                 }
             }else {

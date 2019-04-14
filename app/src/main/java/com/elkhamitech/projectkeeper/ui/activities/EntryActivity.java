@@ -41,7 +41,7 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 import java.util.HashMap;
 import java.util.List;
 
-public class EntryMainActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
 
     private DatabaseHelper db;
@@ -104,7 +104,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
         SUB_FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EntryMainActivity.this, SubEntryActivity.class);
+                Intent i = new Intent(EntryActivity.this, EntryDetailsActivity.class);
                 i.putExtra("long", row_id);
                 startActivity(i);
             }
@@ -204,7 +204,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
             public void onClick(View view, int position) {
                 SubEntryModel subModel = SubModel.get(position);
                 fromListView = true;
-                Intent mIntent = new Intent(EntryMainActivity.this, SubEntryActivity.class);
+                Intent mIntent = new Intent(EntryActivity.this, EntryDetailsActivity.class);
                 mIntent.putExtra("boolean", fromListView);
                 mIntent.putExtra("long", subModel.getRowId());
 
@@ -228,7 +228,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
     public void onDelete() {
 
 
-        new AlertDialog.Builder(EntryMainActivity.this)
+        new AlertDialog.Builder(EntryActivity.this)
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this entry?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -368,7 +368,7 @@ public class EntryMainActivity extends AppCompatActivity implements AppBarLayout
 
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                         clipboard.setText(tdtxt.getText().toString());
-                        Toast.makeText(EntryMainActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EntryActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
 
                         return true;
                     default:

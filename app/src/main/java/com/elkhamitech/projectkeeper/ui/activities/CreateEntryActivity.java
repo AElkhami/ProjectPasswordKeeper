@@ -18,7 +18,7 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 
 import java.util.HashMap;
 
-public class CreateNewEntry extends AppCompatActivity {
+public class CreateEntryActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
     private EntryModel eMail;
@@ -84,7 +84,7 @@ public class CreateNewEntry extends AppCompatActivity {
         row_id = eMail.getRowId();
         fromListView = true;
 
-        Intent mIntent = new Intent (CreateNewEntry.this,EntryMainActivity.class);
+        Intent mIntent = new Intent (CreateEntryActivity.this, EntryActivity.class);
         mIntent.putExtra("boolean",fromListView);
         mIntent.putExtra("long", row_id);
         startActivity(mIntent);

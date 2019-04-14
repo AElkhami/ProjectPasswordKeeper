@@ -2,7 +2,7 @@ package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
 
 import org.junit.Before;
@@ -29,7 +29,7 @@ public class WelcomePresenterTest {
     @Mock
     private WelcomePresenterListener listener;
     @Mock
-    private Repository repository;
+    private CacheRepository cacheRepository;
     @Mock
     private UserCrud crud;
     @Mock
@@ -40,7 +40,7 @@ public class WelcomePresenterTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        presenter = new WelcomePresenter(repository, crud);
+        presenter = new WelcomePresenter(cacheRepository, crud);
         presenter.setListener(listener);
     }
 

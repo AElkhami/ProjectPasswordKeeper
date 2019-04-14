@@ -26,23 +26,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.EntryMainActivity"
+            android:name=".ui.activities.EntryActivity"
             android:parentActivityName=".ui.activities.MainActivity" />
-        <activity
-            android:name=".ui.activities.SignupActivity"
-            android:parentActivityName=".ui.activities.WelcomeActivity" />
         <activity android:name=".ui.activities.WelcomeActivity"
             android:windowSoftInputMode="stateHidden"
             />
         <activity
-            android:name=".ui.activities.LoginActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".ui.activities.WelcomeActivity" />
-        <activity
-            android:name=".ui.activities.SubEntryActivity"
-            android:parentActivityName=".ui.activities.EntryMainActivity" />
+            android:name=".ui.activities.EntryDetailsActivity"
+            android:parentActivityName=".ui.activities.EntryActivity" />
         <activity android:name=".ui.activities.FortressGate" />
-        <activity android:name=".ui.activities.CreateNewEntry" />
+        <activity android:name=".ui.activities.CreateEntryActivity" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main"

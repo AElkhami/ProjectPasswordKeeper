@@ -8,20 +8,17 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-public class SharedPrefsRepository implements Repository{
-
-    private static final String PREF_NAME = "Preference";
+public class SharedPrefsCacheRepository implements CacheRepository {
 
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String IS_PIN = "IsPin";
-    public static final String KEY_ID = "Id";
-    public static final String KEY_PIN = "Pin";
-
+    private static final String KEY_ID = "Id";
+    private static final String KEY_PIN = "Pin";
 
     private final SharedPreferences prefs;
 
     @Inject
-    SharedPrefsRepository(SharedPreferences prefs) {
+    SharedPrefsCacheRepository(SharedPreferences prefs) {
         this.prefs = prefs;
     }
 

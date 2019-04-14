@@ -2,7 +2,7 @@ package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
-import com.elkhamitech.projectkeeper.data.sharedpreferences.Repository;
+import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.viewnotifiyers.BasePresenterListener;
 
 import org.junit.Before;
@@ -27,9 +27,7 @@ public class BasePresenterImplTest {
     private BasePresenterImpl basePresenter;
 
     @Mock
-    private Repository repository;
-    @Mock
-    private UserCrud crud;
+    private CacheRepository cacheRepository;
     @Mock
     private BasePresenterListener listener;
     @Mock
@@ -42,7 +40,7 @@ public class BasePresenterImplTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        basePresenter = new BasePresenterImpl(repository, crud);
+        basePresenter = new BasePresenterImpl(cacheRepository);
     }
 
     @Test
@@ -75,7 +73,7 @@ public class BasePresenterImplTest {
         HashMap<String, Boolean> hashMap = new HashMap<>();
         hashMap.put(Constants.KEYBOARD_TYPE, true);
 
-        when(repository.getKeyboardDetails())
+        when(cacheRepository.getKeyboardDetails())
                 .thenReturn(hashMap);
 
         assertTrue(basePresenter.getKeyboardStatus());
@@ -87,7 +85,7 @@ public class BasePresenterImplTest {
         HashMap<String, Boolean> hashMap = new HashMap<>();
         hashMap.put(Constants.KEYBOARD_TYPE, false);
 
-        when(repository.getKeyboardDetails())
+        when(cacheRepository.getKeyboardDetails())
                 .thenReturn(hashMap);
 
         assertFalse(basePresenter.getKeyboardStatus());

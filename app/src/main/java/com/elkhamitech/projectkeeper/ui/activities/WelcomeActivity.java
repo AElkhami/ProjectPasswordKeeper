@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
@@ -32,6 +30,9 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 public class WelcomeActivity extends BaseActivity
         implements WelcomePresenterListener {
