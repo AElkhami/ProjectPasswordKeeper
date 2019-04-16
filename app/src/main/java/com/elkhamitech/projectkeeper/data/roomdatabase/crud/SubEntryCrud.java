@@ -5,25 +5,39 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 
 import java.util.List;
 
-public class SubEntryCrud {
+import javax.inject.Inject;
 
-    public static long createSubEntry(PasswordsDatabase db, SubEntryModel subEntryModel){
-        return db.subEntryDao().createSubEntry(subEntryModel);
+public class SubEntryCrud implements LocalDbRepository<SubEntryModel, Long> {
+
+    private final PasswordsDatabase db;
+
+    @Inject
+    SubEntryCrud(PasswordsDatabase db){
+        this.db = db;
     }
 
-    public static SubEntryModel getSubEntry(PasswordsDatabase db, long rowId){
-        return db.subEntryDao().getSubEntry(rowId);
+    @Override
+    public long create(SubEntryModel subEntity) {
+        return db.subEntryDao().createSubEntry(subEntity);
     }
 
-    public static List<SubEntryModel> getSubEntries(PasswordsDatabase db, long parentId){
-        return db.subEntryDao().getSubEntries(parentId);
+    @Override
+    public List<SubEntryModel> getListDb(Long id) {
+        return db.subEntryDao().getSubEntries(id);
     }
 
-    public static void updateSubEntry(PasswordsDatabase db, SubEntryModel subEntryModel){
-        db.subEntryDao().updateSubEntry(subEntryModel);
+    @Override
+    public SubEntryModel readFromDb(Long id) {
+        return db.subEntryDao().getSubEntry(id);
     }
 
-    public static void deleteSubEntry(PasswordsDatabase db, SubEntryModel subEntryModel){
-        db.subEntryDao().deleteSubEntry(subEntryModel);
+    @Override
+    public void update(SubEntryModel subEntity) {
+        db.subEntryDao().updateSubEntry(subEntity);
+    }
+
+    @Override
+    public void delete(SubEntryModel subEntity) {
+        db.subEntryDao().deleteSubEntry(subEntity);
     }
 }

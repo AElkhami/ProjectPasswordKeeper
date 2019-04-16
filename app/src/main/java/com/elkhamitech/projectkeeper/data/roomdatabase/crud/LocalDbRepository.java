@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface LocalDbRepository<T, E> {
 
-    long create(T String);
+    long create(T entity);
 
     List<T> getListDb(E id);
     T readFromDb(E id);

@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import android.text.method.KeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,28 +17,51 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elkhamitech.projectkeeper.utils.AccessHandler.AESHelper;
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.data.helper.DatabaseHelper;
+import com.elkhamitech.projectkeeper.dagger.AppComponent;
+import com.elkhamitech.projectkeeper.dagger.ContextModule;
+import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
+import com.elkhamitech.projectkeeper.presenter.EntryDetailsPresenter;
+import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
+import com.elkhamitech.projectkeeper.viewnotifiyers.EntryDetailsNotifier;
 
-public class EntryDetailsActivity extends AppCompatActivity {
+import javax.inject.Inject;
 
-    private EditText edtxtName, edtxtUsrName, edtxtUsrPass,edtxtWebsite,edtxtNotes;
-    private KeyListener mKeyListener1,mKeyListener2,mKeyListener3,mKeyListener4,mKeyListener5;
-    private TextView txtCreated;
-    private String cName,cUsrName,cPass,cWebsite,cNote;
-    private SubEntryModel subEntryModel;
-    private DatabaseHelper db;
+import androidx.appcompat.widget.PopupMenu;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNotifier {
+
+    @BindView(R.id.contactName)
+    EditText edtxtName;
+    @BindView(R.id.userName)
+    EditText edtxtUsrName;
+    @BindView(R.id.contactPassword)
+    EditText edtxtUsrPass;
+    @BindView(R.id.contactwebsite)
+    EditText edtxtWebsite;
+    @BindView(R.id.contactnotes)
+    EditText edtxtNotes;
+    @BindView(R.id.supCreated)
+    TextView txtCreated;
+
     private long parentId;
-    private boolean fromEmail , onEditPressed= false;
-    private long row_id;
 
-    //for encryption and decryption
-    private String seedValue = "I don't know what is this";
-    private String normalTextEnc;
-    private String normalTextDec;
+    private boolean fromList, onEditPressed = false;
+
+    private KeyListener mKeyListener1;
+    private KeyListener mKeyListener2;
+    private KeyListener mKeyListener3;
+    private KeyListener mKeyListener4;
+    private KeyListener mKeyListener5;
+
+    private SubEntryModel subEntryModel;
+
+    @Inject
+    EntryDetailsPresenter presenter;
+    private long selectedId;
 
 
     @Override
@@ -48,46 +69,31 @@ public class EntryDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_entry);
 
+        ButterKnife.bind(this);
+
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
+        component.inject(this);
+
+        parentId = getIntent().getLongExtra("long",1L);
+        selectedId = getIntent().getLongExtra("selectedId",1L);
+        fromList = getIntent().getBooleanExtra("boolean",false);
+
+        presenter.setListener(this);
+
         setTitle("Passwords");
 
-        edtxtName = (EditText)findViewById(R.id.contactName);
-        edtxtUsrName = (EditText)findViewById(R.id.userName);
-        edtxtUsrPass = (EditText)findViewById(R.id.contactPassword);
-        edtxtWebsite = (EditText)findViewById(R.id.contactwebsite);
-        edtxtNotes = (EditText)findViewById(R.id.contactnotes);
-        txtCreated = (TextView)findViewById(R.id.supCreated);
-
-
-        row_id = getIntent().getLongExtra("long",1L);
-        fromEmail = getIntent().getBooleanExtra("boolean",false);
-
-
-        db = new DatabaseHelper(getApplicationContext());
-
-        if (fromEmail){
-
+        if(fromList){
             disableEditText();
 
-            db = new DatabaseHelper(getApplicationContext());
-            db.getOneSubContact(row_id);
-            edtxtName.setText(db.getOneSubContact(row_id).getName());
-            edtxtUsrName.setText(db.getOneSubContact(row_id).getUserName());
-            try {
-                normalTextDec = AESHelper.decrypt(seedValue,db.getOneSubContact(row_id).getPassword());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            edtxtUsrPass.setText(normalTextDec);
-            edtxtWebsite.setText(db.getOneSubContact(row_id).getWebsite());
-            edtxtNotes.setText(db.getOneSubContact(row_id).getNote());
-
-            txtCreated.setVisibility(View.VISIBLE);
-            txtCreated.setText("Last Updated "+db.getOneSubContact(row_id).getCreatedAt());
+            presenter.getSelectedSubEntry(selectedId);
 
             onCopy();
-
         }
+
     }
 
     public void copyText(final EditText tdtxt, View v) {
@@ -124,7 +130,6 @@ public class EntryDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 copyText(edtxtName, v);
-
             }
         });
         edtxtUsrName.setOnClickListener(new View.OnClickListener() {
@@ -154,37 +159,12 @@ public class EntryDetailsActivity extends AppCompatActivity {
     }
 
     public void whenDone(){
-
-            parentId = getIntent().getLongExtra("long",1L);
-            cName = edtxtName.getText().toString();
-            cUsrName = edtxtUsrName.getText().toString();
-            cPass = edtxtUsrPass.getText().toString();
-            cWebsite = edtxtWebsite.getText().toString();
-            cNote = edtxtNotes.getText().toString();
-
-            db = new DatabaseHelper(getApplicationContext());
-            subEntryModel = new SubEntryModel();
-
-            subEntryModel.setParentId(parentId);
-            subEntryModel.setName(cName);
-            subEntryModel.setUserName(cUsrName);
-        try {
-            normalTextEnc = AESHelper.encrypt(seedValue, cPass);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-            subEntryModel.setPassword(normalTextEnc);
-            subEntryModel.setWebsite(cWebsite);
-            subEntryModel.setNote(cNote);
-
-            db.createSubContact(subEntryModel);
-
-            finish();
+        createUpdateObject();
+        presenter.createSubEntry(subEntryModel);
+        finish();
     }
 
     public void onDelete(){
-
 
         new AlertDialog.Builder(EntryDetailsActivity.this)
                 .setTitle("Delete entry")
@@ -192,10 +172,7 @@ public class EntryDetailsActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        db = new DatabaseHelper(getApplicationContext());
-                        row_id = getIntent().getLongExtra("long",1L);
-                        db.deleteSubContact(row_id);
-
+                        presenter.deleteSelectedSubEntry(subEntryModel);
                         finish();
                     }
                 })
@@ -209,54 +186,45 @@ public class EntryDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void onUpdate(){
+    public void onUpdate() {
         enableEditText();
         onEditPressed = true;
-
     }
 
-    public void onUpdateDone(){
+    private void createUpdateObject() {
 
-        row_id = getIntent().getLongExtra("long",1L);
-
-            db = new DatabaseHelper(getApplicationContext());
+        if(subEntryModel == null){
             subEntryModel = new SubEntryModel();
-
-            cName = edtxtName.getText().toString();
-            cUsrName = edtxtUsrName.getText().toString();
-            cPass = edtxtUsrPass.getText().toString();
-            cWebsite = edtxtWebsite.getText().toString();
-            cNote = edtxtNotes.getText().toString();
-
-            subEntryModel.setRowId(row_id);
-            subEntryModel.setName(cName);
-            subEntryModel.setUserName(cUsrName);
-            try {
-                normalTextEnc = AESHelper.encrypt(seedValue, cPass);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            subEntryModel.setPassword(normalTextEnc);
-            subEntryModel.setWebsite(cWebsite);
-            subEntryModel.setNote(cNote);
-
-            db.updateSubContact(subEntryModel);
-            disableEditText();
-            onEditPressed = false;
-
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
+            subEntryModel.setParentId(parentId);
+        }
+        subEntryModel.setName(edtxtName.getText().toString());
+        subEntryModel.setUserName(edtxtUsrName.getText().toString());
+        subEntryModel.setPassword(edtxtUsrPass.getText().toString());
+        subEntryModel.setWebsite(edtxtWebsite.getText().toString());
+        subEntryModel.setNote(edtxtNotes.getText().toString());
     }
 
-    public void onCancel(){
+    public void onUpdateDone() {
+
+        createUpdateObject();
+
+        presenter.editSelectedSubEntry(subEntryModel);
+
         disableEditText();
         onEditPressed = false;
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
-    public void disableEditText(){
+    public void onCancel() {
+        disableEditText();
+        onEditPressed = false;
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
+    }
+
+    public void disableEditText() {
 //        edtxtName.setTextColor(Color.parseColor("#FFFFFF"));
         mKeyListener1 = edtxtName.getKeyListener();
         edtxtName.setKeyListener(null);
@@ -276,8 +244,8 @@ public class EntryDetailsActivity extends AppCompatActivity {
         edtxtNotes.setKeyListener(null);
     }
 
-    public void enableEditText(){
-        InputMethodManager imm = (InputMethodManager)this.getSystemService(Service.INPUT_METHOD_SERVICE);
+    public void enableEditText() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtxtName, 0);
 
         edtxtName.setSelection(edtxtName.getText().length());
@@ -298,11 +266,11 @@ public class EntryDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        fromEmail = getIntent().getBooleanExtra("boolean",false);
+        fromList = getIntent().getBooleanExtra("boolean",false);
 
-        if (onEditPressed){
+        if (onEditPressed) {
             inflater.inflate(R.menu.actionbar_updone_btn, menu);
-        } else if (fromEmail) {
+        } else if (fromList) {
             inflater.inflate(R.menu.actionbar_edt_delt, menu);
         } else {
             inflater.inflate(R.menu.actionbar_done_btn, menu);
@@ -314,7 +282,6 @@ public class EntryDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-
         switch (item.getItemId()) {
             case R.id.action_done:
                 whenDone();
@@ -364,5 +331,17 @@ public class EntryDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SecurityModerator.lockAppCheck(this);
+    }
+
+    @Override
+    public void onSelectedSubEntryReceived(SubEntryModel subEntry) {
+        this.subEntryModel = subEntry;
+
+        edtxtName.setText(subEntry.getName());
+        edtxtUsrName.setText(subEntry.getUserName());
+        edtxtUsrPass.setText(subEntry.getPassword());
+        edtxtWebsite.setText(subEntry.getWebsite());
+        edtxtNotes.setText(subEntry.getNote());
+        txtCreated.setText("Last Updated " + subEntry.getCreatedAt());
     }
 }

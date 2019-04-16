@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.ui.fragments.HelpFragment;
 import com.elkhamitech.projectkeeper.ui.fragments.HomeFragment;
-import com.elkhamitech.projectkeeper.ui.fragments.ProfileFragment;
 import com.elkhamitech.projectkeeper.ui.fragments.SendFeedbackFragment;
 import com.elkhamitech.projectkeeper.ui.fragments.SettingsFragment;
 import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
@@ -67,23 +66,6 @@ public class MainActivity extends AppCompatActivity
 
         manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
 
-        //setting buttons
-        ImageButton userButton = header.findViewById(R.id.imgbtnUser);
-        userButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfileFragment profileFragment = new ProfileFragment();
-
-                FragmentManager manager = getSupportFragmentManager();
-
-                manager.beginTransaction().replace(R.id.layoutttt, profileFragment).commit();
-
-                navigationView.getMenu().getItem(0).setChecked(false);
-
-                drawer.closeDrawer(GravityCompat.START);
-
-            }
-        });
 
         ImageButton lockButton = header.findViewById(R.id.imgbtnLock);
         lockButton.setOnClickListener(new View.OnClickListener() {
@@ -184,5 +166,4 @@ public class MainActivity extends AppCompatActivity
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
-
 }

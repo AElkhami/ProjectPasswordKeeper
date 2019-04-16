@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "sub_entry")
 public class SubEntryModel {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "sub_entry_id")
     private long rowId;
     @ColumnInfo(name = "sub_entry_name")

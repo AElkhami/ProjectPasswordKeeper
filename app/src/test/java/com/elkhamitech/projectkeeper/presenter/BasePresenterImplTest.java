@@ -52,20 +52,21 @@ public class BasePresenterImplTest {
     @Test
     public void saveKeyboardType_numeric() {
         //no need to test this method
+        when(basePresenterContract.getKeyboardStatus()).thenReturn(isNumericKeyboard);
+
         basePresenter.saveKeyboardType(isNumericKeyboard);
-        boolean saveTypeSideEffect = true;
 
-        assertTrue(saveTypeSideEffect);
-
+        assertTrue(basePresenterContract.getKeyboardStatus());
     }
 
     @Test
     public void saveKeyboardType_nonNumeric() {
+        //no need to test this method
+        when(basePresenterContract.getKeyboardStatus()).thenReturn(isNotNumericKeyboard);
+
         basePresenter.saveKeyboardType(isNotNumericKeyboard);
 
-        boolean saveTypeSideEffect = basePresenterContract.getKeyboardStatus();
-
-        assertFalse(saveTypeSideEffect);
+        assertFalse(basePresenterContract.getKeyboardStatus());
     }
 
     @Test
@@ -76,18 +77,24 @@ public class BasePresenterImplTest {
         when(cacheRepository.getKeyboardDetails())
                 .thenReturn(hashMap);
 
+        when(basePresenterContract.getKeyboardStatus())
+                .thenReturn(hashMap.get(Constants.KEYBOARD_TYPE));
+
         assertTrue(basePresenter.getKeyboardStatus());
     }
 
     @Test
     public void getKeyboardStatus_nonNumeric() {
-
         HashMap<String, Boolean> hashMap = new HashMap<>();
         hashMap.put(Constants.KEYBOARD_TYPE, false);
 
         when(cacheRepository.getKeyboardDetails())
                 .thenReturn(hashMap);
 
+        when(basePresenterContract.getKeyboardStatus())
+                .thenReturn(hashMap.get(Constants.KEYBOARD_TYPE));
+
         assertFalse(basePresenter.getKeyboardStatus());
     }
+
 }

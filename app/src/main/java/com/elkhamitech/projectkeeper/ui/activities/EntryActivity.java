@@ -8,15 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.method.KeyListener;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,88 +19,126 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elkhamitech.projectkeeper.utils.AccessHandler.AESHelper;
-import com.elkhamitech.projectkeeper.ui.adapters.SubEntriesAdapter;
-import com.elkhamitech.projectkeeper.ui.adapters.Handlers.DividerItemDecoration;
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.projectkeeper.ui.adapters.Handlers.RecyclerTouchListener;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.data.helper.DatabaseHelper;
+import com.elkhamitech.projectkeeper.dagger.AppComponent;
+import com.elkhamitech.projectkeeper.dagger.ContextModule;
+import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
+import com.elkhamitech.projectkeeper.presenter.EntryPresenter;
+import com.elkhamitech.projectkeeper.ui.adapters.Handlers.DividerItemDecoration;
+import com.elkhamitech.projectkeeper.ui.adapters.Handlers.RecyclerTouchListener;
+import com.elkhamitech.projectkeeper.ui.adapters.SubEntriesAdapter;
+import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
+import com.elkhamitech.projectkeeper.viewnotifiyers.EntryNotifier;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
-public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+import javax.inject.Inject;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class EntryActivity extends BaseActivity
+        implements AppBarLayout.OnOffsetChangedListener, EntryNotifier {
 
 
-    private DatabaseHelper db;
-    private EntryModel eMail;
-    private EditText edtxtName, edtxtUsrName, edtxtUsrPass, edtxtWebsite, edtxtNotes;
-    private TextView txtCreated, txtv;
-    private String cName, cUsrName, cPass, cWebsite, cNote;
-    private long UserId, row_id;
-    private HashMap<String, Long> rid;
-    private KeyListener mKeyListener1, mKeyListener2, mKeyListener3, mKeyListener4, mKeyListener5;
-    private boolean fromListView, onEditPressed = false;
-    private RecyclerView recyclerView;
-    private FloatingActionButton SUB_FAB;
-    private ImageButton expand, collapse;
-    private List<SubEntryModel> SubModel;
+    @BindView(R.id.contactName)
+    EditText edtxtName;
+    @BindView(R.id.userName)
+    EditText edtxtUsrName;
+    @BindView(R.id.Password)
+    EditText edtxtUsrPass;
+    @BindView(R.id.website)
+    EditText edtxtWebsite;
+    @BindView(R.id.notes)
+    EditText edtxtNotes;
+    @BindView(R.id.created)
+    TextView txtCreated;
+    @BindView(R.id.txtaddsub)
+    TextView emptyListTextView;
+    @BindView(R.id.subAccountsRCV)
+    RecyclerView recyclerView;
+    @BindView(R.id.SUB_FAB)
+    FloatingActionButton SUB_FAB;
+    @BindView(R.id.expand)
+    ImageButton expand;
+    @BindView(R.id.collapse)
+    ImageButton collapse;
+    @BindView(R.id.websiteLayout)
+    TextInputLayout textLayoutWeb;
+    @BindView(R.id.notesLayout)
+    TextInputLayout textLayoutNotes;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     private SubEntriesAdapter mAdapter;
-    private AppBarLayout appBarLayout;
-    private TextInputLayout textLayoutWeb, textLayoutNotes;
 
-    //for encryption and decryption
-    private String seedValue = "I don't know what is this";
-    private String normalTextEnc;
-    private String normalTextDec;
+    private long parentId;
+    private EntryModel entry;
 
+    private KeyListener mKeyListener1,
+            mKeyListener2, mKeyListener3,
+            mKeyListener4, mKeyListener5;
+
+    private boolean fromListView, onEditPressed = false;
+
+    private List<SubEntryModel> SubModel = new ArrayList<>();
+
+    @Inject
+    EntryPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_main);
 
-        //===============================Declaration===============================================
 
-        edtxtName = (EditText) findViewById(R.id.contactName);
-        edtxtUsrName = (EditText) findViewById(R.id.userName);
-        edtxtUsrPass = (EditText) findViewById(R.id.Password);
-        edtxtWebsite = (EditText) findViewById(R.id.website);
-        edtxtNotes = (EditText) findViewById(R.id.notes);
-        txtCreated = (TextView) findViewById(R.id.created);
-        txtv = (TextView) findViewById(R.id.txtaddsub);
+        ButterKnife.bind(this);
+
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
+        component.inject(this);
+
+        presenter.setListener(this);
 
         setTitle("Passwords");
 
-        recyclerView = (RecyclerView) findViewById(R.id.subAccountsRCV);
-
-        row_id = getIntent().getLongExtra("long", 1L);
+        parentId = getIntent().getLongExtra("long", 1L);
         fromListView = getIntent().getBooleanExtra("boolean", false);
 
-        expand = (ImageButton) findViewById(R.id.expand);
-        collapse = (ImageButton) findViewById(R.id.collapse);
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
-        textLayoutWeb = (TextInputLayout) findViewById(R.id.websiteLayout);
-        textLayoutNotes = (TextInputLayout) findViewById(R.id.notesLayout);
+        setSubEntryAdapter();
 
         appBarLayout.addOnOffsetChangedListener(this);
 
-        //=========================================================================================
+        checkView();
 
         //Adding SubAccount Floating Action Button --> go to add
-        SUB_FAB = findViewById(R.id.SUB_FAB);
         SUB_FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(EntryActivity.this, EntryDetailsActivity.class);
-                i.putExtra("long", row_id);
+                Intent i = new Intent(EntryActivity.this,
+                        EntryDetailsActivity.class);
+                i.putExtra("long", parentId);
                 startActivity(i);
             }
         });
 
+        //Handling expanded button
         expand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -135,60 +164,36 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
             }
         });
 
-
         //if coming from RecyclerView Item (View Existing Contact)
         if (fromListView) {
 
             showContact();
-            showSubContact();
+            presenter.getSelectedEntry(parentId);
+            presenter.getSubEntries(parentId);
 
             Toast.makeText(this, "Double tap to copy the text", Toast.LENGTH_SHORT).show();
-
-
         } else {
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
             edtxtName.requestFocus();
             edtxtName.setSelection(edtxtName.getText().length());
             imm.showSoftInput(edtxtName, 0);
-
         }
 
     }
 
     public void showContact() {
-
         //Show selected Contact
         disableEditText();
         onCopy();
 
         recyclerView.setVisibility(View.VISIBLE);
         SUB_FAB.show();
-
-        db = new DatabaseHelper(getApplicationContext());
-        db.getOneContact(row_id);
-        edtxtName.setText(db.getOneContact(row_id).getName());
-        edtxtUsrName.setText(db.getOneContact(row_id).getUserName());
-
-        try {
-            normalTextDec = AESHelper.decrypt(seedValue, db.getOneContact(row_id).getPassword());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        edtxtUsrPass.setText(normalTextDec);
-        edtxtWebsite.setText(db.getOneContact(row_id).getWebsite());
-        edtxtNotes.setText(db.getOneContact(row_id).getNote());
-        txtCreated.setText("Last Updated " + db.getOneContact(row_id).getCreatedAt());
     }
 
-    public void showSubContact() {
-
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+    public void setSubEntryAdapter() {
 
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
-
-        SubModel = db.getSubContacts(row_id);
 
         mAdapter = new SubEntriesAdapter(SubModel);
         recyclerView.setAdapter(mAdapter);
@@ -206,7 +211,7 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
                 fromListView = true;
                 Intent mIntent = new Intent(EntryActivity.this, EntryDetailsActivity.class);
                 mIntent.putExtra("boolean", fromListView);
-                mIntent.putExtra("long", subModel.getRowId());
+                mIntent.putExtra("selectedId", subModel.getRowId());
 
                 startActivity(mIntent);
             }
@@ -218,15 +223,13 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
         }));
         if (mLayoutManager.getItemCount() == 0) {
             //Do something
-
         } else {
             recyclerView.setVisibility(View.VISIBLE);
-            txtv.setVisibility(View.GONE);
+            emptyListTextView.setVisibility(View.GONE);
         }
     }
 
     public void onDelete() {
-
 
         new AlertDialog.Builder(EntryActivity.this)
                 .setTitle("Delete entry")
@@ -234,10 +237,8 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        db = new DatabaseHelper(getApplicationContext());
-                        row_id = getIntent().getLongExtra("long", 1L);
-                        db.deleteContact(row_id);
-
+                        presenter.deleteSelectedEntry(entry);
+                        checkView();
                         finish();
                     }
                 })
@@ -254,44 +255,31 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
     public void onUpdate() {
         enableEditText();
         onEditPressed = true;
-
     }
 
     public void onUpdateDone() {
 
-        row_id = getIntent().getLongExtra("long", 1L);
+        parentId = getIntent().getLongExtra("long", 1L);
 
+        prepareObjectToUpdate();
 
-        db = new DatabaseHelper(getApplicationContext());
-        eMail = new EntryModel();
+        presenter.editSelectedEntry(entry);
 
-        cName = edtxtName.getText().toString();
-        cUsrName = edtxtUsrName.getText().toString();
-        cPass = edtxtUsrPass.getText().toString();
-        cWebsite = edtxtWebsite.getText().toString();
-        cNote = edtxtNotes.getText().toString();
-
-        eMail.setRowId(row_id);
-        eMail.setName(cName);
-        eMail.setUserName(cUsrName);
-
-        try {
-            normalTextEnc = AESHelper.encrypt(seedValue, cPass);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        eMail.setPassword(normalTextEnc);
-        eMail.setWebsite(cWebsite);
-        eMail.setNote(cNote);
-
-        db.updateContact(eMail);
         disableEditText();
         onEditPressed = false;
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
+    }
+
+    private void prepareObjectToUpdate() {
+
+        entry.setRowId(parentId);
+        entry.setName(edtxtName.getText().toString());
+        entry.setUserName(edtxtUsrName.getText().toString());
+        entry.setPassword(edtxtUsrPass.getText().toString());
+        entry.setWebsite(edtxtWebsite.getText().toString());
+        entry.setNote(edtxtNotes.getText().toString());
     }
 
     public void onCancel() {
@@ -349,7 +337,6 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
         edtxtWebsite.setKeyListener(mKeyListener4);
         edtxtNotes.setKeyListener(mKeyListener5);
     }
-
 
     public void copyText(final EditText tdtxt, View v) {
 
@@ -472,25 +459,9 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
     @Override
     protected void onResume() {
         super.onResume();
-
-        //work around provided on the up button
-        //Refresh Recycler View after resuming
-        SubModel.clear();
-        SubModel.addAll(db.getSubContacts(row_id));
+        presenter.getSubEntries(parentId);
         mAdapter.notifyDataSetChanged();
-
-        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        if (mLayoutManager.getItemCount() == 0) {
-            //Do something
-            txtv.setVisibility(View.VISIBLE);
-        } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            txtv.setVisibility(View.GONE);
-        }
-
-
+        checkView();
         SecurityModerator.lockAppCheck(this);
     }
 
@@ -510,4 +481,44 @@ public class EntryActivity extends AppCompatActivity implements AppBarLayout.OnO
         }
     }
 
+    private void checkView() {
+
+        RecyclerView.LayoutManager mLayoutManager
+                = new LinearLayoutManager(this.getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        if (mLayoutManager.getItemCount() == 0) {
+
+            recyclerView.setVisibility(View.GONE);
+            emptyListTextView.setVisibility(View.VISIBLE);
+
+        } else {
+
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyListTextView.setVisibility(View.GONE);
+        }
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onSubEntryListReceived(List<SubEntryModel> subEntryList) {
+        SubModel.clear();
+        SubModel.addAll(subEntryList);
+
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSelectedEntryReceived(EntryModel entry) {
+
+        this.entry = entry;
+
+        edtxtName.setText(entry.getName());
+        edtxtUsrName.setText(entry.getUserName());
+        edtxtUsrPass.setText(entry.getPassword());
+        edtxtWebsite.setText(entry.getWebsite());
+        edtxtNotes.setText(entry.getNote());
+        txtCreated.setText("Last Updated " + entry.getCreatedAt());
+
+    }
 }

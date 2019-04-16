@@ -13,4 +13,5 @@ public class Constants {
     public static final String KEYBOARD_TYPE = "KEYBOARD_TYPE";
     public static final String ERROR_DATA_RETRIEVE = "Error: Couldn't retrieve your data, Please try again later";
     public static final String SUCCESS_DELETE = "Entry has been deleted";
+    public static final String SUCCESS_EDIT = "Entry has been Edited";
 }

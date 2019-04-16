@@ -36,7 +36,7 @@ public class HomePresenterTest {
     CacheRepository cacheRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         presenter = new HomePresenter(cacheRepository, entryCrud);
@@ -72,6 +72,13 @@ public class HomePresenterTest {
         verify(homeNotifier).displayPasswordsList(entryModels);
     }
 
+    private HashMap<String,Long> cachedUserStub(){
+        HashMap<String,Long> userData = new HashMap<>();
+        userData.put("Id",1L);
+
+        return userData;
+    }
+
     @Test
     public void getPasswordsListNullId() {
 
@@ -92,16 +99,13 @@ public class HomePresenterTest {
 
     @Test
     public void getPasswordsListNullData() {
-
-        HashMap<String, Long> userMap = new HashMap<>();
-
-        userMap.put("Id",1L);
-
         entryModels = null;
 
-        when(cacheRepository.getRowDetails()).thenReturn(userMap);
+        when(cacheRepository.getRowDetails()).thenReturn(cachedUserStub());
 
-        when(entryCrud.getListDb(userMap.get("Id"))).thenReturn(entryModels);
+        long userId = cachedUserStub().get("Id");
+
+        when(entryCrud.getListDb(userId)).thenReturn(entryModels);
 
         presenter.getPasswordsList();
 

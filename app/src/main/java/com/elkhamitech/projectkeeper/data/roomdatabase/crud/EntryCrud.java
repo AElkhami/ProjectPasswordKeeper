@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 public class EntryCrud implements LocalDbRepository<EntryModel, Long>{
 
-    private EntryModel entryModel = new EntryModel();
     private final PasswordsDatabase db;
 
     @Inject
@@ -23,8 +22,8 @@ public class EntryCrud implements LocalDbRepository<EntryModel, Long>{
     }
 
     @Override
-    public EntryModel readFromDb(Long password) {
-        return null;
+    public EntryModel readFromDb(Long userId) {
+        return db.entryDao().getEntry(userId);
     }
 
     @Override

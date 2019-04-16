@@ -45,7 +45,6 @@ import butterknife.ButterKnife;
 public class HomeFragment extends Fragment implements HomeNotifier {
 
     private EntriesAdapter mAdapter;
-    private long userId;
     private boolean fromListView;
 
     private ArrayList<EntryModel> entriesList = new ArrayList<>();
@@ -57,7 +56,7 @@ public class HomeFragment extends Fragment implements HomeNotifier {
     RecyclerView recyclerView;
 
     @BindView(R.id.txtaddmain)
-    TextView txtv;
+    TextView emptyListTextView;
 
     @Inject
     HomePresenter presenter;
@@ -118,7 +117,6 @@ public class HomeFragment extends Fragment implements HomeNotifier {
 
         mAdapter = new EntriesAdapter(passwordEntries);
 
-
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getApplicationContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
@@ -126,7 +124,6 @@ public class HomeFragment extends Fragment implements HomeNotifier {
         mAdapter.notifyDataSetChanged();
 
         checkView();
-
 
         //on list item click
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity().getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
@@ -155,12 +152,12 @@ public class HomeFragment extends Fragment implements HomeNotifier {
         if (mLayoutManager.getItemCount() == 0) {
 
             recyclerView.setVisibility(View.GONE);
-            txtv.setVisibility(View.VISIBLE);
+            emptyListTextView.setVisibility(View.VISIBLE);
 
         } else {
 
             recyclerView.setVisibility(View.VISIBLE);
-            txtv.setVisibility(View.GONE);
+            emptyListTextView.setVisibility(View.GONE);
         }
         mAdapter.notifyDataSetChanged();
 
@@ -195,8 +192,9 @@ public class HomeFragment extends Fragment implements HomeNotifier {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //todo preform deletion
-
                         presenter.deletePasswordEntry(entryModel);
+                        entriesList.remove(entryModel);
+                        mAdapter.notifyDataSetChanged();
                         checkView();
 //
                     }
@@ -221,6 +219,7 @@ public class HomeFragment extends Fragment implements HomeNotifier {
     public void displayPasswordsList(List<EntryModel> passwordEntries) {
         entriesList.addAll(passwordEntries);
         mAdapter.notifyDataSetChanged();
+        checkView();
     }
 
     @Override
