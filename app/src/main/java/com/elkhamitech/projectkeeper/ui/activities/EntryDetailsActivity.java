@@ -1,7 +1,6 @@
 package com.elkhamitech.projectkeeper.ui.activities;
 
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,8 +22,8 @@ import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 import com.elkhamitech.projectkeeper.presenter.EntryDetailsPresenter;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 
 import javax.inject.Inject;
 
@@ -59,18 +58,32 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
 
     private SubEntryModel subEntryModel;
 
+    private InputMethodManager imm;
+    private long selectedId;
+
     @Inject
     EntryDetailsPresenter presenter;
-    private long selectedId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_entry);
-
         ButterKnife.bind(this);
+        setTitle("Passwords");
 
+        init();
+
+        presenter.setListener(this);
+
+        if (fromList) {
+            disableEditText();
+            presenter.getSelectedSubEntry(selectedId);
+            onCopy();
+        }
+    }
+
+    private void init() {
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
@@ -78,22 +91,12 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
 
         component.inject(this);
 
-        parentId = getIntent().getLongExtra("long",1L);
-        selectedId = getIntent().getLongExtra("selectedId",1L);
-        fromList = getIntent().getBooleanExtra("boolean",false);
+        parentId = getIntent().getLongExtra("long", 1L);
+        selectedId = getIntent().getLongExtra("selectedId", 1L);
+        fromList = getIntent().getBooleanExtra("boolean", false);
 
-        presenter.setListener(this);
-
-        setTitle("Passwords");
-
-        if(fromList){
-            disableEditText();
-
-            presenter.getSelectedSubEntry(selectedId);
-
-            onCopy();
-        }
-
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
     }
 
     public void copyText(final EditText tdtxt, View v) {
@@ -158,13 +161,13 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
         });
     }
 
-    public void whenDone(){
+    public void whenDone() {
         createUpdateObject();
         presenter.createSubEntry(subEntryModel);
         finish();
     }
 
-    public void onDelete(){
+    public void onDelete() {
 
         new AlertDialog.Builder(EntryDetailsActivity.this)
                 .setTitle("Delete entry")
@@ -193,7 +196,7 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
 
     private void createUpdateObject() {
 
-        if(subEntryModel == null){
+        if (subEntryModel == null) {
             subEntryModel = new SubEntryModel();
             subEntryModel.setParentId(parentId);
         }
@@ -213,14 +216,14 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
         disableEditText();
         onEditPressed = false;
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
     public void onCancel() {
         disableEditText();
         onEditPressed = false;
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
@@ -245,7 +248,6 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
     }
 
     public void enableEditText() {
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtxtName, 0);
 
         edtxtName.setSelection(edtxtName.getText().length());
@@ -266,7 +268,7 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        fromList = getIntent().getBooleanExtra("boolean",false);
+        fromList = getIntent().getBooleanExtra("boolean", false);
 
         if (onEditPressed) {
             inflater.inflate(R.menu.actionbar_updone_btn, menu);

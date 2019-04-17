@@ -1,44 +1,75 @@
 package com.elkhamitech.projectkeeper.ui.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elkhamitech.projectkeeper.R;
-import com.elkhamitech.projectkeeper.ui.fragments.HelpFragment;
-import com.elkhamitech.projectkeeper.ui.fragments.HomeFragment;
-import com.elkhamitech.projectkeeper.ui.fragments.SendFeedbackFragment;
-import com.elkhamitech.projectkeeper.ui.fragments.SettingsFragment;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+import com.elkhamitech.projectkeeper.dagger.AppComponent;
+import com.elkhamitech.projectkeeper.dagger.ContextModule;
+import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
+import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
+import com.elkhamitech.projectkeeper.presenter.HomePresenter;
+import com.elkhamitech.projectkeeper.ui.adapters.EntriesAdapter;
+import com.elkhamitech.projectkeeper.ui.adapters.handlers.RecyclerTouchListener;
+import com.elkhamitech.projectkeeper.ui.adapters.handlers.SwipeUtil;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.HomeNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements HomeNotifier {
+
+    private EntriesAdapter mAdapter;
+    private boolean fromListView;
+
+    private ArrayList<EntryModel> entriesList = new ArrayList<>();
+
+    @BindView(R.id.imageButton)
+    FloatingActionButton FAB;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
+    @BindView(R.id.txtaddmain)
+    TextView emptyListTextView;
+
+    @BindView(R.id.lock_imageView)
+    ImageView lockImageButton;
+
+    @BindView(R.id.searchView)
+    SearchView searchView;
+
+    @BindView(R.id.screen_title)
+    TextView screenTitle;
+
+    @Inject
+    HomePresenter presenter;
 
     private boolean doubleBackToExitPressedOnce;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,38 +77,190 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        //setting nav drawer
+        initDagger();
+        init();
+
+        presenter.getPasswordsList();
+    }
+
+    private void initDagger() {
+
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
+        component.inject(this);
+    }
+
+    private void init() {
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        presenter.setListener(this);
 
-        View header = navigationView.getHeaderView(0);
+        setAdapter(entriesList);
+        setSwipeForRecyclerView();
 
-        //Setting Home Fragment (Default)
-        HomeFragment homeFragment = new HomeFragment();
-        FragmentManager manager = getSupportFragmentManager();
-
-        navigationView.setCheckedItem(R.id.nav_passwords);
-
-        manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
-
-
-        ImageButton lockButton = header.findViewById(R.id.imgbtnLock);
-        lockButton.setOnClickListener(new View.OnClickListener() {
+        lockImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, FortressGate.class);
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,
+                        FortressGateActivity.class);
                 startActivity(i);
-
-                Toast.makeText(MainActivity.this, "Your app has been locked", Toast.LENGTH_SHORT).show();
             }
         });
 
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                screenTitle.setVisibility(View.GONE);
+                Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                screenTitle.setVisibility(View.VISIBLE);
+                Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+
+        //Floating Action Button
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent myIntent = new Intent(MainActivity.this, CreateEntryActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(myIntent);
+            }
+        });
+
+    }
+
+    private void setAdapter(List<EntryModel> passwordEntries) {
+
+        mAdapter = new EntriesAdapter(passwordEntries);
+
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this.getApplicationContext(), LinearLayoutManager.VERTICAL));
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.notifyDataSetChanged();
+
+        checkView();
+
+        //on list item click
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener
+                (getApplicationContext(), recyclerView,
+                        new RecyclerTouchListener.ClickListener() {
+                            @Override
+                            public void onClick(View view, int position) {
+                                EntryModel entryModel = entriesList.get(position);
+                                fromListView = true;
+                                Intent mIntent = new Intent(getApplicationContext()
+                                        , EntryActivity.class);
+                                mIntent.putExtra("boolean", fromListView);
+                                mIntent.putExtra("long", entryModel.getRowId());
+
+                                startActivity(mIntent);
+                            }
+
+                            @Override
+                            public void onLongClick(View view, int position) {
+                            }
+                        }));
+    }
+
+    private void checkView() {
+
+        RecyclerView.LayoutManager mLayoutManager
+                = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        if (mLayoutManager.getItemCount() == 0) {
+
+            recyclerView.setVisibility(View.GONE);
+            emptyListTextView.setVisibility(View.VISIBLE);
+
+        } else {
+
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyListTextView.setVisibility(View.GONE);
+        }
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    private void setSwipeForRecyclerView() {
+
+        new SwipeUtil(this, recyclerView) {
+            @Override
+            public void instantiateUnderlayButton(final RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new SwipeUtil.UnderlayButton(
+                        "Delete",
+                        0,
+                        Color.parseColor("#FF3C30"),
+                        new SwipeUtil.UnderlayButtonClickListener() {
+                            @Override
+                            public void onClick(final int pos) {
+                                showConfirmationDialog(entriesList.get(pos));
+                            }
+                        }
+                ));
+            }
+        };
+
+    }
+
+    private void showConfirmationDialog(EntryModel entryModel) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //todo preform deletion
+                        presenter.deletePasswordEntry(entryModel);
+                        entriesList.remove(entryModel);
+                        mAdapter.notifyDataSetChanged();
+                        checkView();
+//
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        mAdapter.notifyDataSetChanged();
+                    }
+                })
+//                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override
@@ -92,16 +275,7 @@ public class MainActivity extends AppCompatActivity
         this.doubleBackToExitPressedOnce = false;
 
         SecurityModerator.lockAppCheck(this);
-
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.getHeaderView(0);
-        HomeFragment homeFragment = new HomeFragment();
-        FragmentManager manager = getSupportFragmentManager();
-
-        navigationView.setCheckedItem(R.id.nav_passwords);
-
-        manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commitAllowingStateLoss();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -111,7 +285,6 @@ public class MainActivity extends AppCompatActivity
         if (doubleBackToExitPressedOnce) {
             moveTaskToBack(true);
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please press BACK again to exit", Toast.LENGTH_SHORT).show();
 
@@ -122,48 +295,17 @@ public class MainActivity extends AppCompatActivity
             }
         }, 2000);
 
-        //close the drawer
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_passwords) {
-
-            HomeFragment homeFragment = new HomeFragment();
-            FragmentManager manager = getSupportFragmentManager();
-
-            manager.beginTransaction().replace(R.id.layoutttt, homeFragment).commit();
-
-        } else if (id == R.id.nav_settings) {
-
-            SettingsFragment settingsFragment = new SettingsFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.layoutttt, settingsFragment).commit();
-
-        } else if (id == R.id.nav_send_Feedback) {
-
-            SendFeedbackFragment sendFeedbackFragment = new SendFeedbackFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.layoutttt, sendFeedbackFragment).commit();
-
-        } else if (id == R.id.nav_help) {
-
-            HelpFragment helpFragment = new HelpFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.layoutttt, helpFragment).commit();
-
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    public void displayPasswordsList(List<EntryModel> passwordEntries) {
+        entriesList.addAll(passwordEntries);
+        mAdapter.notifyDataSetChanged();
+        checkView();
     }
 
-    public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+    @Override
+    public void userMessage(String msg) {
+
     }
 }

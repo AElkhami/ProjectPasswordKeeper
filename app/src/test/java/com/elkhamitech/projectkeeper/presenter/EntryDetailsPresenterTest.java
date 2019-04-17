@@ -3,7 +3,7 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.SubEntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
-import com.elkhamitech.projectkeeper.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryDetailsNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +85,7 @@ public class EntryDetailsPresenterTest {
     @Test
     public void createSubEntry() {
 
-        subEntryCrud.delete(subEntryModelStub());
+        subEntryCrud.create(subEntryModelStub());
         presenter.createSubEntry(subEntryModelStub());
         verify(subEntryCrud).create(subEntryModelStub());
     }

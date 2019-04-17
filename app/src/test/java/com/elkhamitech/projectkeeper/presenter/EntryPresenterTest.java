@@ -5,7 +5,7 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.crud.EntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.SubEntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
-import com.elkhamitech.projectkeeper.viewnotifiyers.EntryNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +36,8 @@ public class EntryPresenterTest {
     EntryModel entryModel;
     @Mock
     SubEntryModel subEntryModel;
+    @Mock
+    BasePresenter basePresenter;
 
     @Before
     public void setUp() {
@@ -79,10 +81,13 @@ public class EntryPresenterTest {
     }
 
     @Test
-    public void editSelectedSubEntry() {
+    public void editSelectedEntry() {
 
-        subEntryModelStub().setName("Name 2");
-        subEntryCrud.update(subEntryModelStub());
+        entryModelStub().setName("Name 2");
+        entryModelStub().setCreatedAt(basePresenter.getCurrentDate());
+        when(basePresenter.getCurrentDate()).thenReturn("a");
+
+        entryCrud.update(entryModelStub());
 
         presenter.editSelectedEntry(entryModelStub());
 
@@ -90,9 +95,9 @@ public class EntryPresenterTest {
     }
 
     @Test
-    public void deleteSelectedSubEntry() {
+    public void deleteSelectedEntry() {
 
-        subEntryCrud.delete(subEntryModelStub());
+        entryCrud.delete(entryModelStub());
 
         presenter.deleteSelectedEntry(entryModelStub());
 

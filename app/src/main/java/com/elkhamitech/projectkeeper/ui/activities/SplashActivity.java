@@ -10,11 +10,11 @@ import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.SplashPresenter;
-import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SplashNotifier;
 
 import javax.inject.Inject;
 
-public class SplashActivity extends BaseActivity implements SplashPresenterListener {
+public class SplashActivity extends BaseActivity implements SplashNotifier {
 
     private Intent intent;
 
@@ -28,16 +28,20 @@ public class SplashActivity extends BaseActivity implements SplashPresenterListe
 
         setTitleFont(R.id.appTitle);
 
+        daggerInit();
+
+        presenter.setListener(this);
+
+        splashRunner();
+    }
+
+    private void daggerInit() {
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
                 .build();
 
         component.inject(this);
-
-        presenter.setListener(this);
-
-        splashRunner();
     }
 
     public void splashRunner() {

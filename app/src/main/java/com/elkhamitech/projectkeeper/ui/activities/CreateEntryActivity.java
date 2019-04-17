@@ -13,12 +13,11 @@ import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.presenter.CreateEntryPresenter;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.viewnotifiyers.CreateEntryNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.CreateEntryNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -40,8 +39,6 @@ public class CreateEntryActivity extends BaseActivity
 //    @BindView(R.id.created)
 //    TextView txtCreated;
 
-    private Boolean fromListView = false;
-
     @Inject
     CreateEntryPresenter presenter;
 
@@ -52,14 +49,9 @@ public class CreateEntryActivity extends BaseActivity
 
         ButterKnife.bind(this);
 
-        AppComponent component = DaggerAppComponent
-                .builder()
-                .contextModule(new ContextModule(this))
-                .build();
+        daggerInit();
 
-        component.inject(this);
-
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_close_white_24dp);
         }
@@ -69,12 +61,21 @@ public class CreateEntryActivity extends BaseActivity
         presenter.setListener(this);
     }
 
+    private void daggerInit() {
+        AppComponent component = DaggerAppComponent
+                .builder()
+                .contextModule(new ContextModule(this))
+                .build();
+
+        component.inject(this);
+    }
+
     public void createNewEntry() {
 
         EntryModel newEntry = new EntryModel();
         newEntry.setName(edtxtName.getText().toString());
         newEntry.setUserName(edtxtUsrName.getText().toString());
-        newEntry.setPassword( edtxtUsrPass.getText().toString());
+        newEntry.setPassword(edtxtUsrPass.getText().toString());
         newEntry.setWebsite(edtxtWebsite.getText().toString());
         newEntry.setNote(edtxtNote.getText().toString());
 
@@ -122,16 +123,12 @@ public class CreateEntryActivity extends BaseActivity
         Intent mIntent = new Intent(CreateEntryActivity.this,
                 EntryActivity.class);
 
-        fromListView = true;
-        mIntent.putExtra("boolean", fromListView);
+
+        mIntent.putExtra("boolean", true);
         mIntent.putExtra("long", rowId);
         startActivity(mIntent);
 
         finish();
     }
 
-    @Override
-    public void userMessage(String msg) {
-
-    }
 }

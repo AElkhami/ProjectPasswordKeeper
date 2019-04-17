@@ -1,11 +1,7 @@
 package com.elkhamitech.projectkeeper.ui.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
@@ -15,56 +11,53 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
 import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.presenter.WelcomePresenter;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.WelcomeNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class WelcomeActivity extends BaseActivity
-        implements WelcomePresenterListener {
+        implements WelcomeNotifier {
 
-    private EditText pinCodeEditText;
+    @BindView(R.id.editPin)
+    EditText pinCodeEditText;
+
     private boolean NumericKeyboard;
 
     @Inject
     WelcomePresenter presenter;
 
-    private final int EXTERNAL_STORAGE_REQUEST = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ButterKnife.bind(this);
 
         setTitleFont(R.id.appTitle);
 
+        daggerInit();
+
+        presenter.setListener(this);
+
+        NumericKeyboard = presenter.getKeyboardStatus();
+
+    }
+
+    private void daggerInit() {
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
                 .build();
 
         component.inject(this);
-
-        presenter.setListener(this);
-
-        pinCodeEditText = findViewById(R.id.editPin);
-
-        NumericKeyboard = presenter.getKeyboardStatus();
-
     }
 
     public void pinKeyboard() {
@@ -140,82 +133,24 @@ public class WelcomeActivity extends BaseActivity
         moveTaskToBack(true);
     }
 
-    public void restoreBackup(View view) {
-
-        if (!checkPermissionForReadExternalStorage()) {
-            requestPermissionForReadExternalStorage();
-        }else {
-            importDatabase();
-        }
-    }
-
-    private void importDatabase(){
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
-
-            if (sd.canWrite()) {
-                String currentDBPath = "//data//" + getPackageName()
-                        + "//databases//" + "PassKeeper";
-                String backupDBPath = "/Password Wallet/PassKeeper";
-                File backupDB = new File(data, currentDBPath);
-                File currentDB = new File(sd, backupDBPath);
-
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-
-                userMessage(Constants.BACKUP_RESTORED);
-            }
-        } catch (Exception e) {
-
-            userMessage(e.toString());
-
-        }
-    }
-
-    public boolean checkPermissionForReadExternalStorage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            int permissionRead = this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-
-            return permissionRead == PackageManager.PERMISSION_GRANTED;
-
-        }
-        return false;
-    }
-
-    public void requestPermissionForReadExternalStorage() {
-        try {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    EXTERNAL_STORAGE_REQUEST);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case EXTERNAL_STORAGE_REQUEST: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    importDatabase();
-                } else {
-
-                    Toast.makeText(getApplicationContext(), Constants.PERMISSION_DENIED
-                            , Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode,
+//                                           @NonNull String[] permissions,
+//                                           @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode) {
+//            case EXTERNAL_STORAGE_REQUEST: {
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    importDatabase();
+//                } else {
+//
+//                    Toast.makeText(getApplicationContext(), Constants.PERMISSION_DENIED
+//                            , Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void userMessage(String msg) {
@@ -231,8 +166,6 @@ public class WelcomeActivity extends BaseActivity
     @Override
     public void onPasswordCreatedSuccessfully() {
         Intent gotoMain = new Intent(WelcomeActivity.this, MainActivity.class);
-        boolean newUser = true;
-        gotoMain.putExtra("boolean", newUser);
         startActivity(gotoMain);
         finish();
     }

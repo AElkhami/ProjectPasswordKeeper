@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
  */
 public class SendFeedbackFragment extends Fragment {
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -29,11 +28,8 @@ public class SendFeedbackFragment extends Fragment {
         startActivity(Intent.createChooser(intent, "Send Email"));
 
     }
-}
 
-
-
-//    private EditText edTxt;
+    //    private EditText edTxt;
 //    private Button sendFeedback;
 //    String feedbackTxt;
 //
@@ -127,3 +123,5 @@ public class SendFeedbackFragment extends Fragment {
 //    }
 
 //}
+}
+

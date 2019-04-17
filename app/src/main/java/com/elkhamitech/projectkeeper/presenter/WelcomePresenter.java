@@ -1,23 +1,23 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
+import com.elkhamitech.projectkeeper.data.roomdatabase.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.WelcomeNotifier;
 
 import javax.inject.Inject;
 
-public class WelcomePresenter implements BasePresenterContract,
-        SetPresenterListener<WelcomePresenterListener> {
+public class WelcomePresenter implements SetViewNotifier<WelcomeNotifier> {
 
     private CacheRepository cacheRepository;
     private LocalDbRepository<UserModel, String> userCrud;
-    private WelcomePresenterListener listener;
+    private WelcomeNotifier listener;
 
     @Inject
-    BasePresenterImpl basePresenter;
+    BasePresenter basePresenter;
 
     @Inject
     WelcomePresenter(CacheRepository cacheRepository, UserCrud userCrud) {
@@ -26,16 +26,14 @@ public class WelcomePresenter implements BasePresenterContract,
     }
 
     @Override
-    public void setListener(WelcomePresenterListener listener) {
+    public void setListener(WelcomeNotifier listener) {
         this.listener = listener;
     }
 
-    @Override
     public void saveKeyboardType(boolean isNumericKeyboard) {
         basePresenter.saveKeyboardType(isNumericKeyboard);
     }
 
-    @Override
     public boolean getKeyboardStatus() {
         return basePresenter.getKeyboardStatus();
     }
@@ -55,11 +53,6 @@ public class WelcomePresenter implements BasePresenterContract,
     }
 
     public void createNewUser(String pinCode) {
-//        try {
-//            normalTextEnc = AESHelper.encrypt(Constants.SEED, pinCode);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         UserModel userModel = new UserModel();
         userModel.setPin(pinCode);
 

@@ -3,7 +3,7 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.WelcomePresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.WelcomeNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WelcomePresenterTest {
@@ -27,15 +24,11 @@ public class WelcomePresenterTest {
     private WelcomePresenter presenter;
 
     @Mock
-    private WelcomePresenterListener listener;
+    private WelcomeNotifier listener;
     @Mock
     private CacheRepository cacheRepository;
     @Mock
     private UserCrud crud;
-    @Mock
-    private BasePresenterImpl basePresenter;
-    @Mock
-    private BasePresenterContract presenterContract;
 
     @Before
     public void setUp(){
@@ -66,12 +59,6 @@ public class WelcomePresenterTest {
     public void createNewUser() {
         presenter.createNewUser(pinCode_correct);
         verify(listener).onPasswordCreatedSuccessfully();
-    }
-
-    @Test
-    public void getKeyboardStatus_numeric() {
-        when(basePresenter.getKeyboardStatus()).thenReturn(true);
-        assertTrue(basePresenter.getKeyboardStatus());
     }
 
 }

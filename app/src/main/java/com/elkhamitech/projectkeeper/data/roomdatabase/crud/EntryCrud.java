@@ -1,5 +1,6 @@
 package com.elkhamitech.projectkeeper.data.roomdatabase.crud;
 
+import com.elkhamitech.projectkeeper.data.roomdatabase.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.PasswordsDatabase;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class EntryCrud implements LocalDbRepository<EntryModel, Long>{
+public class EntryCrud implements LocalDbRepository<EntryModel, Long> {
 
     private final PasswordsDatabase db;
 

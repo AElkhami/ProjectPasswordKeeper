@@ -5,12 +5,8 @@ import java.util.HashMap;
 public interface CacheRepository {
 
     void createLoginSession(long id, String pin);
-    void createKeyboardType( boolean keyboardType);
-    HashMap<String, Long> getRowDetails();
-    HashMap<String, String> getUserDetails();
-    HashMap<String, Boolean> getKeyboardDetails();
-    void logoutUser();
+    void setKeyboardType(boolean keyboardType);
+    HashMap<String, Long> getUserId();
+    HashMap<String, Boolean> getKeyboardType();
     boolean isLoggedIn();
-    boolean isPin();
-
 }

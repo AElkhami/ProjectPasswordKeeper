@@ -1,15 +1,16 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.SplashPresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SplashNotifier;
 
 import javax.inject.Inject;
 
-public class SplashPresenter implements SetPresenterListener<SplashPresenterListener>{
+public class SplashPresenter implements SetViewNotifier<SplashNotifier> {
 
 
     private CacheRepository cacheRepository;
-    private SplashPresenterListener listener;
+    private SplashNotifier listener;
 
 
     @Inject
@@ -27,7 +28,7 @@ public class SplashPresenter implements SetPresenterListener<SplashPresenterList
     }
 
     @Override
-    public void setListener(SplashPresenterListener listener) {
+    public void setListener(SplashNotifier listener) {
         this.listener = listener;
     }
 }

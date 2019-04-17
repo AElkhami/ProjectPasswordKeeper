@@ -8,11 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.elkhamitech.projectkeeper.utils.Fonts.FontCache;
-import com.elkhamitech.projectkeeper.viewnotifiyers.BasePresenterListener;
+import com.elkhamitech.projectkeeper.utils.fonts.FontCache;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.BaseNotifier;
 
 public abstract class BaseActivity extends AppCompatActivity
-        implements BasePresenterListener {
+        implements BaseNotifier {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState,

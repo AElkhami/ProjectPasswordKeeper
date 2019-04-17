@@ -3,14 +3,16 @@ package com.elkhamitech.projectkeeper.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.elkhamitech.projectkeeper.ui.activities.MainActivity;
 import com.elkhamitech.projectkeeper.R;
+import com.elkhamitech.projectkeeper.ui.activities.MainActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 /**
@@ -23,9 +25,8 @@ public class HelpFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help, container, false);
@@ -36,9 +37,10 @@ public class HelpFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final Activity activity = getActivity();
+        assert activity != null;
 
         // Set title bar
-        ((MainActivity) getActivity())
-                .setActionBarTitle("Help");
+//        ((MainActivity) activity)
+//                .setActionBarTitle("Help");
     }
 }

@@ -1,22 +1,22 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
+import com.elkhamitech.projectkeeper.data.roomdatabase.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
-import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.FortressGateNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
 
 import javax.inject.Inject;
 
 public class FortressGatePresenter
-        implements BasePresenterContract
-        , SetPresenterListener<FortressGatePresenterListener> {
+        implements SetViewNotifier<FortressGateNotifier> {
 
-    private FortressGatePresenterListener listener;
+    private FortressGateNotifier listener;
     private LocalDbRepository<UserModel, String> crud;
 
     @Inject
-    BasePresenterImpl basePresenter;
+    BasePresenter basePresenter;
 
     @Inject
     FortressGatePresenter(UserCrud crud) {
@@ -45,16 +45,14 @@ public class FortressGatePresenter
     }
 
     @Override
-    public void setListener(FortressGatePresenterListener listener) {
+    public void setListener(FortressGateNotifier listener) {
         this.listener = listener;
     }
 
-    @Override
     public void saveKeyboardType(boolean isNumericKeyboard) {
         basePresenter.saveKeyboardType(isNumericKeyboard);
     }
 
-    @Override
     public boolean getKeyboardStatus() {
         return basePresenter.getKeyboardStatus();
     }

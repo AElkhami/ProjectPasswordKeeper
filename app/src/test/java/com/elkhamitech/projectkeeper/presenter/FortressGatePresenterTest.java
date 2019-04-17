@@ -4,7 +4,7 @@ import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.FortressGatePresenterListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.FortressGateNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +23,11 @@ public class FortressGatePresenterTest {
     private FortressGatePresenter presenter;
 
     @Mock
-    private FortressGatePresenterListener listener;
-    @Mock
-    private CacheRepository cacheRepository;
+    private FortressGateNotifier listener;
     @Mock
     private UserCrud crud;
     @Mock
     private UserModel userModel;
-    @Mock
-    private BasePresenterImpl basePresenter;
 
     @Before
     public void setUp() {

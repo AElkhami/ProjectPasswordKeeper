@@ -3,7 +3,6 @@ package com.elkhamitech.projectkeeper.ui.activities;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,11 +25,10 @@ import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 import com.elkhamitech.projectkeeper.presenter.EntryPresenter;
-import com.elkhamitech.projectkeeper.ui.adapters.Handlers.DividerItemDecoration;
-import com.elkhamitech.projectkeeper.ui.adapters.Handlers.RecyclerTouchListener;
 import com.elkhamitech.projectkeeper.ui.adapters.SubEntriesAdapter;
-import com.elkhamitech.projectkeeper.utils.AccessHandler.SecurityModerator;
-import com.elkhamitech.projectkeeper.viewnotifiyers.EntryNotifier;
+import com.elkhamitech.projectkeeper.ui.adapters.handlers.RecyclerTouchListener;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,6 +41,7 @@ import javax.inject.Inject;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -83,43 +82,51 @@ public class EntryActivity extends BaseActivity
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
-    private SubEntriesAdapter mAdapter;
+    @Inject
+    EntryPresenter presenter;
 
+    private SubEntriesAdapter mAdapter;
     private long parentId;
     private EntryModel entry;
-
     private KeyListener mKeyListener1,
             mKeyListener2, mKeyListener3,
             mKeyListener4, mKeyListener5;
-
     private boolean fromListView, onEditPressed = false;
-
     private List<SubEntryModel> SubModel = new ArrayList<>();
-
-    @Inject
-    EntryPresenter presenter;
+    private InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_main);
-
-
         ButterKnife.bind(this);
 
+        parentId = getIntent().getLongExtra("long", 1L);
+        fromListView = getIntent().getBooleanExtra("boolean", false);
+
+        initDagger();
+        initView();
+
+        presenter.setListener(this);
+
+        //if coming from RecyclerView Item (View Existing Contact)
+        checkFromWhereTheScreenIsOpened();
+    }
+
+    private void initDagger() {
         AppComponent component = DaggerAppComponent
                 .builder()
                 .contextModule(new ContextModule(this))
                 .build();
 
         component.inject(this);
+    }
 
-        presenter.setListener(this);
+    private void initView() {
 
         setTitle("Passwords");
 
-        parentId = getIntent().getLongExtra("long", 1L);
-        fromListView = getIntent().getBooleanExtra("boolean", false);
+        imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
 
         setSubEntryAdapter();
 
@@ -163,22 +170,22 @@ public class EntryActivity extends BaseActivity
                 txtCreated.setVisibility(View.GONE);
             }
         });
+    }
 
-        //if coming from RecyclerView Item (View Existing Contact)
+    private void checkFromWhereTheScreenIsOpened() {
         if (fromListView) {
 
             showContact();
             presenter.getSelectedEntry(parentId);
             presenter.getSubEntries(parentId);
 
-            Toast.makeText(this, "Double tap to copy the text", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Double tap to copy the text",
+                    Toast.LENGTH_SHORT).show();
         } else {
-            InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
             edtxtName.requestFocus();
             edtxtName.setSelection(edtxtName.getText().length());
             imm.showSoftInput(edtxtName, 0);
         }
-
     }
 
     public void showContact() {
@@ -204,7 +211,8 @@ public class EntryActivity extends BaseActivity
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext()
+                , recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 SubEntryModel subModel = SubModel.get(position);
@@ -221,9 +229,7 @@ public class EntryActivity extends BaseActivity
 
             }
         }));
-        if (mLayoutManager.getItemCount() == 0) {
-            //Do something
-        } else {
+        if (mLayoutManager.getItemCount() != 0) {
             recyclerView.setVisibility(View.VISIBLE);
             emptyListTextView.setVisibility(View.GONE);
         }
@@ -268,7 +274,6 @@ public class EntryActivity extends BaseActivity
         disableEditText();
         onEditPressed = false;
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
@@ -287,7 +292,6 @@ public class EntryActivity extends BaseActivity
         onEditPressed = false;
 
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtxtName.getWindowToken(), 0);
     }
 
@@ -320,7 +324,6 @@ public class EntryActivity extends BaseActivity
     }
 
     public void enableEditText() {
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtxtName, 0);
 
         edtxtName.setSelection(edtxtName.getText().length());

@@ -3,7 +3,7 @@ package com.elkhamitech.projectkeeper.presenter;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.EntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.CreateEntryNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.CreateEntryNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class CreateEntryPresenterTest {
     EntryModel newEntry;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         presenter = new CreateEntryPresenter(cacheRepository, entryCrud);
         presenter.setListener(entryNotifier);
@@ -57,9 +57,8 @@ public class CreateEntryPresenterTest {
 
         userMap.put("Id",1L);
 
-        when(cacheRepository.getRowDetails()).thenReturn(userMap);
+        when(cacheRepository.getUserId()).thenReturn(userMap);
         when(entryCrud.create(entryModelStub())).thenReturn(1L);
-
         presenter.createNewEntry(entryModelStub());
 
         verify(entryNotifier).onNewEntryCreated(1);

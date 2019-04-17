@@ -1,5 +1,6 @@
 package com.elkhamitech.projectkeeper.data.roomdatabase.crud;
 
+import com.elkhamitech.projectkeeper.data.roomdatabase.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.PasswordsDatabase;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 

@@ -24,12 +24,11 @@ public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.My
         public TextView name,user_name,created;
         int rid;
 
-        public MyViewHolder(View view) {
+        private MyViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.itemText);
-            user_name = (TextView) view.findViewById(R.id.itemText2);
-            created = (TextView) view.findViewById(R.id.itemDate);
-
+            name = view.findViewById(R.id.itemText);
+            user_name = view.findViewById(R.id.itemText2);
+            created = view.findViewById(R.id.itemDate);
         }
 
     }
@@ -61,6 +60,5 @@ public class SubEntriesAdapter extends RecyclerView.Adapter<SubEntriesAdapter.My
     public int getItemCount() {
         return subContactList.size();
     }
-
 
 }

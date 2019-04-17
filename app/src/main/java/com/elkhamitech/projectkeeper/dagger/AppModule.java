@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.elkhamitech.projectkeeper.data.roomdatabase.PasswordsDatabase;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.SharedPrefsCacheRepository;
 
@@ -19,9 +17,6 @@ abstract class AppModule {
 
     @Binds
     abstract CacheRepository bindCacheRepository(SharedPrefsCacheRepository prefs);
-
-//    @Binds
-//    abstract LocalDbRepository bindLocalDBRepository(UserCrud userCrud);
 
     @Provides
     static SharedPreferences prefs(Context context) {

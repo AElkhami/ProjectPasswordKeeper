@@ -1,25 +1,38 @@
 package com.elkhamitech.projectkeeper.presenter;
 
 import com.elkhamitech.projectkeeper.Constants;
-import com.elkhamitech.projectkeeper.data.roomdatabase.crud.LocalDbRepository;
+import com.elkhamitech.projectkeeper.data.roomdatabase.LocalDbRepository;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.SubEntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
-import com.elkhamitech.projectkeeper.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 /**
  * Created by A.Elkhami on 14,April,2019
  */
-public class EntryDetailsPresenter implements SetPresenterListener<EntryDetailsNotifier> {
+public class EntryDetailsPresenter implements SetViewNotifier<EntryDetailsNotifier> {
 
     private LocalDbRepository<SubEntryModel, Long> subEntryCrud;
 
     private EntryDetailsNotifier notifier;
 
     @Inject
+    BasePresenter basePresenter;
+
+    @Inject
     EntryDetailsPresenter(SubEntryCrud subEntryCrud){
         this.subEntryCrud = subEntryCrud;
+    }
+
+    @Override
+    public void setListener(EntryDetailsNotifier listener) {
+        this.notifier = listener;
     }
 
     public void getSelectedSubEntry(long id){
@@ -28,6 +41,8 @@ public class EntryDetailsPresenter implements SetPresenterListener<EntryDetailsN
     }
 
     public void editSelectedSubEntry(SubEntryModel subEntry){
+        subEntry.setCreatedAt(basePresenter.getCurrentDate());
+
         subEntryCrud.update(subEntry);
         notifier.userMessage(Constants.SUCCESS_EDIT);
     }
@@ -37,12 +52,8 @@ public class EntryDetailsPresenter implements SetPresenterListener<EntryDetailsN
         notifier.userMessage(Constants.SUCCESS_DELETE);
     }
 
-    @Override
-    public void setListener(EntryDetailsNotifier listener) {
-        this.notifier = listener;
-    }
-
     public void createSubEntry(SubEntryModel subEntry) {
+        subEntry.setCreatedAt(basePresenter.getCurrentDate());
         subEntryCrud.create(subEntry);
     }
 }

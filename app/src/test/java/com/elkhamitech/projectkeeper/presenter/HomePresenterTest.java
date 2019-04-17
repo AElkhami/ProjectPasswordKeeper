@@ -4,7 +4,7 @@ import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.data.roomdatabase.crud.EntryCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
-import com.elkhamitech.projectkeeper.viewnotifiyers.HomeNotifier;
+import com.elkhamitech.projectkeeper.ui.viewnotifiyers.HomeNotifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +63,7 @@ public class HomePresenterTest {
 
         entryModels.add(entryModelStub());
 
-        when(cacheRepository.getRowDetails()).thenReturn(userMap);
+        when(cacheRepository.getUserId()).thenReturn(userMap);
 
         when(entryCrud.getListDb(userMap.get("Id"))).thenReturn(entryModels);
 
@@ -88,7 +88,7 @@ public class HomePresenterTest {
 
         entryModels.add(entryModelStub());
 
-        when(cacheRepository.getRowDetails()).thenReturn(userMap);
+        when(cacheRepository.getUserId()).thenReturn(userMap);
 
         when(entryCrud.getListDb(userMap.get("Id"))).thenReturn(entryModels);
 
@@ -101,7 +101,7 @@ public class HomePresenterTest {
     public void getPasswordsListNullData() {
         entryModels = null;
 
-        when(cacheRepository.getRowDetails()).thenReturn(cachedUserStub());
+        when(cacheRepository.getUserId()).thenReturn(cachedUserStub());
 
         long userId = cachedUserStub().get("Id");
 
