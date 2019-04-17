@@ -1,6 +1,8 @@
 package com.elkhamitech.projectkeeper.ui.activities;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,10 +28,12 @@ import com.elkhamitech.projectkeeper.ui.adapters.handlers.SwipeUtil;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.HomeNotifier;
 import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -40,7 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements HomeNotifier {
+public class MainActivity extends BaseActivity implements HomeNotifier {
 
     private EntriesAdapter mAdapter;
     private boolean fromListView;
@@ -58,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements HomeNotifier {
 
     @BindView(R.id.lock_imageView)
     ImageView lockImageButton;
-
-    @BindView(R.id.searchView)
-    SearchView searchView;
 
     @BindView(R.id.screen_title)
     TextView screenTitle;
@@ -112,23 +112,6 @@ public class MainActivity extends AppCompatActivity implements HomeNotifier {
             }
         });
 
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                screenTitle.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "open", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                screenTitle.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this, "close", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
 
         //Floating Action Button
         FAB.setOnClickListener(new View.OnClickListener() {
@@ -246,6 +229,28 @@ public class MainActivity extends AppCompatActivity implements HomeNotifier {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actionbar_main, menu);
+
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+
+        assert manager != null;
+        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, "Search", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
 
         return super.onCreateOptionsMenu(menu);
     }

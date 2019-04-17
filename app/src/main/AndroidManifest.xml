@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.elkhamitech.projectkeeper">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="987256bc635b349650c5e8671ce1c066fdf7ff98"
-            />
+            android:value="987256bc635b349650c5e8671ce1c066fdf7ff98" />
 
         <activity android:name=".ui.activities.SplashActivity">
             <intent-filter>
@@ -27,18 +28,20 @@
         <activity
             android:name=".ui.activities.EntryActivity"
             android:parentActivityName=".ui.activities.MainActivity" />
-        <activity android:name=".ui.activities.WelcomeActivity"
-            android:windowSoftInputMode="stateHidden"
-            />
+        <activity
+            android:name=".ui.activities.WelcomeActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.activities.EntryDetailsActivity"
             android:parentActivityName=".ui.activities.EntryActivity" />
-        <activity android:name=".ui.activities.FortressGateActivity" />
-        <activity android:name=".ui.activities.CreateEntryActivity" />
+        <activity android:name=".ui.activities.FortressGateActivity"
+            android:theme="@style/AppThemeReverse"/>
+        <activity android:name=".ui.activities.CreateEntryActivity"
+            android:theme="@style/AppThemeUpDown"/>
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

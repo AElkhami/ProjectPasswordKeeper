@@ -199,8 +199,8 @@ public class EntryActivity extends BaseActivity
 
     public void setSubEntryAdapter() {
 
-        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
-        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedAppbar);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedAppbar);
 
         mAdapter = new SubEntriesAdapter(SubModel);
         recyclerView.setAdapter(mAdapter);

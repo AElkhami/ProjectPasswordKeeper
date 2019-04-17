@@ -3,9 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:showAsAction="always"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+    <item
         android:id="@+id/menu_backup"
-        android:checkable="false"
         android:icon="@mipmap/ic_backup_white_24dp"
+        app:showAsAction="ifRoom"
         android:title="Backup" />
     <item
         android:id="@+id/menu_feedback"
