@@ -7,6 +7,7 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.data.sharedpreferences.CacheRepository;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.WelcomeNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.Ciphering;
 
 import javax.inject.Inject;
 
@@ -54,10 +55,10 @@ public class WelcomePresenter implements SetViewNotifier<WelcomeNotifier> {
 
     public void createNewUser(String pinCode) {
         UserModel userModel = new UserModel();
-        userModel.setPin(pinCode);
+        userModel.setPin(Ciphering.encrypt(pinCode, Constants.ENCRYPT_KEY));
 
         long id = userCrud.create(userModel);
-        cacheRepository.createLoginSession(id, pinCode);
+//        cacheRepository.createLoginSession(id, pinCode);
         listener.onPasswordCreatedSuccessfully();
     }
 

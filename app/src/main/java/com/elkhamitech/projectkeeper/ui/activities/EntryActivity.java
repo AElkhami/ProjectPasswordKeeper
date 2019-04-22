@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
@@ -28,6 +29,7 @@ import com.elkhamitech.projectkeeper.presenter.EntryPresenter;
 import com.elkhamitech.projectkeeper.ui.adapters.SubEntriesAdapter;
 import com.elkhamitech.projectkeeper.ui.adapters.handlers.RecyclerTouchListener;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.Ciphering;
 import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -282,7 +284,8 @@ public class EntryActivity extends BaseActivity
         entry.setRowId(parentId);
         entry.setName(edtxtName.getText().toString());
         entry.setUserName(edtxtUsrName.getText().toString());
-        entry.setPassword(edtxtUsrPass.getText().toString());
+        entry.setPassword(Ciphering.encrypt(edtxtUsrPass.getText().toString(),
+                Constants.ENCRYPT_KEY));
         entry.setWebsite(edtxtWebsite.getText().toString());
         entry.setNote(edtxtNotes.getText().toString());
     }
@@ -518,7 +521,8 @@ public class EntryActivity extends BaseActivity
 
         edtxtName.setText(entry.getName());
         edtxtUsrName.setText(entry.getUserName());
-        edtxtUsrPass.setText(entry.getPassword());
+        edtxtUsrPass.setText(Ciphering.decrypt(entry.getPassword(), Constants.ENCRYPT_KEY));
+//        edtxtUsrPass.setText(entry.getPassword());
         edtxtWebsite.setText(entry.getWebsite());
         edtxtNotes.setText(entry.getNote());
         txtCreated.setText("Last Updated " + entry.getCreatedAt());

@@ -12,7 +12,6 @@ public class SharedPrefsCacheRepository implements CacheRepository {
 
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String KEY_ID = "Id";
-    private static final String KEY_PIN = "Pin";
 
     private final SharedPreferences prefs;
 
@@ -25,8 +24,6 @@ public class SharedPrefsCacheRepository implements CacheRepository {
         // Storing login value as TRUE
         prefs.edit().putBoolean(IS_LOGIN, true).apply();
         prefs.edit().putLong(KEY_ID, id).apply();
-        prefs.edit().putString(KEY_PIN, pin).apply();
-
     }
 
     @Override

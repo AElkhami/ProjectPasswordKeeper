@@ -36,7 +36,6 @@ public class AESHelper {
         return raw;
     }
 
-
     private static byte[] encrypt(byte[] raw, byte[] clear) throws Exception {
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         Cipher cipher = Cipher.getInstance("AES");
@@ -56,6 +55,7 @@ public class AESHelper {
     public static String toHex(String txt) {
         return toHex(txt.getBytes());
     }
+
     public static String fromHex(String hex) {
         return new String(toByte(hex));
     }

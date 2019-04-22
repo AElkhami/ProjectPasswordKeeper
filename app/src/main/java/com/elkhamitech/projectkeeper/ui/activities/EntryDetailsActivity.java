@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
@@ -23,6 +24,7 @@ import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.SubEntryModel;
 import com.elkhamitech.projectkeeper.presenter.EntryDetailsPresenter;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.EntryDetailsNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.Ciphering;
 import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 
 import javax.inject.Inject;
@@ -202,7 +204,8 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
         }
         subEntryModel.setName(edtxtName.getText().toString());
         subEntryModel.setUserName(edtxtUsrName.getText().toString());
-        subEntryModel.setPassword(edtxtUsrPass.getText().toString());
+        subEntryModel.setPassword(Ciphering.encrypt(edtxtUsrPass.getText().toString(),
+                Constants.ENCRYPT_KEY));
         subEntryModel.setWebsite(edtxtWebsite.getText().toString());
         subEntryModel.setNote(edtxtNotes.getText().toString());
     }
@@ -341,7 +344,7 @@ public class EntryDetailsActivity extends BaseActivity implements EntryDetailsNo
 
         edtxtName.setText(subEntry.getName());
         edtxtUsrName.setText(subEntry.getUserName());
-        edtxtUsrPass.setText(subEntry.getPassword());
+        edtxtUsrPass.setText(Ciphering.decrypt(subEntry.getPassword(), Constants.ENCRYPT_KEY));
         edtxtWebsite.setText(subEntry.getWebsite());
         edtxtNotes.setText(subEntry.getNote());
         txtCreated.setText("Last Updated " + subEntry.getCreatedAt());

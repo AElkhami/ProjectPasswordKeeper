@@ -18,6 +18,12 @@ android {
                                      "$projectDir/schemas".toString()]
             }
         }
+
+        externalNativeBuild {  
+            cmake {
+                cppFlags ""
+            }
+        }
     }
 
     compileOptions {
@@ -32,8 +38,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
         }
     }
 }

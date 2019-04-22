@@ -6,6 +6,7 @@ import com.elkhamitech.projectkeeper.data.roomdatabase.crud.UserCrud;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.UserModel;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.FortressGateNotifier;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.SetViewNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.Ciphering;
 
 import javax.inject.Inject;
 
@@ -25,15 +26,17 @@ public class FortressGatePresenter
 
     public void checkPassword(String userPin){
 
-        if (!userPin.equals("")) {
-            if(crud.readFromDb(userPin)!= null
-                    && crud.readFromDb(userPin).getPin() != null){
+        String encrypted = Ciphering.encrypt(userPin, Constants.ENCRYPT_KEY);
 
-                UserModel dbPin = crud.readFromDb(userPin);
+        if (!userPin.equals("")) {
+            if(crud.readFromDb(encrypted)!= null
+                    && crud.readFromDb(encrypted).getPin() != null){
+
+                UserModel dbPin = crud.readFromDb(encrypted);
 
                 String retrievedPin = dbPin.getPin();
 
-                if (retrievedPin.equals(userPin)) {
+                if (retrievedPin.equals(encrypted)) {
                     listener.onCorrectPassword();
                 }
             }else {

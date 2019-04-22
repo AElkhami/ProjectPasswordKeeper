@@ -2,6 +2,26 @@ package com.elkhamitech.projectkeeper;
 
 public class Constants {
 
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    public static native String getTransformationFromJNI();
+
+    public final static String TRANSFORMATION = getTransformationFromJNI();
+
+    public static native String getAlgorithmFromJNI();
+
+    public final static String ALGORITHM = getAlgorithmFromJNI();
+
+    public static native String getEncodingFromJNI();
+
+    public final static String ENCODING = getEncodingFromJNI();
+
+    public static native String getEncryptKeyFromJNI();
+
+    public final static String ENCRYPT_KEY = getEncryptKeyFromJNI();
+
     public static final String BACKUP_RESTORED = "Passwords have been restored," +
             " Thanks to re-enter the pin to confirm the passwords are yours.";
     public static final String ERROR_EMPTY_TEXT = "Please Fill all the Required Filed.";

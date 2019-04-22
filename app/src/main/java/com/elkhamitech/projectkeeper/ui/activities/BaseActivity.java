@@ -6,7 +6,10 @@ import android.os.PersistableBundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.elkhamitech.projectkeeper.utils.fonts.FontCache;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.BaseNotifier;
@@ -15,10 +18,11 @@ public abstract class BaseActivity extends AppCompatActivity
         implements BaseNotifier {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState,
-                         @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);
     }
 
     @Override

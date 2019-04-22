@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.elkhamitech.projectkeeper.Constants;
 import com.elkhamitech.projectkeeper.R;
 import com.elkhamitech.projectkeeper.dagger.AppComponent;
 import com.elkhamitech.projectkeeper.dagger.ContextModule;
@@ -14,6 +15,7 @@ import com.elkhamitech.projectkeeper.dagger.DaggerAppComponent;
 import com.elkhamitech.projectkeeper.data.roomdatabase.model.EntryModel;
 import com.elkhamitech.projectkeeper.presenter.CreateEntryPresenter;
 import com.elkhamitech.projectkeeper.ui.viewnotifiyers.CreateEntryNotifier;
+import com.elkhamitech.projectkeeper.utils.accesshandler.Ciphering;
 import com.elkhamitech.projectkeeper.utils.accesshandler.SecurityModerator;
 
 import javax.inject.Inject;
@@ -75,7 +77,8 @@ public class CreateEntryActivity extends BaseActivity
         EntryModel newEntry = new EntryModel();
         newEntry.setName(edtxtName.getText().toString());
         newEntry.setUserName(edtxtUsrName.getText().toString());
-        newEntry.setPassword(edtxtUsrPass.getText().toString());
+        newEntry.setPassword(Ciphering.encrypt(edtxtUsrPass.getText().toString(),
+                Constants.ENCRYPT_KEY));
         newEntry.setWebsite(edtxtWebsite.getText().toString());
         newEntry.setNote(edtxtNote.getText().toString());
 
