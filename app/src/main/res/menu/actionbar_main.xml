@@ -12,7 +12,9 @@
         android:id="@+id/menu_backup"
         android:icon="@mipmap/ic_backup_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="Backup" />
+        android:title="Backup"
+        android:visible="false"
+        />
     <item
         android:id="@+id/menu_feedback"
         android:icon="@mipmap/ic_feedback_white_24dp"

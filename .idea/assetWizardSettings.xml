@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/hardware/ic_keyboard_arrow_down_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -70,9 +70,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\ElkhamiTech\Downloads\Resume\Images\lg_lock.png" />
-                                      <entry key="outputName" value="ic_search" />
-                                      <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="outputName" value="ic_arrow_down_white" />
+                                      <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="themeColor" value="e0e0e0" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -100,10 +100,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="e0e0e0" />
                                       <entry key="foregroundImage" value="C:\Users\ElkhamiTech\Downloads\Resume\Images\lg_lock.png" />
-                                      <entry key="previewDensity" value="XXHIGH" />
-                                      <entry key="showGrid" value="true" />
                                     </map>
                                   </option>
                                 </PersistentState>

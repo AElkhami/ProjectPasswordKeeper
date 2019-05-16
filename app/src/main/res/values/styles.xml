@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme" parent="AppThemeDefault">
@@ -61,6 +61,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/SlideRightLeftAnimationReverse</item>
+        <item name="android:windowContentTransitions">true</item>
+
     </style>
 
     <style name="NoAnimTheme" parent="@style/AppTheme">

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.elkhamitech.projectkeeper">
+    package="com.elkhamitechnologies.projectkeeper">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -14,11 +13,14 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <activity android:name="com.elkhamitechnologies.projectkeeper.ui.activities.HelpActivity"
+            android:parentActivityName="com.elkhamitechnologies.projectkeeper.ui.activities.MainActivity"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="987256bc635b349650c5e8671ce1c066fdf7ff98" />
 
-        <activity android:name=".ui.activities.SplashActivity">
+        <activity android:name="com.elkhamitechnologies.projectkeeper.ui.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,22 +28,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.EntryActivity"
-            android:parentActivityName=".ui.activities.MainActivity" />
+            android:name="com.elkhamitechnologies.projectkeeper.ui.activities.EntryActivity"
+            android:parentActivityName="com.elkhamitechnologies.projectkeeper.ui.activities.MainActivity" />
         <activity
-            android:name=".ui.activities.WelcomeActivity"
+            android:name="com.elkhamitechnologies.projectkeeper.ui.activities.WelcomeActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.activities.EntryDetailsActivity"
-            android:parentActivityName=".ui.activities.EntryActivity" />
-        <activity android:name=".ui.activities.FortressGateActivity"
-            android:theme="@style/AppThemeReverse"/>
-        <activity android:name=".ui.activities.CreateEntryActivity"
-            android:theme="@style/AppThemeUpDown"/>
+            android:name="com.elkhamitechnologies.projectkeeper.ui.activities.EntryDetailsActivity"
+            android:parentActivityName="com.elkhamitechnologies.projectkeeper.ui.activities.EntryActivity" />
+        <activity android:name="com.elkhamitechnologies.projectkeeper.ui.activities.FortressGateActivity" />
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name="com.elkhamitechnologies.projectkeeper.ui.activities.CreateEntryActivity"
+            android:theme="@style/AppThemeUpDown" />
+        <activity
+            android:name="com.elkhamitechnologies.projectkeeper.ui.activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
